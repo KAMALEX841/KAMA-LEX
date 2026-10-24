@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAMA LEX - Savoir pour mieux décider</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 800: '#0B132B', 900: '#070A17' },
+                        gold: { 500: '#D4AF37', 600: '#AA8C2C' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-navy-900 text-slate-100 h-full flex flex-col font-sans antialiased">
+
+    <!-- En-tête Global -->
+    <header class="bg-navy-800 border-b border-gold-500/30 px-4 py-3 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-gold-500/20 border border-gold-500 flex items-center justify-center text-gold-500 font-serif font-bold text-lg">KL</div>
+            <div>
+                <h1 class="font-serif font-bold text-gold-500 tracking-wide text-base sm:text-lg">KAMA LEX</h1>
+                <p class="text-[10px] sm:text-xs text-slate-400 italic">Savoir pour mieux décider</p>
+            </div>
+        </div>
+        <div id="user-badge" class="hidden flex items-center space-x-3 text-xs sm:text-sm">
+            <span id="badge-nom" class="text-slate-300 font-medium truncate max-w-[120px] sm:max-w-none"></span>
+            <button onclick="deconnexion()" class="bg-red-600/20 text-red-400 border border-red-500/30 px-2.5 py-1 rounded hover:bg-red-600/30 transition">Déconnexion</button>
+        </div>
+    </header>
+
+    <!-- Bannière d'Annonce Globale -->
+    <div id="banniere-annonce" class="bg-gradient-to-r from-gold-600 to-gold-500 text-navy-900 px-4 py-2 text-xs font-semibold text-center shadow-inner flex justify-center items-center gap-2">
+        <span>📢 <strong id="texte-annonce">Chargement des annonces...</strong></span>
+    </div>
+
+    <!-- Conteneur Principal -->
+    <main class="flex-1 overflow-y-auto p-4 max-w-5xl mx-auto w-full space-y-6">
+        
+        <!-- VUE 1 : CONNEXION -->
+        <div id="view-login" class="flex flex-col items-center justify-center h-full max-w-md mx-auto py-8">
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-6 shadow-2xl w-full">
+                <div class="text-center mb-6">
+                    <h2 class="text-xl sm:text-2xl font-serif font-bold text-gold-500">Connexion Équipe</h2>
+                    <p class="text-xs text-slate-400 mt-1">Cabinet KAMA LEX - Ouagadougou</p>
+                </div>
+                
+                <form id="login-form" onsubmit="gererConnexion(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">E-mail professionnel</label>
+                        <input type="email" id="login-email" required class="w-full bg-navy-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-gold-500 text-sm" placeholder="exemple@kamalex.bf">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Mot de passe</label>
+                        <input type="password" id="login-password" required class="w-full bg-navy-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-gold-500 text-sm" placeholder="••••••••">
+                    </div>
+                    <div id="login-error" class="text-red-400 text-xs hidden p-2 bg-red-950/40 border border-red-500/30 rounded"></div>
+                    <button type="submit" class="w-full bg-gold-500 text-navy-900 font-bold py-2.5 rounded-lg hover:bg-gold-600 transition shadow-md text-sm">Se connecter</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- VUE 2 : ESPACE PILOTE (ZOURE Aboubakar) -->
+        <div id="view-pilote" class="space-y-6 hidden">
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <span class="text-[10px] uppercase tracking-wider text-gold-500 font-semibold">Espace Pilote & Fondateur</span>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">Supervision, Marges & Objectifs</h2>
+                </div>
+                <div class="bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-xs text-gold-500">ZOURE Aboubakar</div>
+            </div>
+
+            <!-- Gestion de la Bannière d'Annonce -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-3">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Modifier la Bannière d'Annonce (Équipe)</h3>
+                <form onsubmit="mettreAJourAnnonce(event)" class="flex gap-2">
+                    <input type="text" id="input-annonce" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100 focus:border-gold-500" placeholder="Ex: Bravo à l'équipe pour la performance d'hier !">
+                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold px-4 py-1.5 rounded text-xs hover:bg-gold-600 whitespace-nowrap">Diffuser</button>
+                </form>
+            </div>
+
+            <!-- Exportation Tableur CSV -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-3">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Exportation des Dossiers (Tableur / Excel)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Date Début</label>
+                        <input type="date" id="export-start" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Date Fin</label>
+                        <input type="date" id="export-end" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100">
+                    </div>
+                    <div>
+                        <button onclick="exporterDossiersCSV()" class="w-full bg-gold-500 text-navy-900 font-semibold px-4 py-1.5 rounded text-xs hover:bg-gold-600 transition">Télécharger le Tableur</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paramètres Plafonds & Objectifs (Verrouillés par défaut) -->
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Plafonds & Objectifs Fixés</h3>
+                    <button type="button" onclick="basculerEditionParametres()" id="btn-edit-params" class="text-xs text-gold-400 underline hover:text-gold-300">Modifier les seuils</button>
+                </div>
+                <form id="form-params" onsubmit="sauvegarderParametres(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Plafond CPL (FCFA)</label>
+                        <input type="number" id="param-cpl" disabled required class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Plafond CAC (FCFA)</label>
+                        <input type="number" id="param-cac" disabled required class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Obj. Conv. / Jour</label>
+                        <input type="number" id="param-obj-conv" disabled required class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Obj. Acquis / Jour</label>
+                        <input type="number" id="param-obj-acquis" disabled required class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-slate-300">
+                    </div>
+                    <div>
+                        <button type="submit" id="btn-save-params" disabled class="w-full bg-slate-700 text-slate-400 font-semibold text-xs py-2 px-2 rounded cursor-not-allowed transition">Verrouillé</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- KPIs de Pilotage Réel -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4">
+                    <p class="text-xs text-slate-400">Total Conversations (vs Obj. Jour)</p>
+                    <p id="pilote-conv-suivi" class="text-lg font-bold text-gold-500 mt-1">0 / Obj: 34</p>
+                    <span id="pilote-conv-status" class="text-[10px] text-slate-500">Cumul réel (Moy: 0/j)</span>
+                </div>
+                <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4">
+                    <p class="text-xs text-slate-400">Total Clients Acquis (vs Obj. Jour)</p>
+                    <p id="pilote-acquis-suivi" class="text-lg font-bold text-gold-500 mt-1">0 / Obj: 2</p>
+                    <span id="pilote-acquis-status" class="text-[10px] text-slate-500">Cumul réel (Moy: 0/j)</span>
+                </div>
+                <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4">
+                    <p class="text-xs text-slate-400">Taux de Conversion Global</p>
+                    <p id="pilote-taux-conversion" class="text-lg font-bold text-gold-500 mt-1">0 %</p>
+                    <span class="text-[10px] text-slate-500">Total Acquis ÷ Total Conversations</span>
+                </div>
+            </div>
+
+            <!-- Calcul de Marge Nette & Saisie Transparente Publicité -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Calcul des Marges & Gestion Publicitaire</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="bg-navy-900 p-3 rounded border border-slate-700">
+                        <span class="text-slate-400">Total Avances Encaissées :</span>
+                        <p id="marge-total-encaisse" class="text-sm font-bold text-gold-500 mt-1">0 FCFA</p>
+                    </div>
+                    <div class="bg-navy-900 p-3 rounded border border-slate-700">
+                        <span class="text-slate-400">Total Versé au Formaliste :</span>
+                        <p id="marge-total-formaliste" class="text-sm font-bold text-gold-500 mt-1">0 FCFA</p>
+                    </div>
+                    <div class="bg-navy-900 p-3 rounded border border-slate-700">
+                        <span class="text-slate-400">Solde avant Pub :</span>
+                        <p id="marge-solde-avant-pub" class="text-sm font-bold text-gold-500 mt-1">0 FCFA</p>
+                    </div>
+                    <div class="bg-navy-900 p-3 rounded border border-slate-700">
+                        <span class="text-slate-400">Marge Nette (Solde Net) :</span>
+                        <p id="marge-nette" class="text-sm font-bold text-green-400 mt-1">0 FCFA</p>
+                    </div>
+                </div>
+
+                <!-- Formulaire de Frais de Pub transparent et modifiable -->
+                <form onsubmit="enregistrerPub(event)" class="flex gap-3 items-end pt-2 border-t border-slate-700/55">
+                    <div class="flex-1">
+                        <label class="block text-xs text-slate-300 mb-1">Frais de Publicité Actuels (FCFA)</label>
+                        <input type="number" id="pub-depense" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100" placeholder="Ex: 50000">
+                    </div>
+                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold px-4 py-1.5 rounded text-xs hover:bg-gold-600 h-[34px] whitespace-nowrap">Mettre à jour la Pub</button>
+                </form>
+            </div>
+
+            <!-- Rapprochement Bancaire -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Solde Réel & Trésorerie</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-navy-900 p-3 rounded border border-slate-700">
+                        <p class="text-xs text-slate-400">Trésorerie Nette (Système)</p>
+                        <p id="system-total-encaisse" class="text-lg font-bold text-gold-500 mt-1">0 FCFA</p>
+                    </div>
+                    <div class="bg-navy-900 p-3 rounded border border-slate-700">
+                        <label class="block text-xs text-slate-400 mb-1">Saisir le Solde Réel (Banque / Caisse)</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="solde-reel-input" class="w-full bg-navy-800 border border-slate-700 rounded px-2 py-1 text-sm text-slate-100" placeholder="Ex: 150000">
+                            <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-900 font-semibold px-3 py-1 rounded text-xs hover:bg-gold-600">Vérifier</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="rapprochement-ecart" class="text-xs pt-1"></div>
+            </div>
+
+            <!-- Supervision des Dossiers & Paiements Formaliste -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Gestion des Versements au Formaliste par Dossier</h3>
+                <div id="pilote-container" class="space-y-3 text-xs text-slate-300">
+                    Chargement des dossiers...
+                </div>
+            </div>
+        </div>
+
+        <!-- VUE 3 : ESPACE CLOSER (Abdoul) -->
+        <div id="view-closer" class="space-y-6 hidden">
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <span class="text-[10px] uppercase tracking-wider text-gold-500 font-semibold">Espace Closer</span>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">WhatsApp, Point Journalier & Vente</h2>
+                </div>
+                <div class="bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-xs text-gold-500">Abdoul</div>
+            </div>
+
+            <!-- Point Journalier -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Point Journalier (Conversations & Prospects Acquis)</h3>
+                <form onsubmit="enregistrerStatsCloser(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Date</label>
+                        <input type="date" id="stat-date" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Conversations du Jour</label>
+                        <input type="number" id="stat-conv" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Ex: 34">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Clients Acquis du Jour</label>
+                        <input type="number" id="stat-acquis" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Ex: 2">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-gold-500 text-navy-900 font-semibold text-xs py-2 px-3 rounded hover:bg-gold-600 transition">Enregistrer le Point</button>
+                    </div>
+                </form>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-700/55 text-xs">
+                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700">
+                        <span class="text-slate-400">Total Conversations :</span> <strong id="cumul-conv" class="text-gold-500">0</strong>
+                    </div>
+                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700">
+                        <span class="text-slate-400">Total Clients Acquis :</span> <strong id="cumul-acquis" class="text-gold-500">0</strong>
+                    </div>
+                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700">
+                        <span class="text-slate-400">Taux de Conversion :</span> <strong id="taux-conv" class="text-gold-500">0 %</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire Enregistrement Client -->
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Enregistrer un Client (EI = 150k | SARL = 175k)</h3>
+                <form onsubmit="ajouterDossierCloser(event)" class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Nom</label>
+                            <input type="text" id="closer-nom" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Nom">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Prénom</label>
+                            <input type="text" id="closer-prenom" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Prénom">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Téléphone WhatsApp</label>
+                            <input type="text" id="closer-tel" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Ex: 70000000">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Type d'Entreprise</label>
+                            <select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500">
+                                <option value="EI">EI (150 000 FCFA)</option>
+                                <option value="SARL">SARL (175 000 FCFA)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Net Négocié (FCFA)</label>
+                            <input type="number" id="closer-total" required readonly class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-gold-500 font-bold cursor-not-allowed" value="150000">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-300 mb-1">Avance Encaissée (FCFA)</label>
+                            <input type="number" id="closer-avance" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Avance versée">
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold text-xs py-2.5 px-4 rounded hover:bg-gold-600 transition w-full sm:w-auto">Enregistrer & Transmettre au Formaliste</button>
+                </form>
+            </div>
+
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-3">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers, Reliquats & État en Temps Réel</h3>
+                <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">
+                    Chargement de vos dossiers...
+                </div>
+            </div>
+        </div>
+
+        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) -->
+        <div id="view-formaliste" class="space-y-6 hidden">
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <span class="text-[10px] uppercase tracking-wider text-gold-500 font-semibold">Espace Formaliste (Terrain)</span>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">Suivi des Étapes & Paiements Reçus</h2>
+                </div>
+                <div class="bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-xs text-gold-500">OUEDRAOGO Adama</div>
+            </div>
+
+            <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués, Étapes & Paiements</h3>
+                <div id="formaliste-container" class="space-y-3 text-xs text-slate-300">
+                    Chargement des dossiers...
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Script JavaScript -->
+    <script>
+        const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
+        
+        const kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let currentRole = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('stat-date');
+            if (dateInput) dateInput.value = today;
+            chargerAnnonceGlobale();
+        });
+
+        async function chargerAnnonceGlobale() {
+            const { data } = await kamaClient.from('annonces').select('*').limit(1).single();
+            if (data && data.message) {
+                document.getElementById('texte-annonce').textContent = data.message;
+            }
+        }
+
+        async function mettreAJourAnnonce(event) {
+            event.preventDefault();
+            const nouveauMsg = document.getElementById('input-annonce').value;
+            const { data: existing } = await kamaClient.from('annonces').select('id').limit(1);
+            
+            if (existing && existing.length > 0) {
+                await kamaClient.from('annonces').update({ message: nouveauMsg }).eq('id', existing[0].id);
+            } else {
+                await kamaClient.from('annonces').insert([{ message: nouveauMsg }]);
+            }
+            alert("Bannière mise à jour avec succès !");
+            document.getElementById('input-annonce').value = '';
+            chargerAnnonceGlobale();
+        }
+
+        // --- EXPORT TABLEUR CSV ---
+        async function exporterDossiersCSV() {
+            const startDate = document.getElementById('export-start').value;
+            const endDate = document.getElementById('export-end').value;
+
+            let query = kamaClient.from('dossiers').select('*');
+            if (startDate) query = query.gte('created_at', startDate + 'T00:00:00');
+            if (endDate) query = query.lte('created_at', endDate + 'T23:59:59');
+
+            const { data, error } = await query;
+            if (error) {
+                alert("Erreur lors de l'exportation : " + error.message);
+                return;
+            }
+            if (!data || data.length === 0) {
+                alert("Aucun dossier trouvé pour cette période.");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "Reference;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Date Creation\n";
+
+            data.forEach(d => {
+                let dateStr = d.created_at ? d.created_at.split('T')[0] : '';
+                let row = [
+                    d.reference || '',
+                    (d.nom || '').replace(/;/g, ','),
+                    (d.prenom || '').replace(/;/g, ','),
+                    d.telephone || '',
+                    d.type_entreprise || '',
+                    d.montant_total || 0,
+                    d.montant_encaisse || 0,
+                    (d.statut || '').replace(/;/g, ','),
+                    dateStr
+                ].join(";");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `kama_lex_dossiers_${startDate || 'tout'}_au_${endDate || 'tout'}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function changerTarifOffre() {
+            const selectType = document.getElementById('closer-type').value;
+            const inputTotal = document.getElementById('closer-total');
+            inputTotal.value = (selectType === 'EI') ? '150000' : '175000';
+        }
+
+        async function gererConnexion(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.classList.add('hidden');
+
+            try {
+                const { data: authData, error: authError } = await kamaClient.auth.signInWithPassword({ email, password });
+                if (authError) throw new Error("Identifiants incorrects ou accès non autorisé.");
+
+                currentUser = authData.user;
+                const { data: profile, error: profileError } = await kamaClient
+                    .from('profiles')
+                    .select('role, nom_complet')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (profileError || !profile) throw new Error("Profil utilisateur introuvable.");
+
+                currentRole = profile.role;
+                basculerVue(currentRole, profile.nom_complet);
+            } catch (err) {
+                errorDiv.textContent = "Erreur : " + err.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        function basculerVue(role, nom) {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-pilote').classList.add('hidden');
+            document.getElementById('view-closer').classList.add('hidden');
+            document.getElementById('view-formaliste').classList.add('hidden');
+
+            document.getElementById('user-badge').classList.remove('hidden');
+            document.getElementById('badge-nom').textContent = nom + ' (' + role.toUpperCase() + ')';
+
+            if (role === 'pilote') {
+                document.getElementById('view-pilote').classList.remove('hidden');
+                chargerDonneesPilote();
+            } else if (role === 'closer') {
+                document.getElementById('view-closer').classList.remove('hidden');
+                chargerDonneesCloser();
+                chargerStatsCloser();
+            } else if (role === 'formaliste') {
+                document.getElementById('view-formaliste').classList.remove('hidden');
+                chargerDonneesFormaliste();
+            }
+        }
+
+        async function deconnexion() {
+            await kamaClient.auth.signOut();
+            currentUser = null;
+            currentRole = null;
+            document.getElementById('user-badge').classList.add('hidden');
+            document.getElementById('view-login').classList.remove('hidden');
+        }
+
+        // --- PARAMÈTRES & OBJECTIFS PILOTE (VERROUILLÉS) ---
+        function basculerEditionParametres() {
+            const cpl = document.getElementById('param-cpl');
+            const cac = document.getElementById('param-cac');
+            const objConv = document.getElementById('param-obj-conv');
+            const objAcquis = document.getElementById('param-obj-acquis');
+            const btnSave = document.getElementById('btn-save-params');
+            const btnEdit = document.getElementById('btn-edit-params');
+
+            const isDisabled = cpl.disabled;
+            cpl.disabled = !isDisabled;
+            cac.disabled = !isDisabled;
+            objConv.disabled = !isDisabled;
+            objAcquis.disabled = !isDisabled;
+
+            if (isDisabled) {
+                cpl.classList.remove('bg-navy-950', 'text-slate-300'); cpl.classList.add('bg-navy-900', 'text-slate-100');
