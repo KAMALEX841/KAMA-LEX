@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour mieux décider</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -73,7 +72,7 @@
             </div>
         </div>
 
-        <!-- VUE 2 : ESPACE PILOTE (ZOURE Aboubakar) -->
+        <!-- VUE 2 : ESPACE PILOTE -->
         <div id="view-pilote" class="space-y-6 hidden">
             <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
@@ -83,16 +82,16 @@
                 <div class="bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-xs text-gold-500">ZOURE Aboubakar</div>
             </div>
 
-            <!-- Gestion de la Bannière d'Annonce -->
+            <!-- Gestion de la Bannière -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-3">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Modifier la Bannière d'Annonce (Équipe)</h3>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Modifier la Bannière d'Annonce</h3>
                 <form onsubmit="mettreAJourAnnonce(event)" class="flex gap-2">
-                    <input type="text" id="input-annonce" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100 focus:border-gold-500" placeholder="Ex: Bravo à l'équipe pour la performance d'hier !">
+                    <input type="text" id="input-annonce" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100 focus:border-gold-500" placeholder="Ex: Bravo à l'équipe !">
                     <button type="submit" class="bg-gold-500 text-navy-900 font-semibold px-4 py-1.5 rounded text-xs hover:bg-gold-600 whitespace-nowrap">Diffuser</button>
                 </form>
             </div>
 
-            <!-- Exportation Tableur CSV -->
+            <!-- Export CSV -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-3">
                 <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Exportation des Dossiers (Tableur / Excel)</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
@@ -110,7 +109,7 @@
                 </div>
             </div>
 
-            <!-- Paramètres Plafonds & Objectifs (Verrouillés par défaut) -->
+            <!-- Paramètres Plafonds & Objectifs -->
             <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 space-y-3">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Plafonds & Objectifs Fixés</h3>
@@ -118,11 +117,11 @@
                 </div>
                 <form id="form-params" onsubmit="sauvegarderParametres(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
                     <div>
-                        <label class="block text-xs text-slate-300 mb-1">Plafond CPL (FCFA)</label>
+                        <label class="block text-xs text-slate-300 mb-1">Plafond CPL</label>
                         <input type="number" id="param-cpl" disabled required class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-slate-300">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-300 mb-1">Plafond CAC (FCFA)</label>
+                        <label class="block text-xs text-slate-300 mb-1">Plafond CAC</label>
                         <input type="number" id="param-cac" disabled required class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-slate-300">
                     </div>
                     <div>
@@ -139,35 +138,35 @@
                 </form>
             </div>
 
-            <!-- KPIs de Pilotage Réel -->
+            <!-- KPIs -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4">
-                    <p class="text-xs text-slate-400">Total Conversations (vs Obj. Jour)</p>
+                    <p class="text-xs text-slate-400">Total Conversations</p>
                     <p id="pilote-conv-suivi" class="text-lg font-bold text-gold-500 mt-1">0 / Obj: 34</p>
-                    <span id="pilote-conv-status" class="text-[10px] text-slate-500">Cumul réel (Moy: 0/j)</span>
+                    <span id="pilote-conv-status" class="text-[10px] text-slate-500">Cumul réel</span>
                 </div>
                 <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4">
-                    <p class="text-xs text-slate-400">Total Clients Acquis (vs Obj. Jour)</p>
+                    <p class="text-xs text-slate-400">Total Clients Acquis</p>
                     <p id="pilote-acquis-suivi" class="text-lg font-bold text-gold-500 mt-1">0 / Obj: 2</p>
-                    <span id="pilote-acquis-status" class="text-[10px] text-slate-500">Cumul réel (Moy: 0/j)</span>
+                    <span id="pilote-acquis-status" class="text-[10px] text-slate-500">Cumul réel</span>
                 </div>
                 <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4">
-                    <p class="text-xs text-slate-400">Taux de Conversion Global</p>
+                    <p class="text-xs text-slate-400">Taux de Conversion</p>
                     <p id="pilote-taux-conversion" class="text-lg font-bold text-gold-500 mt-1">0 %</p>
-                    <span class="text-[10px] text-slate-500">Total Acquis ÷ Total Conversations</span>
+                    <span class="text-[10px] text-slate-500">Acquis ÷ Conversations</span>
                 </div>
             </div>
 
-            <!-- Calcul de Marge Nette & Saisie Transparente Publicité -->
+            <!-- Marges & Pub -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Calcul des Marges & Gestion Publicitaire</h3>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Calcul des Marges & Publicité</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                     <div class="bg-navy-900 p-3 rounded border border-slate-700">
-                        <span class="text-slate-400">Total Avances Encaissées :</span>
+                        <span class="text-slate-400">Total Encaissé :</span>
                         <p id="marge-total-encaisse" class="text-sm font-bold text-gold-500 mt-1">0 FCFA</p>
                     </div>
                     <div class="bg-navy-900 p-3 rounded border border-slate-700">
-                        <span class="text-slate-400">Total Versé au Formaliste :</span>
+                        <span class="text-slate-400">Versé au Formaliste :</span>
                         <p id="marge-total-formaliste" class="text-sm font-bold text-gold-500 mt-1">0 FCFA</p>
                     </div>
                     <div class="bg-navy-900 p-3 rounded border border-slate-700">
@@ -175,31 +174,29 @@
                         <p id="marge-solde-avant-pub" class="text-sm font-bold text-gold-500 mt-1">0 FCFA</p>
                     </div>
                     <div class="bg-navy-900 p-3 rounded border border-slate-700">
-                        <span class="text-slate-400">Marge Nette (Solde Net) :</span>
+                        <span class="text-slate-400">Marge Nette :</span>
                         <p id="marge-nette" class="text-sm font-bold text-green-400 mt-1">0 FCFA</p>
                     </div>
                 </div>
-
-                <!-- Formulaire de Frais de Pub transparent et modifiable -->
                 <form onsubmit="enregistrerPub(event)" class="flex gap-3 items-end pt-2 border-t border-slate-700/55">
                     <div class="flex-1">
                         <label class="block text-xs text-slate-300 mb-1">Frais de Publicité Actuels (FCFA)</label>
-                        <input type="number" id="pub-depense" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100" placeholder="Ex: 50000">
+                        <input type="number" id="pub-depense" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100">
                     </div>
-                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold px-4 py-1.5 rounded text-xs hover:bg-gold-600 h-[34px] whitespace-nowrap">Mettre à jour la Pub</button>
+                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold px-4 py-1.5 rounded text-xs hover:bg-gold-600 h-[34px] whitespace-nowrap">Mettre à jour</button>
                 </form>
             </div>
 
-            <!-- Rapprochement Bancaire -->
+            <!-- Rapprochement -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Solde Réel & Trésorerie</h3>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Trésorerie</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-navy-900 p-3 rounded border border-slate-700">
                         <p class="text-xs text-slate-400">Trésorerie Nette (Système)</p>
                         <p id="system-total-encaisse" class="text-lg font-bold text-gold-500 mt-1">0 FCFA</p>
                     </div>
                     <div class="bg-navy-900 p-3 rounded border border-slate-700">
-                        <label class="block text-xs text-slate-400 mb-1">Saisir le Solde Réel (Banque / Caisse)</label>
+                        <label class="block text-xs text-slate-400 mb-1">Saisir le Solde Réel (Banque/Caisse)</label>
                         <div class="flex gap-2">
                             <input type="number" id="solde-reel-input" class="w-full bg-navy-800 border border-slate-700 rounded px-2 py-1 text-sm text-slate-100" placeholder="Ex: 150000">
                             <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-900 font-semibold px-3 py-1 rounded text-xs hover:bg-gold-600">Vérifier</button>
@@ -209,136 +206,129 @@
                 <div id="rapprochement-ecart" class="text-xs pt-1"></div>
             </div>
 
-            <!-- Supervision des Dossiers & Paiements Formaliste -->
+            <!-- Dossiers & Formaliste -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Gestion des Versements au Formaliste par Dossier</h3>
-                <div id="pilote-container" class="space-y-3 text-xs text-slate-300">
-                    Chargement des dossiers...
-                </div>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Gestion des Versements Formaliste</h3>
+                <div id="pilote-container" class="space-y-3 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
 
-        <!-- VUE 3 : ESPACE CLOSER (Abdoul) -->
+        <!-- VUE 3 : ESPACE CLOSER -->
         <div id="view-closer" class="space-y-6 hidden">
-            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex justify-between items-center">
                 <div>
                     <span class="text-[10px] uppercase tracking-wider text-gold-500 font-semibold">Espace Closer</span>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">WhatsApp, Point Journalier & Vente</h2>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">Point Journalier & Vente</h2>
                 </div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-xs text-gold-500">Abdoul</div>
             </div>
 
             <!-- Point Journalier -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Point Journalier (Conversations & Prospects Acquis)</h3>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Point Journalier</h3>
                 <form onsubmit="enregistrerStatsCloser(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                     <div>
                         <label class="block text-xs text-slate-300 mb-1">Date</label>
-                        <input type="date" id="stat-date" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500">
+                        <input type="date" id="stat-date" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-300 mb-1">Conversations du Jour</label>
-                        <input type="number" id="stat-conv" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Ex: 34">
+                        <label class="block text-xs text-slate-300 mb-1">Conversations</label>
+                        <input type="number" id="stat-conv" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-300 mb-1">Clients Acquis du Jour</label>
-                        <input type="number" id="stat-acquis" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Ex: 2">
+                        <label class="block text-xs text-slate-300 mb-1">Clients Acquis</label>
+                        <input type="number" id="stat-acquis" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100">
                     </div>
                     <div class="flex items-end">
-                        <button type="submit" class="w-full bg-gold-500 text-navy-900 font-semibold text-xs py-2 px-3 rounded hover:bg-gold-600 transition">Enregistrer le Point</button>
+                        <button type="submit" class="w-full bg-gold-500 text-navy-900 font-semibold text-xs py-2 px-3 rounded hover:bg-gold-600 transition">Enregistrer</button>
                     </div>
                 </form>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-700/55 text-xs">
-                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700">
-                        <span class="text-slate-400">Total Conversations :</span> <strong id="cumul-conv" class="text-gold-500">0</strong>
-                    </div>
-                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700">
-                        <span class="text-slate-400">Total Clients Acquis :</span> <strong id="cumul-acquis" class="text-gold-500">0</strong>
-                    </div>
-                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700">
-                        <span class="text-slate-400">Taux de Conversion :</span> <strong id="taux-conv" class="text-gold-500">0 %</strong>
-                    </div>
+                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700"><span class="text-slate-400">Total Conv :</span> <strong id="cumul-conv" class="text-gold-500">0</strong></div>
+                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700"><span class="text-slate-400">Total Acquis :</span> <strong id="cumul-acquis" class="text-gold-500">0</strong></div>
+                    <div class="bg-navy-900 p-2.5 rounded border border-slate-700"><span class="text-slate-400">Taux :</span> <strong id="taux-conv" class="text-gold-500">0 %</strong></div>
                 </div>
             </div>
 
-            <!-- Formulaire Enregistrement Client -->
+            <!-- Ajout Client -->
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
                 <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Enregistrer un Client (EI = 150k | SARL = 175k)</h3>
                 <form onsubmit="ajouterDossierCloser(event)" class="space-y-3">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs text-slate-300 mb-1">Nom</label>
-                            <input type="text" id="closer-nom" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Nom">
+                            <input type="text" id="closer-nom" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100" placeholder="Nom">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-300 mb-1">Prénom</label>
-                            <input type="text" id="closer-prenom" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Prénom">
+                            <input type="text" id="closer-prenom" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100" placeholder="Prénom">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-300 mb-1">Téléphone WhatsApp</label>
-                            <input type="text" id="closer-tel" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Ex: 70000000">
+                            <input type="text" id="closer-tel" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100" placeholder="70000000">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs text-slate-300 mb-1">Type d'Entreprise</label>
-                            <select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500">
+                            <select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100">
                                 <option value="EI">EI (150 000 FCFA)</option>
                                 <option value="SARL">SARL (175 000 FCFA)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-300 mb-1">Net Négocié (FCFA)</label>
-                            <input type="number" id="closer-total" required readonly class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-gold-500 font-bold cursor-not-allowed" value="150000">
+                            <label class="block text-xs text-slate-300 mb-1">Net Négocié</label>
+                            <input type="number" id="closer-total" required readonly class="w-full bg-navy-950 border border-slate-800 rounded px-3 py-1.5 text-sm text-gold-500 font-bold" value="150000">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-300 mb-1">Avance Encaissée (FCFA)</label>
-                            <input type="number" id="closer-avance" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100 focus:border-gold-500" placeholder="Avance versée">
+                            <label class="block text-xs text-slate-300 mb-1">Avance Encaissée</label>
+                            <input type="number" id="closer-avance" required class="w-full bg-navy-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-100" placeholder="Montant">
                         </div>
                     </div>
-                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold text-xs py-2.5 px-4 rounded hover:bg-gold-600 transition w-full sm:w-auto">Enregistrer & Transmettre au Formaliste</button>
+                    <button type="submit" class="bg-gold-500 text-navy-900 font-semibold text-xs py-2.5 px-4 rounded hover:bg-gold-600 transition w-full sm:w-auto">Enregistrer & Transmettre</button>
                 </form>
             </div>
 
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-3">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers, Reliquats & État en Temps Réel</h3>
-                <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">
-                    Chargement de vos dossiers...
-                </div>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers & Reliquats</h3>
+                <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
 
-        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) -->
+        <!-- VUE 4 : ESPACE FORMALISTE -->
         <div id="view-formaliste" class="space-y-6 hidden">
-            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="bg-navy-800 border border-gold-500/30 rounded-xl p-4 shadow-md flex justify-between items-center">
                 <div>
                     <span class="text-[10px] uppercase tracking-wider text-gold-500 font-semibold">Espace Formaliste (Terrain)</span>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">Suivi des Étapes & Paiements Reçus</h2>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-100">Suivi des Étapes & Paiements</h2>
                 </div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-xs text-gold-500">OUEDRAOGO Adama</div>
             </div>
 
             <div class="bg-navy-800 border border-slate-700/60 rounded-xl p-4 space-y-4">
-                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués, Étapes & Paiements</h3>
-                <div id="formaliste-container" class="space-y-3 text-xs text-slate-300">
-                    Chargement des dossiers...
-                </div>
+                <h3 class="text-sm font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués</h3>
+                <div id="formaliste-container" class="space-y-3 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
 
     </main>
 
-    <!-- Script JavaScript -->
     <script>
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
         
-        const kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+        let kamaClient = null;
         let currentUser = null;
         let currentRole = null;
 
+        // Initialisation sécurisée au chargement complet de la page
         document.addEventListener('DOMContentLoaded', () => {
+            if (window.supabase) {
+                kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            } else {
+                console.error("Supabase SDK non chargé.");
+            }
+
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('stat-date');
             if (dateInput) dateInput.value = today;
@@ -346,6 +336,7 @@
         });
 
         async function chargerAnnonceGlobale() {
+            if (!kamaClient) return;
             const { data } = await kamaClient.from('annonces').select('*').limit(1).single();
             if (data && data.message) {
                 document.getElementById('texte-annonce').textContent = data.message;
@@ -354,6 +345,7 @@
 
         async function mettreAJourAnnonce(event) {
             event.preventDefault();
+            if (!kamaClient) return;
             const nouveauMsg = document.getElementById('input-annonce').value;
             const { data: existing } = await kamaClient.from('annonces').select('id').limit(1);
             
@@ -362,13 +354,13 @@
             } else {
                 await kamaClient.from('annonces').insert([{ message: nouveauMsg }]);
             }
-            alert("Bannière mise à jour avec succès !");
+            alert("Bannière mise à jour !");
             document.getElementById('input-annonce').value = '';
             chargerAnnonceGlobale();
         }
 
-        // --- EXPORT TABLEUR CSV ---
         async function exporterDossiersCSV() {
+            if (!kamaClient) return;
             const startDate = document.getElementById('export-start').value;
             const endDate = document.getElementById('export-end').value;
 
@@ -377,14 +369,8 @@
             if (endDate) query = query.lte('created_at', endDate + 'T23:59:59');
 
             const { data, error } = await query;
-            if (error) {
-                alert("Erreur lors de l'exportation : " + error.message);
-                return;
-            }
-            if (!data || data.length === 0) {
-                alert("Aucun dossier trouvé pour cette période.");
-                return;
-            }
+            if (error) { alert("Erreur : " + error.message); return; }
+            if (!data || data.length === 0) { alert("Aucun dossier pour cette période."); return; }
 
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
             csvContent += "Reference;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Date Creation\n";
@@ -408,7 +394,7 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `kama_lex_dossiers_${startDate || 'tout'}_au_${endDate || 'tout'}.csv`);
+            link.setAttribute("download", `kama_lex_export.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -416,20 +402,27 @@
 
         function changerTarifOffre() {
             const selectType = document.getElementById('closer-type').value;
-            const inputTotal = document.getElementById('closer-total');
-            inputTotal.value = (selectType === 'EI') ? '150000' : '175000';
+            document.getElementById('closer-total').value = (selectType === 'EI') ? '150000' : '175000';
         }
 
+        // --- CONNEXION SÉCURISÉE AVEC AFFICHAGE DE L'ERREUR EXACTE ---
         async function gererConnexion(event) {
             event.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
             const errorDiv = document.getElementById('login-error');
             errorDiv.classList.add('hidden');
 
+            if (!kamaClient) {
+                errorDiv.textContent = "Erreur : La base de données n'est pas initialisée. Vérifiez votre connexion internet.";
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+
             try {
                 const { data: authData, error: authError } = await kamaClient.auth.signInWithPassword({ email, password });
-                if (authError) throw new Error("Identifiants incorrects ou accès non autorisé.");
+                if (authError) throw new Error(authError.message);
 
                 currentUser = authData.user;
                 const { data: profile, error: profileError } = await kamaClient
@@ -438,12 +431,12 @@
                     .eq('id', currentUser.id)
                     .single();
 
-                if (profileError || !profile) throw new Error("Profil utilisateur introuvable.");
+                if (profileError || !profile) throw new Error("Utilisateur authentifié mais introuvable dans la table 'profiles'.");
 
                 currentRole = profile.role;
                 basculerVue(currentRole, profile.nom_complet);
             } catch (err) {
-                errorDiv.textContent = "Erreur : " + err.message;
+                errorDiv.textContent = "Erreur de connexion : " + err.message;
                 errorDiv.classList.remove('hidden');
             }
         }
@@ -471,14 +464,13 @@
         }
 
         async function deconnexion() {
-            await kamaClient.auth.signOut();
+            if (kamaClient) await kamaClient.auth.signOut();
             currentUser = null;
             currentRole = null;
             document.getElementById('user-badge').classList.add('hidden');
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // --- PARAMÈTRES & OBJECTIFS PILOTE (VERROUILLÉS) ---
         function basculerEditionParametres() {
             const cpl = document.getElementById('param-cpl');
             const cac = document.getElementById('param-cac');
@@ -494,4 +486,305 @@
             objAcquis.disabled = !isDisabled;
 
             if (isDisabled) {
-                cpl.classList.remove('bg-navy-950', 'text-slate-300'); cpl.classList.add('bg-navy-900', 'text-slate-100');
+                cpl.classList.remove('bg-navy-950'); cpl.classList.add('bg-navy-900');
+                cac.classList.remove('bg-navy-950'); cac.classList.add('bg-navy-900');
+                objConv.classList.remove('bg-navy-950'); objConv.classList.add('bg-navy-900');
+                objAcquis.classList.remove('bg-navy-950'); objAcquis.classList.add('bg-navy-900');
+                btnSave.disabled = false;
+                btnSave.className = "w-full bg-gold-500 text-navy-900 font-semibold text-xs py-2 px-2 rounded transition";
+                btnSave.textContent = "Enregistrer";
+                btnEdit.textContent = "Verrouiller";
+            } else {
+                cpl.classList.add('bg-navy-950'); cpl.classList.remove('bg-navy-900');
+                cac.classList.add('bg-navy-950'); cac.classList.remove('bg-navy-900');
+                objConv.classList.add('bg-navy-950'); objConv.classList.remove('bg-navy-900');
+                objAcquis.classList.add('bg-navy-950'); objAcquis.classList.remove('bg-navy-900');
+                btnSave.disabled = true;
+                btnSave.className = "w-full bg-slate-700 text-slate-400 font-semibold text-xs py-2 px-2 rounded cursor-not-allowed transition";
+                btnSave.textContent = "Verrouillé";
+                btnEdit.textContent = "Modifier les seuils";
+            }
+        }
+
+        async function chargerParametres() {
+            if (!kamaClient) return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations: 34, objectif_acquis: 2, depense_pub_totale: 0 };
+            const { data } = await kamaClient.from('parametres').select('*').limit(1).single();
+            if (data) {
+                if (document.getElementById('param-cpl')) document.getElementById('param-cpl').value = data.plafond_cpl;
+                if (document.getElementById('param-cac')) document.getElementById('param-cac').value = data.plafond_cac;
+                if (document.getElementById('param-obj-conv')) document.getElementById('param-obj-conv').value = data.objectif_conversations;
+                if (document.getElementById('param-obj-acquis')) document.getElementById('param-obj-acquis').value = data.objectif_acquis;
+                if (document.getElementById('pub-depense')) document.getElementById('pub-depense').value = data.depense_pub_totale || 0;
+                return data;
+            }
+            return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations: 34, objectif_acquis: 2, depense_pub_totale: 0 };
+        }
+
+        async function sauvegarderParametres(event) {
+            event.preventDefault();
+            if (!kamaClient) return;
+            const newCpl = parseFloat(document.getElementById('param-cpl').value);
+            const newCac = parseFloat(document.getElementById('param-cac').value);
+            const objConv = parseInt(document.getElementById('param-obj-conv').value);
+            const objAcquis = parseInt(document.getElementById('param-obj-acquis').value);
+
+            const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
+            if (existing && existing.length > 0) {
+                await kamaClient.from('parametres').update({ plafond_cpl: newCpl, plafond_cac: newCac, objectif_conversations: objConv, objectif_acquis: objAcquis }).eq('id', existing[0].id);
+            } else {
+                await kamaClient.from('parametres').insert([{ plafond_cpl: newCpl, plafond_cac: newCac, objectif_conversations: objConv, objectif_acquis: objAcquis }]);
+            }
+            alert("Paramètres mis à jour !");
+            basculerEditionParametres();
+            chargerDonneesPilote();
+        }
+
+        async function enregistrerStatsCloser(event) {
+            event.preventDefault();
+            if (!kamaClient) return;
+            const datePoint = document.getElementById('stat-date').value;
+            const conv = parseInt(document.getElementById('stat-conv').value);
+            const acquis = parseInt(document.getElementById('stat-acquis').value);
+
+            const { error } = await kamaClient.from('closer_stats').insert([{ date_point: datePoint, conversations: conv, clients_acquis: acquis }]);
+            if (error) { alert("Erreur : " + error.message); return; }
+
+            alert("Point journalier enregistré !");
+            document.getElementById('stat-conv').value = '';
+            document.getElementById('stat-acquis').value = '';
+            chargerStatsCloser();
+        }
+
+        async function chargerStatsCloser() {
+            if (!kamaClient) return;
+            const { data } = await kamaClient.from('closer_stats').select('*');
+            let totalConv = 0, totalAcquisStats = 0;
+            if (data) {
+                data.forEach(s => {
+                    totalConv += Number(s.conversations || 0);
+                    totalAcquisStats += Number(s.clients_acquis || 0);
+                });
+            }
+            document.getElementById('cumul-conv').textContent = totalConv;
+            document.getElementById('cumul-acquis').textContent = totalAcquisStats;
+            let taux = totalConv > 0 ? ((totalAcquisStats / totalConv) * 100).toFixed(1) : 0;
+            document.getElementById('taux-conv').textContent = taux + " %";
+        }
+
+        async function chargerDonneesPilote() {
+            if (!kamaClient) return;
+            const params = await chargerParametres();
+            const objConv = Number(params.objectif_conversations || 34);
+            const objAcquis = Number(params.objectif_acquis || 2);
+            const depenseTotale = Number(params.depense_pub_totale || 0);
+
+            const { data: statsData } = await kamaClient.from('closer_stats').select('*');
+            let totalConv = 0, totalAcquisStats = 0, nbJours = 0;
+            if (statsData) {
+                nbJours = statsData.length;
+                statsData.forEach(s => {
+                    totalConv += Number(s.conversations || 0);
+                    totalAcquisStats += Number(s.clients_acquis || 0);
+                });
+            }
+
+            let moyenneConv = nbJours > 0 ? (totalConv / nbJours) : 0;
+            let moyenneAcquis = nbJours > 0 ? (totalAcquisStats / nbJours) : 0;
+            let taux = totalConv > 0 ? ((totalAcquisStats / totalConv) * 100).toFixed(1) : 0;
+            document.getElementById('pilote-taux-conversion').textContent = taux + " %";
+
+            document.getElementById('pilote-conv-suivi').textContent = `${totalConv} (Moy: ${moyenneConv.toFixed(1)} /j)`;
+            document.getElementById('pilote-conv-status').innerHTML = moyenneConv >= objConv ? `<span class="text-green-400">✔ Obj. atteint</span>` : `<span class="text-amber-400">⚠ Sous l'obj.</span>`;
+
+            document.getElementById('pilote-acquis-suivi').textContent = `${totalAcquisStats} (Moy: ${moyenneAcquis.toFixed(1)} /j)`;
+            document.getElementById('pilote-acquis-status').innerHTML = moyenneAcquis >= objAcquis ? `<span class="text-green-400">✔ Obj. atteint</span>` : `<span class="text-amber-400">⚠ Sous l'obj.</span>`;
+
+            const { data: dossiersData } = await kamaClient.from('dossiers').select('*');
+            let totalEncaisse = 0, totalFormalisteVerse = 0;
+
+            if (dossiersData) {
+                dossiersData.forEach(d => {
+                    totalEncaisse += Number(d.montant_encaisse || 0);
+                    totalFormalisteVerse += Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat || 0);
+                });
+            }
+
+            let soldeAvantPub = totalEncaisse - totalFormalisteVerse;
+            let margeNette = soldeAvantPub - depenseTotale;
+
+            document.getElementById('marge-total-encaisse').textContent = totalEncaisse.toLocaleString() + " FCFA";
+            document.getElementById('marge-total-formaliste').textContent = totalFormalisteVerse.toLocaleString() + " FCFA";
+            document.getElementById('marge-solde-avant-pub').textContent = soldeAvantPub.toLocaleString() + " FCFA";
+            document.getElementById('marge-nette').textContent = margeNette.toLocaleString() + " FCFA";
+            document.getElementById('system-total-encaisse').textContent = margeNette.toLocaleString() + " FCFA";
+
+            const container = document.getElementById('pilote-container');
+            if (!dossiersData || dossiersData.length === 0) {
+                container.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
+                return;
+            }
+
+            let html = '<div class="space-y-3">';
+            dossiersData.forEach(d => {
+                let avanceF = Number(d.formaliste_avance || 0);
+                let reliquatF = Number(d.formaliste_reliquat || 0);
+                html += `<div class="bg-navy-900 p-3 rounded border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <span class="font-bold text-slate-200 text-sm">[Tél: ${d.telephone || 'N/A'}] ${d.prenom || ''} ${d.nom || ''}</span> - <span class="text-gold-500">${d.type_entreprise || 'EI'}</span>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Avance client : ${d.montant_encaisse || 0} FCFA | Statut : <span class="text-gold-400">${d.statut || 'En cours'}</span></div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div>
+                            <label class="block text-[10px] text-slate-400">Avance Formaliste</label>
+                            <input type="number" id="form-avance-${d.id}" value="${avanceF}" class="bg-navy-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 w-24">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-400">Reliquat Formaliste</label>
+                            <input type="number" id="form-reliquat-${d.id}" value="${reliquatF}" class="bg-navy-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-100 w-24">
+                        </div>
+                        <button onclick="mettreAJourFormalistePaiement('${d.id}')" class="bg-gold-500 text-navy-900 font-semibold px-3 py-1.5 rounded text-xs hover:bg-gold-600 self-end">Valider</button>
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        async function mettreAJourFormalistePaiement(id) {
+            if (!kamaClient) return;
+            const avance = parseFloat(document.getElementById(`form-avance-${id}`).value) || 0;
+            const reliquat = parseFloat(document.getElementById(`form-reliquat-${id}`).value) || 0;
+
+            const { error } = await kamaClient.from('dossiers').update({ 
+                formaliste_avance: avance, 
+                formaliste_reliquat: reliquat,
+                formaliste_paye_avance: avance > 0,
+                formaliste_paye_reliquat: reliquat > 0
+            }).eq('id', id);
+
+            if (error) { alert("Erreur : " + error.message); return; }
+            alert("Paiements formaliste mis à jour !");
+            chargerDonneesPilote();
+        }
+
+        async function enregistrerPub(event) {
+            event.preventDefault();
+            if (!kamaClient) return;
+            const depense = parseFloat(document.getElementById('pub-depense').value) || 0;
+            const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
+
+            if (existing && existing.length > 0) {
+                await kamaClient.from('parametres').update({ depense_pub_totale: depense }).eq('id', existing[0].id);
+            } else {
+                await kamaClient.from('parametres').insert([{ depense_pub_totale: depense }]);
+            }
+            alert("Frais de publicité mis à jour !");
+            chargerDonneesPilote();
+        }
+
+        async function sauvegarderSoldeReel() {
+            const soldeReel = parseFloat(document.getElementById('solde-reel-input').value);
+            const texteSysteme = document.getElementById('system-total-encaisse').textContent;
+            const systemeMontant = parseFloat(texteSysteme.replace(/[^0-9.-]+/g,""));
+            const ecart = soldeReel - systemeMontant;
+            const ecartDiv = document.getElementById('rapprochement-ecart');
+
+            if (ecart === 0) {
+                ecartDiv.innerHTML = `<span class="text-green-400 font-semibold">✔ Rapprochement parfait : Aucun écart.</span>`;
+            } else {
+                ecartDiv.innerHTML = `<span class="text-amber-400 font-semibold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA.</span>`;
+            }
+        }
+
+        async function ajouterDossierCloser(event) {
+            event.preventDefault();
+            if (!kamaClient) return;
+            const nom = document.getElementById('closer-nom').value;
+            const prenom = document.getElementById('closer-prenom').value || '';
+            const telephone = document.getElementById('closer-tel').value;
+            const typeEnt = document.getElementById('closer-type').value;
+            const total = parseFloat(document.getElementById('closer-total').value);
+            const avance = parseFloat(document.getElementById('closer-avance').value);
+            const referenceAuto = 'KL-' + Math.floor(10000 + Math.random() * 90000);
+
+            const { error } = await kamaClient.from('dossiers').insert([{
+                reference: referenceAuto, nom, prenom, telephone, type_entreprise: typeEnt, service: typeEnt,
+                montant_total: total, montant_encaisse: avance, statut: '1. Prise en charge confirmée'
+            }]);
+
+            if (error) { alert("Erreur : " + error.message); return; }
+            alert("Client enregistré et transmis au formaliste !");
+            document.getElementById('closer-nom').value = '';
+            document.getElementById('closer-prenom').value = '';
+            document.getElementById('closer-tel').value = '';
+            document.getElementById('closer-avance').value = '';
+            chargerDonneesCloser();
+        }
+
+        async function chargerDonneesCloser() {
+            if (!kamaClient) return;
+            const listDiv = document.getElementById('closer-dossiers-list');
+            const { data } = await kamaClient.from('dossiers').select('*');
+            if (!data || data.length === 0) { listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
+            let html = '';
+            data.forEach(d => {
+                let total = Number(d.montant_total || 0);
+                let avance = Number(d.montant_encaisse || 0);
+                let reliquat = total - avance;
+                html += `<div class="bg-navy-900 p-2.5 rounded border border-slate-700/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
+                    <div>
+                        <p class="font-medium text-slate-200 text-sm"><span class="text-gold-500">[Tél: ${d.telephone || 'N/A'}]</span> ${d.prenom || ''} ${d.nom || ''} - <span class="text-gold-500">${d.type_entreprise || 'EI'}</span></p>
+                        <p class="text-[11px] text-slate-400">Net : ${total}f | Avance : ${avance}f | État : <span class="text-gold-400 font-medium">${d.statut}</span></p>
+                    </div>
+                    <span class="text-xs text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded border border-orange-500/20">Reliquat : ${reliquat}f</span>
+                </div>`;
+            });
+            listDiv.innerHTML = html;
+        }
+
+        async function chargerDonneesFormaliste() {
+            if (!kamaClient) return;
+            const container = document.getElementById('formaliste-container');
+            const { data } = await kamaClient.from('dossiers').select('*');
+            if (!data || data.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
+            let html = '<div class="space-y-3">';
+            data.forEach(d => {
+                let badgeAvance = d.formaliste_paye_avance ? `<span class="bg-green-950 text-green-400 border border-green-500/30 px-2 py-0.5 rounded text-[10px] font-semibold">✔ Avance (${d.formaliste_avance}f)</span>` : `<span class="text-slate-500 text-[10px]">Avance en attente</span>`;
+                let badgeReliquat = d.formaliste_paye_reliquat ? `<span class="bg-green-950 text-green-400 border border-green-500/30 px-2 py-0.5 rounded text-[10px] font-semibold">✔ Reliquat (${d.formaliste_reliquat}f)</span>` : `<span class="text-slate-500 text-[10px]">Reliquat en attente</span>`;
+
+                html += `<div class="bg-navy-900 p-3.5 rounded border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <span class="font-bold text-slate-200 text-sm"><span class="text-gold-500">[Tél: ${d.telephone || 'N/A'}]</span> ${d.prenom || ''} ${d.nom || ''}</span>
+                        <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-2 flex-wrap">
+                            <span>Offre : <strong class="text-gold-400">${d.type_entreprise || 'EI'}</strong></span> | 
+                            <span>Étape : <strong class="text-gold-500">${d.statut}</strong></span>
+                        </div>
+                        <div class="mt-2 flex gap-2">${badgeAvance} ${badgeReliquat}</div>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <select id="select-statut-${d.id}" class="bg-navy-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
+                            <option value="1. Prise en charge confirmée">1. Prise en charge confirmée</option>
+                            <option value="2. Dénomination commerciale réservée">2. Dénomination réservée</option>
+                            <option value="3. Signature des documents confirmée">3. Signature documents confirmée</option>
+                            <option value="4. Introduction du dossier confirmée">4. Introduction du dossier confirmée</option>
+                            <option value="5. Création confirmée & documents remis">5. Création confirmée (Clôturé)</option>
+                        </select>
+                        <button onclick="mettreAJourStatut('${d.id}')" class="bg-gold-500 text-navy-900 font-semibold px-3 py-1 rounded hover:bg-gold-600 transition text-xs whitespace-nowrap">Mettre à jour</button>
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        async function mettreAJourStatut(id) {
+            if (!kamaClient) return;
+            const nouveauStatut = document.getElementById(`select-statut-${id}`).value;
+            const { error } = await kamaClient.from('dossiers').update({ statut: nouveauStatut }).eq('id', id);
+            if (error) { alert("Erreur : " + error.message); return; }
+            alert("Statut mis à jour !");
+            chargerDonneesFormaliste();
+        }
+    </script>
+</body>
+</html>
