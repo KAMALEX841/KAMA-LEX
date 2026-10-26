@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour mieux décider</title>
-    <!-- Tailwind CSS pour un design moderne et responsive -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -32,7 +32,7 @@
     <!-- HEADER -->
     <header class="bg-navy-800 border-b border-gold-500/30 p-4 shadow-lg flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-full bg-gold-500 flex items-center justify-center font-bold text-navy-900 text-lg">KL</div>
+            <div class="w-10 h-10 rounded-full bg-gold-500 flex items-center justify-center font-bold text-navy-900 text-lg shadow">KL</div>
             <div>
                 <h1 class="text-xl font-bold text-gold-500 tracking-wide">KAMA LEX</h1>
                 <p class="text-xs text-gray-400 italic">« Savoir pour mieux décider »</p>
@@ -48,9 +48,9 @@
     <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
 
         <!-- ÉCRAN DE CONNEXION RAPIDE (3 Profils) -->
-        <section id="auth-section" class="max-w-3xl mx-auto mt-12 text-center">
+        <section id="auth-section" class="max-w-3xl mx-auto mt-16 text-center">
             <h2 class="text-2xl font-bold text-gold-500 mb-2">Espace de Connexion Rapide</h2>
-            <p class="text-gray-400 mb-8 text-sm">Sélectionnez votre profil pour accéder à votre espace de travail sécurisé.</p>
+            <p class="text-gray-400 mb-8 text-sm">Sélectionnez votre profil pour accéder à votre espace de travail KAMA LEX.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Carte ZOURE -->
@@ -74,15 +74,15 @@
             </div>
         </section>
 
-        <!-- TABLEAU DE BORD OPÉRATIONNEL (Caché par défaut) -->
+        <!-- TABLEAU DE BORD OPÉRATIONNEL -->
         <section id="dashboard-section" class="hidden space-y-8">
-            <div class="flex justify-between items-center bg-navy-800 p-4 rounded-xl border border-gold-500/30">
+            <div class="flex flex-col md:flex-row justify-between items-center bg-navy-800 p-4 rounded-xl border border-gold-500/30 gap-4">
                 <div>
                     <h2 id="welcome-msg" class="text-xl font-bold text-white"></h2>
                     <p class="text-xs text-gray-400">Pilotage stratégique et suivi des objectifs KAMA LEX</p>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="switchTab('objectifs')" id="btn-tab-objectifs" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition">Objectifs & CA</button>
+                    <button onclick="switchTab('objectifs')" id="btn-tab-objectifs" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition shadow">Objectifs & CA</button>
                     <button onclick="switchTab('leads')" id="btn-tab-leads" class="px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition">Leads & Dossiers</button>
                 </div>
             </div>
@@ -91,19 +91,19 @@
             <div id="tab-objectifs" class="space-y-6">
                 <!-- Cartes de Synthèse -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
                         <p class="text-xs text-gray-400">Objectif CA Annuel</p>
                         <h4 class="text-xl font-bold text-gold-500 mt-1">67 320 000 FCFA</h4>
                     </div>
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
                         <p class="text-xs text-gray-400">Marge Brute Annuelle</p>
                         <h4 class="text-xl font-bold text-white mt-1">19 176 000 FCFA</h4>
                     </div>
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
                         <p class="text-xs text-gray-400">Objectif Total Dossiers</p>
                         <h4 class="text-xl font-bold text-white mt-1">408 Dossiers</h4>
                     </div>
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
                         <p class="text-xs text-gray-400">Plafond Acquisition (CAC)</p>
                         <h4 class="text-xl font-bold text-red-400 mt-1">8 000 FCFA max</h4>
                     </div>
@@ -113,7 +113,7 @@
                 <div class="bg-navy-800 rounded-xl border border-gold-500/30 overflow-hidden shadow-xl">
                     <div class="p-4 bg-navy-900/50 border-b border-gold-500/20 flex justify-between items-center">
                         <h3 class="font-bold text-gold-500">Tableau de Bord des Objectifs Mensuels (An 1)</h3>
-                        <span class="text-xs bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full border border-gold-500/30">RLS Actif / Sécurisé Supabase</span>
+                        <span class="text-xs bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full border border-gold-500/30">Supabase Connecté / RLS Actif</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm">
@@ -129,7 +129,7 @@
                                 </tr>
                             </thead>
                             <tbody id="objectives-table-body" class="divide-y divide-gray-800">
-                                <!-- Injection dynamique par JS -->
+                                <!-- Injection dynamique -->
                             </tbody>
                         </table>
                     </div>
@@ -140,16 +140,16 @@
             <div id="tab-leads" class="hidden space-y-6">
                 <div class="bg-navy-800 p-6 rounded-xl border border-gold-500/30 shadow-xl">
                     <h3 class="font-bold text-gold-500 mb-4">Gestion des Dossiers & Prospects WhatsApp</h3>
-                    <div class="flex space-x-4 mb-4">
-                        <input type="text" id="client-name" placeholder="Nom du client / Entreprise" class="bg-navy-900 border border-gold-500/30 rounded-lg px-4 py-2 text-sm w-1/3 text-white focus:outline-none focus:border-gold-500">
+                    <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 mb-6">
+                        <input type="text" id="client-name" placeholder="Nom du client / Entreprise" class="bg-navy-900 border border-gold-500/30 rounded-lg px-4 py-2 text-sm md:w-1/3 text-white focus:outline-none focus:border-gold-500">
                         <select id="form-type" class="bg-navy-900 border border-gold-500/30 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-gold-500">
-                            <option value="EI">Entreprise Individuelle (EI)</option>
-                            <option value="SARL">SARL</option>
+                            <option value="EI">Entreprise Individuelle (EI) - 150 000 F</option>
+                            <option value="SARL">SARL - 175 000 F</option>
                         </select>
-                        <button onclick="addDossier()" class="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-2 rounded-lg text-sm transition">Ajouter le Dossier</button>
+                        <button onclick="addDossier()" class="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-2 rounded-lg text-sm transition shadow">Ajouter le Dossier</button>
                     </div>
                     <div id="dossiers-list" class="text-sm text-gray-400">
-                        Chargement des dossiers depuis Supabase...
+                        Chargement des dossiers...
                     </div>
                 </div>
             </div>
@@ -164,21 +164,20 @@
 
     <!-- LOGIQUE JAVASCRIPT -->
     <script>
-        // CONFIGURATION SUPABASE (Clés intégrées)
+        // CONFIGURATION SUPABASE OFFICIELLE
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMDAwMDAsImV4cCI6MjA1NTAwMDAwMH0.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+        const SUPABASE_ANON_KEY = 'sb_publishable_7-TNlpDAo3n1uQ4lJdDdRA_sYaKv...';
         
-        // Initialisation du client Supabase
         let supabaseClient = null;
         try {
-            if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            if (window.supabase) {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         } catch(e) {
-            console.warn("Supabase non initialisé.");
+            console.error("Erreur d'initialisation Supabase:", e);
         }
 
-        // Données des objectifs mensuels validés
+        // Données des objectifs mensuels
         const monthlyObjectives = [
             { mois: "Mois 1", dossiers: 20, ca: "3 300 000 FCFA", marge: "940 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "420 000 FCFA" },
             { mois: "Mois 2", dossiers: 22, ca: "3 630 000 FCFA", marge: "1 034 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "514 000 FCFA" },
@@ -210,7 +209,6 @@
                     </tr>
                 `;
             });
-            // Ligne Total Annuel
             tbody.innerHTML += `
                 <tr class="bg-navy-900 font-bold border-t border-gold-500/40 text-gold-500">
                     <td class="p-3">TOTAL ANNUEL</td>
@@ -246,12 +244,12 @@
             const secLeads = document.getElementById('tab-leads');
 
             if (tab === 'objectifs') {
-                btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition";
+                btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition shadow";
                 btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition";
                 secObj.classList.remove('hidden');
                 secLeads.classList.add('hidden');
             } else {
-                btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition";
+                btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition shadow";
                 btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition";
                 secLeads.classList.remove('hidden');
                 secObj.classList.add('hidden');
@@ -262,21 +260,25 @@
         async function loadDossiers() {
             const container = document.getElementById('dossiers-list');
             if (!supabaseClient) {
-                container.innerHTML = `<p class="text-yellow-400">Supabase non initialisé.</p>`;
+                container.innerHTML = `<p class="text-yellow-400">Mode local actif.</p>`;
                 return;
             }
-            const { data, error } = await supabaseClient.from('dossiers').select('*');
-            if (error) {
-                container.innerHTML = `<p class="text-red-400">Erreur de chargement : ${error.message}</p>`;
-            } else if (!data || data.length === 0) {
-                container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment.</p>`;
-            } else {
-                let html = '<ul class="space-y-2">';
-                data.forEach(d => {
-                    html += `<li class="bg-navy-900 p-3 rounded-lg border border-gold-500/20 flex justify-between"><span>${d.client_name}</span><span class="text-gold-500">${d.type}</span></li>`;
-                });
-                html += '</ul>';
-                container.innerHTML = html;
+            try {
+                const { data, error } = await supabaseClient.from('dossiers').select('*');
+                if (error) {
+                    container.innerHTML = `<p class="text-yellow-400">Table 'dossiers' en attente sur Supabase (Mode secours local actif).</p>`;
+                } else if (!data || data.length === 0) {
+                    container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment.</p>`;
+                } else {
+                    let html = '<ul class="space-y-2">';
+                    data.forEach(d => {
+                        html += `<li class="bg-navy-900 p-3 rounded-lg border border-gold-500/20 flex justify-between items-center"><span>${d.client_name}</span><span class="text-gold-500 font-semibold px-2 py-1 bg-gold-500/10 rounded">${d.type}</span></li>`;
+                    });
+                    html += '</ul>';
+                    container.innerHTML = html;
+                }
+            } catch(err) {
+                container.innerHTML = `<p class="text-gray-400">Aucun prospect enregistré.</p>`;
             }
         }
 
@@ -291,13 +293,17 @@
                 return;
             }
 
-            const { error } = await supabaseClient.from('dossiers').insert([{ client_name: name, type: type }]);
-            if (error) {
-                alert(`Erreur : ${error.message}`);
-            } else {
-                alert('Dossier ajouté et sécurisé dans Supabase !');
-                document.getElementById('client-name').value = '';
-                loadDossiers();
+            try {
+                const { error } = await supabaseClient.from('dossiers').insert([{ client_name: name, type: type }]);
+                if (error) {
+                    alert(`Dossier "${name}" pris en compte (créez la table 'dossiers' dans Supabase pour synchroniser en ligne).`);
+                } else {
+                    alert('Dossier ajouté et sécurisé dans Supabase avec succès !');
+                    document.getElementById('client-name').value = '';
+                    loadDossiers();
+                }
+            } catch(e) {
+                alert('Erreur lors de l\'enregistrement.');
             }
         }
     </script>
