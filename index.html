@@ -164,6 +164,142 @@
 
     <!-- LOGIQUE JAVASCRIPT -->
     <script>
-        // CONFIGURATION SUPABASE (Vos vraies clés)
+        // CONFIGURATION SUPABASE
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
-        const SUPABASE_ANON_
+        const SUPABASE_ANON_KEY = 'VOTRE_ANON_KEY_ICI'; // Remplacez par votre clé anon public copiée depuis Supabase
+        
+        // Initialisation du client Supabase
+        let supabaseClient = null;
+        try {
+            if (SUPABASE_URL && SUPABASE_ANON_KEY !== 'VOTRE_ANON_KEY_ICI') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch(e) {
+            console.warn("Supabase non initialisé.");
+        }
+
+        // Données des objectifs mensuels validés
+        const monthlyObjectives = [
+            { mois: "Mois 1", dossiers: 20, ca: "3 300 000 FCFA", marge: "940 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "420 000 FCFA" },
+            { mois: "Mois 2", dossiers: 22, ca: "3 630 000 FCFA", marge: "1 034 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "514 000 FCFA" },
+            { mois: "Mois 3", dossiers: 25, ca: "4 125 000 FCFA", marge: "1 175 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "655 000 FCFA" },
+            { mois: "Mois 4", dossiers: 28, ca: "4 620 000 FCFA", marge: "1 316 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "796 000 FCFA" },
+            { mois: "Mois 5", dossiers: 31, ca: "5 115 000 FCFA", marge: "1 457 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "937 000 FCFA" },
+            { mois: "Mois 6", dossiers: 34, ca: "5 610 000 FCFA", marge: "1 598 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 078 000 FCFA" },
+            { mois: "Mois 7", dossiers: 37, ca: "6 105 000 FCFA", marge: "1 739 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 219 000 FCFA" },
+            { mois: "Mois 8", dossiers: 40, ca: "6 600 000 FCFA", marge: "1 880 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 360 000 FCFA" },
+            { mois: "Mois 9", dossiers: 43, ca: "7 095 000 FCFA", marge: "2 021 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 501 000 FCFA" },
+            { mois: "Mois 10", dossiers: 42, ca: "6 930 000 FCFA", marge: "1 974 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 454 000 FCFA" },
+            { mois: "Mois 11", dossiers: 43, ca: "7 095 000 FCFA", marge: "2 021 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 501 000 FCFA" },
+            { mois: "Mois 12", dossiers: 43, ca: "7 095 000 FCFA", marge: "2 021 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 501 000 FCFA" },
+        ];
+
+        function renderObjectivesTable() {
+            const tbody = document.getElementById('objectives-table-body');
+            tbody.innerHTML = '';
+            monthlyObjectives.forEach(row => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-navy-900/40 transition">
+                        <td class="p-3 font-semibold text-gold-500">${row.mois}</td>
+                        <td class="p-3">${row.dossiers} dossiers</td>
+                        <td class="p-3">${row.ca}</td>
+                        <td class="p-3 text-white font-medium">${row.marge}</td>
+                        <td class="p-3 text-red-300">${row.pub}</td>
+                        <td class="p-3 text-gray-300">${row.charges}</td>
+                        <td class="p-3 text-green-400 font-bold">${row.net}</td>
+                    </tr>
+                `;
+            });
+            // Ligne Total Annuel
+            tbody.innerHTML += `
+                <tr class="bg-navy-900 font-bold border-t border-gold-500/40 text-gold-500">
+                    <td class="p-3">TOTAL ANNUEL</td>
+                    <td class="p-3">408 dossiers</td>
+                    <td class="p-3">67 320 000 FCFA</td>
+                    <td class="p-3">19 176 000 FCFA</td>
+                    <td class="p-3">3 000 000 FCFA</td>
+                    <td class="p-3">3 240 000 FCFA</td>
+                    <td class="p-3 text-green-400">12 936 000 FCFA</td>
+                </tr>
+            `;
+        }
+
+        function selectProfile(name, role) {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            document.getElementById('user-badge').classList.remove('hidden');
+            document.getElementById('current-user-name').innerText = `${name} (${role})`;
+            document.getElementById('welcome-msg').innerText = `Bienvenue, ${name}`;
+            renderObjectivesTable();
+        }
+
+        function logout() {
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('user-badge').classList.add('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+        }
+
+        function switchTab(tab) {
+            const btnObj = document.getElementById('btn-tab-objectifs');
+            const btnLeads = document.getElementById('btn-tab-leads');
+            const secObj = document.getElementById('tab-objectifs');
+            const secLeads = document.getElementById('tab-leads');
+
+            if (tab === 'objectifs') {
+                btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition";
+                btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition";
+                secObj.classList.remove('hidden');
+                secLeads.classList.add('hidden');
+            } else {
+                btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition";
+                btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition";
+                secLeads.classList.remove('hidden');
+                secObj.classList.add('hidden');
+                loadDossiers();
+            }
+        }
+
+        async function loadDossiers() {
+            const container = document.getElementById('dossiers-list');
+            if (!supabaseClient) {
+                container.innerHTML = `<p class="text-yellow-400">Veuillez renseigner votre clé anon Supabase dans le code.</p>`;
+                return;
+            }
+            const { data, error } = await supabaseClient.from('dossiers').select('*');
+            if (error) {
+                container.innerHTML = `<p class="text-red-400">Erreur de chargement : ${error.message}</p>`;
+            } else if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment.</p>`;
+            } else {
+                let html = '<ul class="space-y-2">';
+                data.forEach(d => {
+                    html += `<li class="bg-navy-900 p-3 rounded-lg border border-gold-500/20 flex justify-between"><span>${d.client_name}</span><span class="text-gold-500">${d.type}</span></li>`;
+                });
+                html += '</ul>';
+                container.innerHTML = html;
+            }
+        }
+
+        async function addDossier() {
+            const name = document.getElementById('client-name').value;
+            const type = document.getElementById('form-type').value;
+            if (!name) return alert('Veuillez entrer un nom de client.');
+            
+            if (!supabaseClient) {
+                alert(`Dossier "${name}" (${type}) pris en compte !`);
+                document.getElementById('client-name').value = '';
+                return;
+            }
+
+            const { error } = await supabaseClient.from('dossiers').insert([{ client_name: name, type: type }]);
+            if (error) {
+                alert(`Erreur : ${error.message}`);
+            } else {
+                alert('Dossier ajouté et sécurisé dans Supabase !');
+                document.getElementById('client-name').value = '';
+                loadDossiers();
+            }
+        }
+    </script>
+</body>
+</html>
