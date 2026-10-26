@@ -171,8 +171,8 @@
         // Initialisation du client Supabase (si les clés sont configurées)
         let supabaseClient = null;
         try {
-            if (SUPABASE_URL !== 'VOTRE_SUPABASE_URL') {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            if (SUPABASE_URL !== ''https://zhcjdlvboqzqpilbxmmr.supabase.co'') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc);
             }
         } catch(e) {
             console.warn("Supabase non initialisé, mode local actif.");
