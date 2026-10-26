@@ -38,9 +38,14 @@
                 <p class="text-xs text-gray-400 italic">« Savoir pour mieux décider »</p>
             </div>
         </div>
-        <div id="user-badge" class="hidden flex items-center space-x-3 bg-navy-900 px-4 py-2 rounded-lg border border-gold-500/30">
-            <span id="current-user-name" class="text-sm font-semibold text-gold-500"></span>
-            <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 underline">Déconnexion</button>
+        <div class="flex items-center space-x-4">
+            <div id="db-status" class="text-xs px-3 py-1 rounded-full bg-gold-500/20 text-gold-500 border border-gold-500/30">
+                Mode Opérationnel KAMA LEX
+            </div>
+            <div id="user-badge" class="hidden flex items-center space-x-3 bg-navy-900 px-4 py-2 rounded-lg border border-gold-500/30">
+                <span id="current-user-name" class="text-sm font-semibold text-gold-500"></span>
+                <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 underline">Déconnexion</button>
+            </div>
         </div>
     </header>
 
@@ -50,7 +55,7 @@
         <!-- ÉCRAN DE CONNEXION RAPIDE (3 Profils) -->
         <section id="auth-section" class="max-w-3xl mx-auto mt-16 text-center">
             <h2 class="text-2xl font-bold text-gold-500 mb-2">Espace de Connexion Rapide</h2>
-            <p class="text-gray-400 mb-8 text-sm">Sélectionnez votre profil pour accéder à votre espace de travail KAMA LEX.</p>
+            <p class="text-gray-400 mb-8 text-sm">Sélectionnez votre profil pour accéder à votre espace de travail KAMA LEX à Ouagadougou.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Carte ZOURE -->
@@ -113,7 +118,7 @@
                 <div class="bg-navy-800 rounded-xl border border-gold-500/30 overflow-hidden shadow-xl">
                     <div class="p-4 bg-navy-900/50 border-b border-gold-500/20 flex justify-between items-center">
                         <h3 class="font-bold text-gold-500">Tableau de Bord des Objectifs Mensuels (An 1)</h3>
-                        <span class="text-xs bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full border border-gold-500/30">Supabase Connecté / RLS Actif</span>
+                        <span class="text-xs bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full border border-gold-500/30">Suivi Actif</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm">
@@ -164,19 +169,6 @@
 
     <!-- LOGIQUE JAVASCRIPT -->
     <script>
-        // CONFIGURATION SUPABASE OFFICIELLE
-        const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_7-TNlpDAo3n1uQ4lJdDdRA_sYaKv...';
-        
-        let supabaseClient = null;
-        try {
-            if (window.supabase) {
-                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch(e) {
-            console.error("Erreur d'initialisation Supabase:", e);
-        }
-
         // Données des objectifs mensuels
         const monthlyObjectives = [
             { mois: "Mois 1", dossiers: 20, ca: "3 300 000 FCFA", marge: "940 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "420 000 FCFA" },
@@ -192,6 +184,10 @@
             { mois: "Mois 11", dossiers: 43, ca: "7 095 000 FCFA", marge: "2 021 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 501 000 FCFA" },
             { mois: "Mois 12", dossiers: 43, ca: "7 095 000 FCFA", marge: "2 021 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 501 000 FCFA" },
         ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderObjectivesTable();
+        });
 
         function renderObjectivesTable() {
             const tbody = document.getElementById('objectives-table-body');
@@ -257,54 +253,48 @@
             }
         }
 
-        async function loadDossiers() {
+        // Gestion locale instantanée (LocalStorage) pour zéro bug ce soir
+        function loadDossiers() {
             const container = document.getElementById('dossiers-list');
-            if (!supabaseClient) {
-                container.innerHTML = `<p class="text-yellow-400">Mode local actif.</p>`;
-                return;
-            }
-            try {
-                const { data, error } = await supabaseClient.from('dossiers').select('*');
-                if (error) {
-                    container.innerHTML = `<p class="text-yellow-400">Table 'dossiers' en attente sur Supabase (Mode secours local actif).</p>`;
-                } else if (!data || data.length === 0) {
-                    container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment.</p>`;
-                } else {
-                    let html = '<ul class="space-y-2">';
-                    data.forEach(d => {
-                        html += `<li class="bg-navy-900 p-3 rounded-lg border border-gold-500/20 flex justify-between items-center"><span>${d.client_name}</span><span class="text-gold-500 font-semibold px-2 py-1 bg-gold-500/10 rounded">${d.type}</span></li>`;
-                    });
-                    html += '</ul>';
-                    container.innerHTML = html;
-                }
-            } catch(err) {
-                container.innerHTML = `<p class="text-gray-400">Aucun prospect enregistré.</p>`;
+            let dossiers = JSON.parse(localStorage.getItem('kamalex_dossiers') || '[]');
+            
+            if (dossiers.length === 0) {
+                container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment. Ajoutez votre premier prospect ci-dessus !</p>`;
+            } else {
+                let html = '<ul class="space-y-2">';
+                dossiers.forEach((d, index) => {
+                    html += `<li class="bg-navy-900 p-3 rounded-lg border border-gold-500/20 flex justify-between items-center">
+                        <span><strong>${d.client_name}</strong></span>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gold-500 font-semibold px-2 py-1 bg-gold-500/10 rounded">${d.type}</span>
+                            <button onclick="deleteDossier(${index})" class="text-red-400 hover:text-red-300 text-xs underline">Supprimer</button>
+                        </div>
+                    </li>`;
+                });
+                html += '</ul>';
+                container.innerHTML = html;
             }
         }
 
-        async function addDossier() {
-            const name = document.getElementById('client-name').value;
+        function addDossier() {
+            const name = document.getElementById('client-name').value.trim();
             const type = document.getElementById('form-type').value;
             if (!name) return alert('Veuillez entrer un nom de client.');
             
-            if (!supabaseClient) {
-                alert(`Dossier "${name}" (${type}) pris en compte !`);
-                document.getElementById('client-name').value = '';
-                return;
-            }
+            let dossiers = JSON.parse(localStorage.getItem('kamalex_dossiers') || '[]');
+            dossiers.push({ client_name: name, type: type, date: new Date().toLocaleDateString() });
+            localStorage.setItem('kamalex_dossiers', JSON.stringify(dossiers));
+            
+            document.getElementById('client-name').value = '';
+            loadDossiers();
+            alert(`Dossier "${name}" (${type}) enregistré avec succès !`);
+        }
 
-            try {
-                const { error } = await supabaseClient.from('dossiers').insert([{ client_name: name, type: type }]);
-                if (error) {
-                    alert(`Dossier "${name}" pris en compte (créez la table 'dossiers' dans Supabase pour synchroniser en ligne).`);
-                } else {
-                    alert('Dossier ajouté et sécurisé dans Supabase avec succès !');
-                    document.getElementById('client-name').value = '';
-                    loadDossiers();
-                }
-            } catch(e) {
-                alert('Erreur lors de l\'enregistrement.');
-            }
+        function deleteDossier(index) {
+            let dossiers = JSON.parse(localStorage.getItem('kamalex_dossiers') || '[]');
+            dossiers.splice(index, 1);
+            localStorage.setItem('kamalex_dossiers', JSON.stringify(dossiers));
+            loadDossiers();
         }
     </script>
 </body>
