@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour mieux décider</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS pour un design moderne et responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -32,20 +30,15 @@
     <!-- HEADER -->
     <header class="bg-navy-800 border-b border-gold-500/30 p-4 shadow-lg flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-full bg-gold-500 flex items-center justify-center font-bold text-navy-900 text-lg shadow">KL</div>
+            <div class="w-10 h-10 rounded-full bg-gold-500 flex items-center justify-center font-bold text-navy-900 text-lg">KL</div>
             <div>
                 <h1 class="text-xl font-bold text-gold-500 tracking-wide">KAMA LEX</h1>
                 <p class="text-xs text-gray-400 italic">« Savoir pour mieux décider »</p>
             </div>
         </div>
-        <div class="flex items-center space-x-4">
-            <div id="db-status" class="text-xs px-3 py-1 rounded-full bg-gold-500/20 text-gold-500 border border-gold-500/30">
-                Mode Opérationnel KAMA LEX
-            </div>
-            <div id="user-badge" class="hidden flex items-center space-x-3 bg-navy-900 px-4 py-2 rounded-lg border border-gold-500/30">
-                <span id="current-user-name" class="text-sm font-semibold text-gold-500"></span>
-                <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 underline">Déconnexion</button>
-            </div>
+        <div id="user-badge" class="hidden flex items-center space-x-3 bg-navy-900 px-4 py-2 rounded-lg border border-gold-500/30">
+            <span id="current-user-name" class="text-sm font-semibold text-gold-500"></span>
+            <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 underline">Déconnexion</button>
         </div>
     </header>
 
@@ -53,9 +46,9 @@
     <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
 
         <!-- ÉCRAN DE CONNEXION RAPIDE (3 Profils) -->
-        <section id="auth-section" class="max-w-3xl mx-auto mt-16 text-center">
+        <section id="auth-section" class="max-w-3xl mx-auto mt-12 text-center">
             <h2 class="text-2xl font-bold text-gold-500 mb-2">Espace de Connexion Rapide</h2>
-            <p class="text-gray-400 mb-8 text-sm">Sélectionnez votre profil pour accéder à votre espace de travail KAMA LEX à Ouagadougou.</p>
+            <p class="text-gray-400 mb-8 text-sm">Sélectionnez votre profil pour accéder à votre espace de travail à Ouagadougou.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Carte ZOURE -->
@@ -81,13 +74,13 @@
 
         <!-- TABLEAU DE BORD OPÉRATIONNEL -->
         <section id="dashboard-section" class="hidden space-y-8">
-            <div class="flex flex-col md:flex-row justify-between items-center bg-navy-800 p-4 rounded-xl border border-gold-500/30 gap-4">
+            <div class="flex justify-between items-center bg-navy-800 p-4 rounded-xl border border-gold-500/30">
                 <div>
                     <h2 id="welcome-msg" class="text-xl font-bold text-white"></h2>
                     <p class="text-xs text-gray-400">Pilotage stratégique et suivi des objectifs KAMA LEX</p>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="switchTab('objectifs')" id="btn-tab-objectifs" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition shadow">Objectifs & CA</button>
+                    <button onclick="switchTab('objectifs')" id="btn-tab-objectifs" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition">Objectifs & CA</button>
                     <button onclick="switchTab('leads')" id="btn-tab-leads" class="px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition">Leads & Dossiers</button>
                 </div>
             </div>
@@ -96,19 +89,19 @@
             <div id="tab-objectifs" class="space-y-6">
                 <!-- Cartes de Synthèse -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
                         <p class="text-xs text-gray-400">Objectif CA Annuel</p>
                         <h4 class="text-xl font-bold text-gold-500 mt-1">67 320 000 FCFA</h4>
                     </div>
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
                         <p class="text-xs text-gray-400">Marge Brute Annuelle</p>
                         <h4 class="text-xl font-bold text-white mt-1">19 176 000 FCFA</h4>
                     </div>
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
                         <p class="text-xs text-gray-400">Objectif Total Dossiers</p>
                         <h4 class="text-xl font-bold text-white mt-1">408 Dossiers</h4>
                     </div>
-                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20 shadow">
+                    <div class="bg-navy-800 p-4 rounded-xl border border-gold-500/20">
                         <p class="text-xs text-gray-400">Plafond Acquisition (CAC)</p>
                         <h4 class="text-xl font-bold text-red-400 mt-1">8 000 FCFA max</h4>
                     </div>
@@ -118,7 +111,7 @@
                 <div class="bg-navy-800 rounded-xl border border-gold-500/30 overflow-hidden shadow-xl">
                     <div class="p-4 bg-navy-900/50 border-b border-gold-500/20 flex justify-between items-center">
                         <h3 class="font-bold text-gold-500">Tableau de Bord des Objectifs Mensuels (An 1)</h3>
-                        <span class="text-xs bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full border border-gold-500/30">Suivi Actif</span>
+                        <span class="text-xs bg-gold-500/20 text-gold-500 px-3 py-1 rounded-full border border-gold-500/30">Mode Opérationnel</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm">
@@ -145,13 +138,13 @@
             <div id="tab-leads" class="hidden space-y-6">
                 <div class="bg-navy-800 p-6 rounded-xl border border-gold-500/30 shadow-xl">
                     <h3 class="font-bold text-gold-500 mb-4">Gestion des Dossiers & Prospects WhatsApp</h3>
-                    <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 mb-6">
-                        <input type="text" id="client-name" placeholder="Nom du client / Entreprise" class="bg-navy-900 border border-gold-500/30 rounded-lg px-4 py-2 text-sm md:w-1/3 text-white focus:outline-none focus:border-gold-500">
+                    <div class="flex space-x-4 mb-4">
+                        <input type="text" id="client-name" placeholder="Nom du client / Entreprise" class="bg-navy-900 border border-gold-500/30 rounded-lg px-4 py-2 text-sm w-1/3 text-white focus:outline-none focus:border-gold-500">
                         <select id="form-type" class="bg-navy-900 border border-gold-500/30 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-gold-500">
-                            <option value="EI">Entreprise Individuelle (EI) - 150 000 F</option>
-                            <option value="SARL">SARL - 175 000 F</option>
+                            <option value="EI">Entreprise Individuelle (EI)</option>
+                            <option value="SARL">SARL</option>
                         </select>
-                        <button onclick="addDossier()" class="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-2 rounded-lg text-sm transition shadow">Ajouter le Dossier</button>
+                        <button onclick="addDossier()" class="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-2 rounded-lg text-sm transition">Ajouter le Dossier</button>
                     </div>
                     <div id="dossiers-list" class="text-sm text-gray-400">
                         Chargement des dossiers...
@@ -185,10 +178,6 @@
             { mois: "Mois 12", dossiers: 43, ca: "7 095 000 FCFA", marge: "2 021 000 FCFA", pub: "250 000 FCFA", charges: "270 000 FCFA", net: "1 501 000 FCFA" },
         ];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            renderObjectivesTable();
-        });
-
         function renderObjectivesTable() {
             const tbody = document.getElementById('objectives-table-body');
             tbody.innerHTML = '';
@@ -205,6 +194,7 @@
                     </tr>
                 `;
             });
+            // Ligne Total Annuel
             tbody.innerHTML += `
                 <tr class="bg-navy-900 font-bold border-t border-gold-500/40 text-gold-500">
                     <td class="p-3">TOTAL ANNUEL</td>
@@ -240,12 +230,12 @@
             const secLeads = document.getElementById('tab-leads');
 
             if (tab === 'objectifs') {
-                btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition shadow";
+                btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition";
                 btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition";
                 secObj.classList.remove('hidden');
                 secLeads.classList.add('hidden');
             } else {
-                btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition shadow";
+                btnLeads.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-gold-500 text-navy-900 transition";
                 btnObj.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-navy-900 text-gray-300 border border-gold-500/30 transition";
                 secLeads.classList.remove('hidden');
                 secObj.classList.add('hidden');
@@ -253,21 +243,20 @@
             }
         }
 
-        // Gestion locale instantanée (LocalStorage) pour zéro bug ce soir
         function loadDossiers() {
             const container = document.getElementById('dossiers-list');
             let dossiers = JSON.parse(localStorage.getItem('kamalex_dossiers') || '[]');
             
             if (dossiers.length === 0) {
-                container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment. Ajoutez votre premier prospect ci-dessus !</p>`;
+                container.innerHTML = `<p class="text-gray-400">Aucun dossier enregistré pour le moment.</p>`;
             } else {
                 let html = '<ul class="space-y-2">';
                 dossiers.forEach((d, index) => {
                     html += `<li class="bg-navy-900 p-3 rounded-lg border border-gold-500/20 flex justify-between items-center">
                         <span><strong>${d.client_name}</strong></span>
                         <div class="flex items-center space-x-3">
-                            <span class="text-gold-500 font-semibold px-2 py-1 bg-gold-500/10 rounded">${d.type}</span>
-                            <button onclick="deleteDossier(${index})" class="text-red-400 hover:text-red-300 text-xs underline">Supprimer</button>
+                            <span class="text-gold-500">${d.type}</span>
+                            <button onclick="deleteDossier(${index})" class="text-red-400 text-xs underline">Supprimer</button>
                         </div>
                     </li>`;
                 });
@@ -282,12 +271,12 @@
             if (!name) return alert('Veuillez entrer un nom de client.');
             
             let dossiers = JSON.parse(localStorage.getItem('kamalex_dossiers') || '[]');
-            dossiers.push({ client_name: name, type: type, date: new Date().toLocaleDateString() });
+            dossiers.push({ client_name: name, type: type });
             localStorage.setItem('kamalex_dossiers', JSON.stringify(dossiers));
             
             document.getElementById('client-name').value = '';
             loadDossiers();
-            alert(`Dossier "${name}" (${type}) enregistré avec succès !`);
+            alert('Dossier enregistré avec succès !');
         }
 
         function deleteDossier(index) {
