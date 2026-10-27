@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour mieux décider</title>
-    <!-- Favicon Emoji ⚖️ -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -43,49 +41,49 @@
 </head>
 <body class="bg-navy-950 text-slate-100 h-full flex flex-col antialiased">
 
-    <!-- En-tête Global -->
+    <!-- En-tete Global -->
     <header class="bg-navy-900 border-b border-gold-500/30 px-6 py-4 flex justify-between items-center shadow-xl">
         <div class="flex items-center space-x-3">
             <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500 flex items-center justify-center text-gold-500 font-bold text-xl shadow-inner">KL</div>
             <div>
                 <h1 class="font-bold text-gold-500 tracking-wider text-lg">KAMA LEX</h1>
-                <p class="text-xs text-slate-400 italic">« Savoir pour mieux décider » — Ouagadougou</p>
+                <p class="text-xs text-slate-400 italic">"Savoir pour mieux decider" - Ouagadougou</p>
             </div>
         </div>
         <div id="user-badge" class="hidden flex items-center space-x-4 text-sm">
             <span id="badge-nom" class="text-gold-400 font-bold"></span>
-            <button onclick="deconnexion()" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl hover:bg-red-500/25 transition text-xs font-bold">Déconnexion</button>
+            <button onclick="deconnexion()" class="bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl hover:bg-red-500/25 transition text-xs font-bold">Deconnexion</button>
         </div>
     </header>
 
     <!-- Bande d'Annonce Modifiable -->
     <div class="bg-gradient-to-r from-navy-900 via-gold-500/10 to-navy-900 border-b border-gold-500/30 px-6 py-2.5 text-xs text-gold-400 text-center font-medium shadow-inner flex justify-center items-center gap-2">
-        <span>📢</span> <span id="texte-annonce">Chargement de la note stratégique...</span>
+        <span>[Note]</span> <span id="texte-annonce">Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux decider.</span>
     </div>
 
     <!-- Conteneur Principal -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
         
-        <!-- VUE 1 : CONNEXION RAPIDE SÉCURISÉE (3 Cartes) -->
+        <!-- VUE 1 : CONNEXION RAPIDE SECURISEE (3 Cartes) -->
         <div id="view-login" class="flex flex-col items-center justify-center h-[75vh] max-w-xl mx-auto">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-8 shadow-2xl w-full relative overflow-hidden space-y-6">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
                 <div class="text-center">
-                    <h2 class="text-2xl font-bold text-gold-500">Espace Équipe Sécurisé</h2>
-                    <p class="text-xs text-slate-400 mt-1">Sélectionnez votre profil et entrez votre code confidentiel</p>
+                    <h2 class="text-2xl font-bold text-gold-500">Espace Equipe Securise</h2>
+                    <p class="text-xs text-slate-400 mt-1">Selectionnez votre profil et entrez votre code confidentiel</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <button onclick="preparerConnexion('pilote', 'ZOURE Aboubakar')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
+                    <button onclick="preparerConnexion('pilote', 'ZOURE Aboubakar')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">ZA</div>
                         <div class="font-bold text-gold-400 text-sm">ZOURE</div>
                         <div class="text-[11px] text-slate-400">Pilote & Fondateur</div>
                     </button>
-                    <button onclick="preparerConnexion('closer', 'Abdoul')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
+                    <button onclick="preparerConnexion('closer', 'Abdoul')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">AB</div>
                         <div class="font-bold text-gold-400 text-sm">Abdoul</div>
                         <div class="text-[11px] text-slate-400">Closer WhatsApp</div>
                     </button>
-                    <button onclick="preparerConnexion('formaliste', 'OUEDRAOGO Adama')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
+                    <button onclick="preparerConnexion('formaliste', 'OUEDRAOGO Adama')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">OA</div>
                         <div class="font-bold text-gold-400 text-sm">OUEDRAOGO</div>
                         <div class="text-[11px] text-slate-400">Formaliste Terrain</div>
@@ -94,19 +92,19 @@
             </div>
         </div>
 
-        <!-- VUE 2 : ESPACE PILOTE (ZOURE Aboubakar) -->
+        <!-- VUE 2 : ESPACE PILOTE -->
         <div id="view-pilote" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Pilote & Fondateur</span>
-                    <h2 class="text-2xl font-bold text-slate-100">Tableau de Bord Stratégique & Trésorerie</h2>
+                    <h2 class="text-2xl font-bold text-slate-100">Tableau de Bord Strategique & Tresorerie</h2>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
                     <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
-                        ⚙️ Plafonds & Objectifs
+                        [Paramètres] Plafonds & Objectifs
                     </button>
                     <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg">
-                        📊 Exporter (Excel)
+                        [Export Excel]
                     </button>
                     <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">ZOURE Aboubakar</div>
                 </div>
@@ -116,18 +114,18 @@
             <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                 <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Modifier la Bande d'Annonce</h3>
                 <div class="flex gap-3">
-                    <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:border-gold-500" placeholder="Message diffusé à l'équipe...">
-                    <button onclick="sauvegarderAnnonce()" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 px-5 rounded-xl hover:bg-gold-600 transition shadow whitespace-nowrap">Mettre à jour</button>
+                    <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:border-gold-500" placeholder="Message diffuse a l'equipe...">
+                    <button onclick="sauvegarderAnnonce()" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 px-5 rounded-xl hover:bg-gold-600 transition shadow whitespace-nowrap">Mettre a jour</button>
                 </div>
             </div>
 
-            <!-- Activité du closer vs plafonds -->
+            <!-- Activite du closer vs plafonds -->
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activité du Closer vs Plafonds & Objectifs</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activite du Closer vs Plafonds & Objectifs</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
             </div>
 
-            <!-- KPIs Financiers (CA, Marge Brute, Marge Nette) -->
+            <!-- KPIs Financiers -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
@@ -140,31 +138,31 @@
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (Avant Pub)</p>
                     <p id="pilote-marge-brute" class="text-3xl font-bold text-white">0 FCFA</p>
-                    <span class="text-[11px] text-slate-400 block">CA - Sommes versées au formaliste</span>
+                    <span class="text-[11px] text-slate-400 block">CA - Sommes versees au formaliste</span>
                 </div>
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Après Pub)</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Apres Pub)</p>
                     <p id="pilote-marge-nette" class="text-3xl font-bold text-emerald-400">0 FCFA</p>
-                    <span class="text-[11px] text-slate-400 block">Marge Brute - Dépenses Pub Meta</span>
+                    <span class="text-[11px] text-slate-400 block">Marge Brute - Depenses Pub Meta</span>
                 </div>
             </div>
 
-            <!-- Publicité & Rapprochement Bancaire -->
+            <!-- Publicite & Rapprochement Bancaire -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Dépense Publicitaire (Meta Ads)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Depense Publicitaire (Meta Ads)</h3>
                     <form onsubmit="enregistrerPub(event)" class="flex gap-3">
                         <input type="number" id="pub-depense" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Montant en FCFA">
                         <button type="submit" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button>
                     </form>
-                    <p class="text-xs font-bold text-slate-400">Total Publicité Investi : <strong id="total-depense-pub" class="text-red-400">0 FCFA</strong></p>
+                    <p class="text-xs font-bold text-slate-400">Total Publicite Investi : <strong id="total-depense-pub" class="text-red-400">0 FCFA</strong></p>
                 </div>
 
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Trésorerie</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Tresorerie</h3>
                     <div class="flex gap-3">
-                        <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Solde réel Banque / Caisse">
-                        <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Vérifier</button>
+                        <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Solde reel Banque / Caisse">
+                        <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Verifier</button>
                     </div>
                     <div id="rapprochement-ecart" class="text-xs pt-1 font-bold"></div>
                 </div>
@@ -182,7 +180,7 @@
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Closer</span>
-                    <h2 class="text-2xl font-bold text-slate-100">WhatsApp, Point Journalier & Intermédiation</h2>
+                    <h2 class="text-2xl font-bold text-slate-100">WhatsApp, Point Journalier & Intermediation</h2>
                 </div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">Abdoul</div>
             </div>
@@ -208,7 +206,7 @@
                     </div>
                 </form>
                 <div id="comparaison-objectif-box" class="bg-navy-950 p-4 rounded-xl border border-slate-800 text-xs font-bold flex justify-between items-center">
-                    <span>Performance Journalière :</span>
+                    <span>Performance Journaliere :</span>
                     <span id="statut-objectif-jour" class="font-bold text-gold-500">Chargement...</span>
                 </div>
             </div>
@@ -216,7 +214,7 @@
             <!-- Enregistrement Client & Remises -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Enregistrer un Client (Création d'Entreprise)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Enregistrer un Client (Creation d'Entreprise)</h3>
                     <form onsubmit="ajouterDossierCloser(event)" class="space-y-4">
                         <div class="grid grid-cols-2 gap-3">
                             <div>
@@ -224,12 +222,12 @@
                                 <input type="text" id="closer-nom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Nom">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">Prénom</label>
-                                <input type="text" id="closer-prenom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Prénom">
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Prenom</label>
+                                <input type="text" id="closer-prenom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Prenom">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Téléphone WhatsApp</label>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Telephone WhatsApp</label>
                             <input type="text" id="closer-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: 70000000">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
@@ -241,21 +239,21 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">Net Négocié (Total)</label>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Net Negocie (Total)</label>
                                 <input type="number" id="closer-total" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-500 font-bold" value="150000">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Somme Versée par le Client (Avance ou Reliquat)</label>
-                            <input type="number" id="closer-avance" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Montant encaissé">
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Somme Versee par le Client (Avance ou Reliquat)</label>
+                            <input type="number" id="closer-avance" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Montant encaisse">
                         </div>
                         <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl hover:bg-gold-600 shadow">Enregistrer & Transmettre</button>
                     </form>
                 </div>
 
-                <!-- Module Intermédiation Financière -->
+                <!-- Module Intermediation Financiere -->
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Intermédiation Financière (Financement)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Intermediation Financiere (Financement)</h3>
                     <form onsubmit="ajouterFinancementCloser(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1">Nom / Entreprise du Demandeur</label>
@@ -263,24 +261,24 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1">Contact WhatsApp</label>
-                            <input type="text" id="fin-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Téléphone">
+                            <input type="text" id="fin-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Telephone">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1">Montant du Financement (FCFA)</label>
                             <input type="number" id="fin-montant" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-400 font-bold" placeholder="Ex: 5000000">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Objet / Détails du Projet</label>
-                            <textarea id="fin-objet" rows="2" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Achat de matériel..."></textarea>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Objet / Details du Projet</label>
+                            <textarea id="fin-objet" rows="2" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Achat de materiel..."></textarea>
                         </div>
                         <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl hover:bg-gold-600 shadow">Enregistrer le Prospect Financement</button>
                     </form>
                 </div>
             </div>
 
-            <!-- Liste des dossiers enregistrés par le Closer -->
+            <!-- Liste des dossiers -->
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-3 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistrés & Suivi des Reliquats Clients</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistres & Suivi des Reliquats Clients</h3>
                 <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
@@ -290,7 +288,7 @@
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Formaliste (Terrain)</span>
-                    <h2 class="text-2xl font-bold text-slate-100">Suivi et avancement des Dossiers / Formaliste</h2>
+                    <h2 class="text-2xl font-bold text-slate-100">Suivi et avancement des Dossiers</h2>
                 </div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">OUEDRAOGO Adama</div>
             </div>
@@ -307,40 +305,40 @@
             </div>
 
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués & Étapes d'Avancement</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribues & Etapes d'Avancement</h3>
                 <div id="formaliste-container" class="space-y-4 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
     </main>
 
-    <!-- MODAL CODE SÉCURITÉ (PIN) -->
+    <!-- MODAL CODE SECURITE (PIN) -->
     <div id="modal-pin" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-2xl relative text-center">
             <div class="flex justify-between items-center">
-                <h3 id="modal-pin-title" class="text-base font-bold text-gold-500">Entrez votre code d'accès</h3>
+                <h3 id="modal-pin-title" class="text-base font-bold text-gold-500">Entrez votre code d'acces</h3>
                 <button onclick="fermerModalPin()" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
             </div>
             <form onsubmit="validerCodePin(event)" class="space-y-4 text-xs">
                 <div>
-                    <input type="password" id="input-pin-code" maxlength="8" inputmode="numeric" pattern="[0-9]*" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold-400 font-bold focus:border-gold-500 focus:outline-none" placeholder="••••••••" required>
-                    <p class="text-[11px] text-slate-400 mt-2">Code confidentiel sécurisé</p>
+                    <input type="password" id="input-pin-code" maxlength="8" inputmode="numeric" pattern="[0-9]*" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold-400 font-bold focus:border-gold-500 focus:outline-none" placeholder="........" required>
+                    <p class="text-[11px] text-slate-400 mt-2">Code confidentiel securise</p>
                 </div>
-                <div id="pin-error" class="text-red-400 text-xs hidden font-bold">Code d'accès incorrect</div>
+                <div id="pin-error" class="text-red-400 text-xs hidden font-bold">Code d'acces incorrect</div>
                 <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold py-3 rounded-xl hover:bg-gold-600 transition shadow text-sm">Valider</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL PLAFONDS & OBJECTIFS (Pilote Seul) -->
+    <!-- MODAL PLAFONDS & OBJECTIFS -->
     <div id="modal-plafonds" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl relative">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gold-500">Paramétrage Plafonds & Objectifs</h3>
+                <h3 class="text-lg font-bold text-gold-500">Parametrage Plafonds & Objectifs</h3>
                 <button onclick="fermerModalPlafonds()" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
             </div>
             <form onsubmit="sauvegarderPlafondsGlobal(event)" class="space-y-4 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Max Coût par Conversation (FCFA)</label>
+                    <label class="block font-bold text-slate-300 mb-1">Max Cout par Conversation (FCFA)</label>
                     <input type="number" id="cfg-cpl" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
                 </div>
                 <div>
@@ -352,7 +350,7 @@
                     <input type="number" id="cfg-obj-clients" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
                 </div>
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Max Coût d'Acquisition Client (CAC - FCFA)</label>
+                    <label class="block font-bold text-slate-300 mb-1">Max Cout d'Acquisition Client (CAC - FCFA)</label>
                     <input type="number" id="cfg-cac" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
                 </div>
                 <div>
@@ -393,12 +391,8 @@
                 const { data, error } = await kamaClient.from('parametres').select('*').limit(1);
                 if (!error && data && data.length > 0 && data[0].annonce) {
                     document.getElementById('texte-annonce').textContent = (data[0].annonce || '').toString();
-                } else {
-                    document.getElementById('texte-annonce').textContent = "Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
                 }
-            } catch (e) {
-                document.getElementById('texte-annonce').textContent = "Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
-            }
+            } catch (e) {}
         }
 
         async function sauvegarderAnnonce() {
@@ -415,11 +409,11 @@
                     const { error: errIns } = await kamaClient.from('parametres').insert([{ annonce: texte }]);
                     if (errIns) throw errIns;
                 }
-                alert('Bande d\'annonce mise à jour !');
+                alert('Bande d\'annonce mise a jour !');
                 document.getElementById('input-annonce').value = '';
                 chargerBandeauAnnonce();
             } catch (err) {
-                alert('Erreur lors de la mise à jour : ' + (err.message || 'Erreur Supabase'));
+                alert('Erreur lors de la mise a jour : ' + (err.message || 'Erreur Supabase'));
             }
         }
 
@@ -430,11 +424,10 @@
             else if (selectType === 'SARL') inputTotal.value = '175000';
         }
 
-        // --- GESTION CODE SÉCURITÉ ---
         function preparerConnexion(role, nom) {
             pendingRole = (role || '').toLowerCase().trim();
             pendingNom = (nom || '');
-            document.getElementById('modal-pin-title').textContent = `Code d'accès : ${pendingNom}`;
+            document.getElementById('modal-pin-title').textContent = `Code d'acces : ${pendingNom}`;
             document.getElementById('input-pin-code').value = '';
             document.getElementById('pin-error').classList.add('hidden');
             document.getElementById('modal-pin').classList.remove('hidden');
@@ -504,7 +497,6 @@
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // --- PLAFONDS & OBJECTIFS ---
         async function recupererPlafonds() {
             try {
                 const { data, error } = await kamaClient.from('plafonds').select('*').limit(1);
@@ -560,7 +552,7 @@
                     if (errIns) throw errIns;
                 }
 
-                alert("Plafonds et objectifs mis à jour avec succès !");
+                alert("Plafonds et objectifs mis a jour avec succes !");
                 fermerModalPlafonds();
                 chargerDonneesPilote();
             } catch (err) {
@@ -568,7 +560,6 @@
             }
         }
 
-        // --- CLOSER STATS ---
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
             const datePoint = (document.getElementById('stat-date').value || '').trim() || new Date().toISOString().split('T')[0];
@@ -581,9 +572,453 @@
                 }]);
 
                 if (error) throw error;
-                alert("Point journalier enregistré !");
+                alert("Point journalier enregistre !");
                 document.getElementById('stat-conv').value = '';
                 document.getElementById('stat-acquis').value = '';
                 chargerStatsCloser();
             } catch (err) {
-                alert("Erreur
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function chargerStatsCloser() {
+            try {
+                const { data, error } = await kamaClient.from('closer_stats').select('*');
+                if (error) throw error;
+                const stats = data || [];
+                let aujourdhui = new Date().toISOString().split('T')[0];
+                let convJour = 0, acquisJour = 0;
+
+                stats.forEach(s => {
+                    if (s.date_point === aujourdhui) {
+                        convJour += Number(s.conversations || 0);
+                        acquisJour += Number(s.clients_acquis || 0);
+                    }
+                });
+
+                const plafonds = await recupererPlafonds();
+                let objConv = plafonds.objectif_conversations_jour || 34;
+                let objClients = plafonds.objectif_clients_jour || 2;
+
+                const box = document.getElementById('statut-objectif-jour');
+                let statusText = `Aujourd'hui : ${convJour} conv. (Obj: ${objConv}) | ${acquisJour} clients (Obj: ${objClients})`;
+                if (acquisJour >= objClients && convJour >= objConv) {
+                    box.innerHTML = `<span class="text-emerald-400">Objectifs atteints ! (${statusText})</span>`;
+                } else {
+                    box.innerHTML = `<span class="text-amber-400">En cours (${statusText})</span>`;
+                }
+            } catch (e) {}
+        }
+
+        async function ajouterDossierCloser(event) {
+            event.preventDefault();
+            const nom = (document.getElementById('closer-nom').value || '').trim();
+            const prenom = (document.getElementById('closer-prenom').value || '').trim();
+            const telephone = (document.getElementById('closer-tel').value || '').trim();
+            const typeEnt = (document.getElementById('closer-type').value || '').trim();
+            const total = parseFloat(document.getElementById('closer-total').value) || 0;
+            const montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
+            
+            const numDossier = 'KML N' + Math.floor(10000 + Math.random() * 90000);
+            let formalisteTotalDu = (typeEnt === 'EI') ? 100000 : 130000;
+
+            try {
+                const { error } = await kamaClient.from('dossiers').insert([{
+                    numero_dossier: numDossier,
+                    nom, prenom, telephone, type_entreprise: typeEnt,
+                    montant_total: total, montant_encaisse: montantEncaisse,
+                    formaliste_du: formalisteTotalDu,
+                    formaliste_avance: 0, formaliste_reliquat_recu: 0,
+                    statut: '1. Reception du dossier'
+                }]);
+
+                if (error) throw error;
+                alert(`Dossier ${numDossier} enregistre et transmis !`);
+                document.getElementById('closer-nom').value = '';
+                document.getElementById('closer-prenom').value = '';
+                document.getElementById('closer-tel').value = '';
+                document.getElementById('closer-avance').value = '';
+                chargerDonneesCloser();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function ajouterFinancementCloser(event) {
+            event.preventDefault();
+            const nom = (document.getElementById('fin-nom').value || '').trim();
+            const telephone = (document.getElementById('fin-tel').value || '').trim();
+            const montant = parseFloat(document.getElementById('fin-montant').value) || 0;
+            const objet = (document.getElementById('fin-objet').value || '').trim();
+
+            try {
+                const { error } = await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
+                if (error) throw error;
+                alert("Prospect financement enregistre !");
+                document.getElementById('fin-nom').value = '';
+                document.getElementById('fin-tel').value = '';
+                document.getElementById('fin-montant').value = '';
+                document.getElementById('fin-objet').value = '';
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function chargerDonneesCloser() {
+            const listDiv = document.getElementById('closer-dossiers-list');
+            try {
+                const { data, error } = await kamaClient.from('dossiers').select('*');
+                if (error) throw error;
+                const dossiers = data || [];
+                if (dossiers.length === 0) {
+                    listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistre.</p>";
+                    return;
+                }
+                let html = '';
+                dossiers.forEach(d => {
+                    let total = Number(d.montant_total || 0);
+                    let encaisse = Number(d.montant_encaisse || 0);
+                    let reliquatClient = total - encaisse;
+                    html += `<div class="bg-navy-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-gold-500">${(d.numero_dossier || 'KML N...')}</span> - <span class="text-slate-200">${(d.prenom || '')} ${(d.nom || '')} (${(d.type_entreprise || '')})</span>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Encaisse : ${encaisse.toLocaleString()} F | Total : ${total.toLocaleString()} F | Statut : <span class="text-gold-400">${(d.statut || '')}</span></div>
+                        </div>
+                        <span class="text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded-lg">Reliquat client : ${reliquatClient > 0 ? reliquatClient.toLocaleString() + ' F' : 'Solde 0 F'}</span>
+                    </div>`;
+                });
+                listDiv.innerHTML = html;
+            } catch (e) {
+                listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistre.</p>";
+            }
+        }
+
+        async function chargerDonneesPilote() {
+            const plafonds = await recupererPlafonds();
+            try {
+                const resDossiers = await kamaClient.from('dossiers').select('*');
+                const dossiers = (resDossiers && resDossiers.data) ? resDossiers.data : [];
+
+                const resPubs = await kamaClient.from('pubs').select('*');
+                const pubs = (resPubs && resPubs.data) ? resPubs.data : [];
+
+                const resStats = await kamaClient.from('closer_stats').select('*');
+                const stats = (resStats && resStats.data) ? resStats.data : [];
+
+                let aujourdhui = new Date().toISOString().split('T')[0];
+                let totalConvJour = 0, totalClientsJour = 0;
+                let totalConvSemaine = 0, totalClientsSemaine = 0;
+                let totalConvMois = 0, totalClientsMois = 0;
+
+                let maintenant = new Date();
+                let debutSemaine = new Date();
+                debutSemaine.setDate(maintenant.getDate() - 7);
+                let moisEnCours = maintenant.toISOString().slice(0, 7);
+
+                stats.forEach(s => {
+                    let c = Number(s.conversations || 0);
+                    let a = Number(s.clients_acquis || 0);
+                    if (s.date_point === aujourdhui) {
+                        totalConvJour += c;
+                        totalClientsJour += a;
+                    }
+                    if (new Date(s.date_point) >= debutSemaine) {
+                        totalConvSemaine += c;
+                        totalClientsSemaine += a;
+                    }
+                    if (s.date_point && s.date_point.startsWith(moisEnCours)) {
+                        totalConvMois += c;
+                        totalClientsMois += a;
+                    }
+                });
+
+                let totalPub = 0;
+                pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
+
+                let coutConv = totalConvJour > 0 ? (totalPub / totalConvJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
+                let coutCac = totalClientsJour > 0 ? (totalPub / totalClientsJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
+
+                const grid = document.getElementById('pilote-activite-closer-grid');
+                let colorConv = totalConvJour >= plafonds.objectif_conversations_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
+                let colorClients = totalClientsJour >= plafonds.objectif_clients_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
+                let colorCpl = Number(coutConv) <= plafonds.plafond_cpl ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-red-400 border-red-500/40 bg-red-950/20';
+                let colorCac = Number(coutCac) <= plafonds.plafond_cac ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-red-400 border-red-500/40 bg-red-950/20';
+
+                grid.innerHTML = `
+                    <div class="p-4 rounded-xl border ${colorConv} space-y-1">
+                        <p class="text-slate-400">Conversations (Jour)</p>
+                        <p class="text-xl font-bold">${totalConvJour} <span class="text-xs font-normal">(Obj: ${plafonds.objectif_conversations_jour})</span></p>
+                        <p class="text-[10px] text-slate-400">Semaine: ${totalConvSemaine} | Mois: ${totalConvMois}</p>
+                    </div>
+                    <div class="p-4 rounded-xl border ${colorClients} space-y-1">
+                        <p class="text-slate-400">Clients Acquis (Jour)</p>
+                        <p class="text-xl font-bold">${totalClientsJour} <span class="text-xs font-normal">(Obj: ${plafonds.objectif_clients_jour})</span></p>
+                        <p class="text-[10px] text-slate-400">Semaine: ${totalClientsSemaine} | Mois: ${totalClientsMois}</p>
+                    </div>
+                    <div class="p-4 rounded-xl border ${colorCpl} space-y-1">
+                        <p class="text-slate-400">Cout / Conv. (CPL)</p>
+                        <p class="text-xl font-bold">${Number(coutConv).toLocaleString()} F</p>
+                        <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cpl.toLocaleString()} F</p>
+                    </div>
+                    <div class="p-4 rounded-xl border ${colorCac} space-y-1">
+                        <p class="text-slate-400">Cout Acquisition (CAC)</p>
+                        <p class="text-xl font-bold">${Number(coutCac).toLocaleString()} F</p>
+                        <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cac.toLocaleString()} F</p>
+                    </div>
+                `;
+
+                let caGlobal = 0, sommeFormalisteVersee = 0;
+                dossiers.forEach(d => {
+                    let encaisse = Number(d.montant_encaisse || 0);
+                    let avForm = Number(d.formaliste_avance || 0);
+                    let relFormRecu = Number(d.formaliste_reliquat_recu || 0);
+                    caGlobal += encaisse;
+                    sommeFormalisteVersee += (avForm + relFormRecu);
+                });
+
+                let margeBrute = caGlobal - sommeFormalisteVersee;
+                let margeNette = margeBrute - totalPub;
+
+                document.getElementById('pilote-ca-global').textContent = caGlobal.toLocaleString() + " FCFA";
+                document.getElementById('pilote-marge-brute').textContent = margeBrute.toLocaleString() + " FCFA";
+                document.getElementById('pilote-marge-nette').textContent = margeNette.toLocaleString() + " FCFA";
+                document.getElementById('total-depense-pub').textContent = totalPub.toLocaleString() + " FCFA";
+
+                let objAnnuel = plafonds.objectif_annuel_ca || 67320000;
+                let tauxCA = objAnnuel > 0 ? Math.min(100, ((caGlobal / objAnnuel) * 100)).toFixed(1) : 0;
+                document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${objAnnuel.toLocaleString()} F) : ${tauxCA}% realise`;
+                document.getElementById('barre-progression-ca').style.width = tauxCA + '%';
+
+                const container = document.getElementById('pilote-formaliste-paiements');
+                if (dossiers.length === 0) {
+                    container.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistre.</p>";
+                    return;
+                }
+
+                let html = '<div class="space-y-3">';
+                dossiers.forEach(d => {
+                    let avActuelle = Number(d.formaliste_avance || 0);
+                    let relActuel = Number(d.formaliste_reliquat_recu || 0);
+                    let totalClient = Number(d.montant_total || 0);
+                    let encaisseClient = Number(d.montant_encaisse || 0);
+
+                    html += `<div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                            <div>
+                                <span class="font-bold text-gold-500">${(d.numero_dossier || '')}</span> - <span class="text-slate-200">${(d.prenom || '')} ${(d.nom || '')} (${(d.type_entreprise || '')})</span>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Statut : <span class="text-gold-400">${(d.statut || '')}</span> | Tel : ${(d.telephone || '')}</div>
+                                <div class="text-[11px] text-slate-300">Client Encaisse : <strong>${encaisseClient.toLocaleString()} F</strong> / Total : ${totalClient.toLocaleString()} F</div>
+                                <div class="text-[11px] text-slate-400">RCCM : ${(d.rccm || 'Non renseigne')} | IFU : ${(d.ifu || 'Non renseigne')}</div>
+                                <div class="text-[11px] text-slate-400 italic">Difficultes : ${(d.difficultes || 'Aucune')}</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800/80 items-center text-xs">
+                            <div class="flex items-center gap-2">
+                                <label class="text-slate-400 whitespace-nowrap">Avance Formaliste :</label>
+                                <input type="number" id="input-av-${d.id}" value="${avActuelle}" class="bg-navy-900 border border-slate-700 rounded-lg px-2.5 py-1 text-slate-100 w-28">
+                                <button onclick="payerAvanceForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded-lg hover:bg-gold-600 transition">Verser</button>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-slate-400 whitespace-nowrap">Reliquat Formaliste :</label>
+                                <input type="number" id="input-rel-${d.id}" value="${relActuel}" class="bg-navy-900 border border-slate-700 rounded-lg px-2.5 py-1 text-slate-100 w-28">
+                                <button onclick="payerReliquatForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded-lg hover:bg-gold-600 transition">Verser</button>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (e) {}
+        }
+
+        async function payerAvanceForm(id) {
+            const el = document.getElementById(`input-av-${id}`);
+            const montant = el ? (parseFloat(el.value) || 0) : 0;
+            try {
+                const { error } = await kamaClient.from('dossiers').update({ formaliste_avance: montant }).eq('id', id);
+                if (error) throw error;
+                alert("Avance formaliste enregistree !");
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function payerReliquatForm(id) {
+            const el = document.getElementById(`input-rel-${id}`);
+            const montant = el ? (parseFloat(el.value) || 0) : 0;
+            try {
+                const { error } = await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: montant }).eq('id', id);
+                if (error) throw error;
+                alert("Reliquat formaliste enregistre !");
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function enregistrerPub(event) {
+            event.preventDefault();
+            const depense = parseFloat(document.getElementById('pub-depense').value) || 0;
+            try {
+                const { error } = await kamaClient.from('pubs').insert([{ depense_reelle: depense }]);
+                if (error) throw error;
+                alert("Depense publicitaire enregistree !");
+                document.getElementById('pub-depense').value = '';
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function sauvegarderSoldeReel() {
+            const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
+            try {
+                const { data: dossiers, error } = await kamaClient.from('dossiers').select('montant_encaisse');
+                if (error) throw error;
+                let systemeMontant = 0;
+                if (dossiers) dossiers.forEach(d => systemeMontant += Number(d.montant_encaisse || 0));
+
+                const ecart = soldeReel - systemeMontant;
+                const ecartDiv = document.getElementById('rapprochement-ecart');
+
+                if (ecart === 0) {
+                    ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">Rapprochement parfait : Tresorerie exacte.</span>`;
+                } else {
+                    ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">Ecart constate : ${ecart.toLocaleString()} FCFA</span>`;
+                }
+            } catch(e) {}
+        }
+
+        async function chargerDonneesFormaliste() {
+            const container = document.getElementById('formaliste-container');
+            try {
+                const { data, error } = await kamaClient.from('dossiers').select('*');
+                if (error) throw error;
+                const dossiers = data || [];
+                if (dossiers.length === 0) {
+                    container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribue.</p>";
+                    document.getElementById('formaliste-total-avances').textContent = "0 FCFA";
+                    document.getElementById('formaliste-total-reliquats').textContent = "0 FCFA";
+                    return;
+                }
+
+                let totalAvancesRecues = 0, totalReliquatsRecus = 0;
+                dossiers.forEach(d => {
+                    totalAvancesRecues += Number(d.formaliste_avance || 0);
+                    totalReliquatsRecus += Number(d.formaliste_reliquat_recu || 0);
+                });
+
+                document.getElementById('formaliste-total-avances').textContent = totalAvancesRecues.toLocaleString() + " FCFA";
+                document.getElementById('formaliste-total-reliquats').textContent = totalReliquatsRecus.toLocaleString() + " FCFA";
+
+                let html = '<div class="space-y-4">';
+                dossiers.forEach(d => {
+                    let avanceForm = Number(d.formaliste_avance || 0);
+                    let reliquatFormRecu = Number(d.formaliste_reliquat_recu || 0);
+                    let statutActuel = (d.statut || '1. Reception du dossier');
+                    let isFormalise = statutActuel.includes('5.') || statutActuel.toLowerCase().includes('formalise');
+
+                    html += `<div class="bg-navy-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gold-500">${(d.numero_dossier || '')}</span>
+                            <span class="text-xs text-slate-300">Client : <strong>${(d.prenom || '')} ${(d.nom || '')} (${(d.type_entreprise || '')})</strong> - Tel : ${(d.telephone || '')}</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center text-xs pt-2 border-t border-slate-800">
+                            <div>
+                                <label class="block text-slate-400 mb-1 font-bold">Etape d'avancement</label>
+                                <select id="select-statut-${d.id}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
+                                    <option value="1. Reception du dossier" ${statutActuel.includes('1.')?'selected':''}>1. Reception du dossier</option>
+                                    <option value="2. Reservation de la denomination" ${statutActuel.includes('2.')?'selected':''}>2. Reservation de la denomination</option>
+                                    <option value="3. Signature client" ${statutActuel.includes('3.')?'selected':''}>3. Signature client</option>
+                                    <option value="4. Dossier introduit" ${statutActuel.includes('4.')?'selected':''}>4. Dossier introduit</option>
+                                    <option value="5. Dossier formalise" ${statutActuel.includes('5.')?'selected':''}>5. Dossier formalise</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="text-gold-400">Avance reçue : <strong>${avanceForm.toLocaleString()} F</strong></div>
+                                ${reliquatFormRecu > 0 ? `<div class="text-emerald-400">Reliquat reçu : <strong>${reliquatFormRecu.toLocaleString()} F</strong></div>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Difficultes eventuelles</label>
+                                <input type="text" id="input-diff-${d.id}" value="${(d.difficultes || '')}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="Notes terrain...">
+                            </div>
+                            ${isFormalise ? `
+                            <div>
+                                <label class="block text-slate-400 mb-1">Numero RCCM</label>
+                                <input type="text" id="input-rccm-${d.id}" value="${(d.rccm || '')}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="RCCM...">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Numero IFU</label>
+                                <input type="text" id="input-ifu-${d.id}" value="${(d.ifu || '')}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="IFU...">
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="flex justify-end pt-2">
+                            <button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-4 py-2 rounded-xl hover:bg-gold-600 transition text-xs shadow">Enregistrer les modifications</button>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribue.</p>";
+            }
+        }
+
+        async function mettreAJourDossierFormaliste(id) {
+            const selectEl = document.getElementById(`select-statut-${id}`);
+            const nouveauStatut = selectEl ? (selectEl.value || '') : '';
+            const diffInput = document.getElementById(`input-diff-${id}`);
+            const rccmInput = document.getElementById(`input-rccm-${id}`);
+            const ifuInput = document.getElementById(`input-ifu-${id}`);
+
+            let updates = { statut: nouveauStatut };
+            if (diffInput) updates.difficultes = diffInput.value || '';
+            if (rccmInput) updates.rccm = rccmInput.value || '';
+            if (ifuInput) updates.ifu = ifuInput.value || '';
+
+            try {
+                const { error } = await kamaClient.from('dossiers').update(updates).eq('id', id);
+                if (error) throw error;
+                alert("Dossier mis a jour avec succes !");
+                chargerDonneesFormaliste();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
+        }
+
+        async function exporterExcelPilote() {
+            try {
+                const { data: dossiers, error } = await kamaClient.from('dossiers').select('*');
+                if (error) throw error;
+                if (!dossiers || dossiers.length === 0) return alert("Aucun dossier a exporter.");
+
+                let csvContent = "\ufeffNumero Dossier;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Avance Formaliste;Reliquat Formaliste Recu;RCCM;IFU;Difficultes;Date\n";
+                dossiers.forEach(d => {
+                    csvContent += `"${(d.numero_dossier || '')}";"${(d.nom || '')}";"${(d.prenom || '')}";"${(d.telephone || '')}";"${(d.type_entreprise || '')}";${(d.montant_total || 0)};${(d.montant_encaisse || 0)};"${(d.statut || '')}";${(d.formaliste_avance || 0)};${(d.formaliste_reliquat_recu || 0)};"${(d.rccm || '')}";"${(d.ifu || '')}";"${(d.difficultes || '')}";"${(d.created_at || '')}"\n`;
+                });
+
+                telechargerFichierCSV(csvContent, "kama_lex_export_pilote.csv");
+            } catch (e) {
+                alert("Erreur d'exportation : " + (e.message || 'Erreur Supabase'));
+            }
+        }
+
+        function telechargerFichierCSV(content, filename) {
+            const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
