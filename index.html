@@ -333,13 +333,16 @@
         async function sauvegarderAnnonce() {
             const texte = document.getElementById('input-annonce').value;
             if (!texte) return alert('Veuillez entrer un message.');
-            const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
-            if (existing && existing.length > 0) {
-                await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing[0].id);
-            } else {
-                await kamaClient.from('parametres').insert([{ annonce: texte }]);
+
+            // Nettoyage et insertion de la nouvelle annonce en base
+            await kamaClient.from('parametres').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+            const { error } = await kamaClient.from('parametres').insert([{ annonce: texte }]);
+
+            if (error) {
+                return alert("Erreur lors de la mise à jour : " + error.message);
             }
-            alert('Bande d\'annonce mise à jour !');
+
+            alert('Bande d\'annonce mise à jour avec succès !');
             document.getElementById('input-annonce').value = '';
             chargerBandeauAnnonce();
         }
