@@ -64,26 +64,26 @@
     <!-- Conteneur Principal -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
         
-        <!-- VUE 1 : CONNEXION RAPIDE (3 Cartes) -->
+        <!-- VUE 1 : CONNEXION RAPIDE SÉCURISÉE (3 Cartes) -->
         <div id="view-login" class="flex flex-col items-center justify-center h-[75vh] max-w-xl mx-auto">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-8 shadow-2xl w-full relative overflow-hidden space-y-6">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
                 <div class="text-center">
                     <h2 class="text-2xl font-bold text-gold-500">Espace Équipe Sécurisé</h2>
-                    <p class="text-xs text-slate-400 mt-1">Cabinet Juridique & Fiscal - Ouagadougou</p>
+                    <p class="text-xs text-slate-400 mt-1">Sélectionnez votre profil et entrez votre code confidentiel</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <button onclick="connexionRapide('pilote', 'ZOURE Aboubakar')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
+                    <button onclick="preparerConnexion('pilote', 'ZOURE Aboubakar')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">ZA</div>
                         <div class="font-bold text-gold-400 text-sm">ZOURE</div>
                         <div class="text-[11px] text-slate-400">Pilote & Fondateur</div>
                     </button>
-                    <button onclick="connexionRapide('closer', 'Abdoul')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
+                    <button onclick="preparerConnexion('closer', 'Abdoul')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">AB</div>
                         <div class="font-bold text-gold-400 text-sm">Abdoul</div>
                         <div class="text-[11px] text-slate-400">Closer WhatsApp</div>
                     </button>
-                    <button onclick="connexionRapide('formaliste', 'OUEDRAOGO Adama')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
+                    <button onclick="preparerConnexion('formaliste', 'OUEDRAOGO Adama')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">OA</div>
                         <div class="font-bold text-gold-400 text-sm">OUEDRAOGO</div>
                         <div class="text-[11px] text-slate-400">Formaliste Terrain</div>
@@ -122,9 +122,7 @@
             <!-- Activité du closer vs plafonds -->
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl">
                 <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activité du Closer vs Plafonds & Objectifs</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid">
-                    <!-- Rempli dynamiquement -->
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
             </div>
 
             <!-- KPIs Financiers (CA, Marge Brute, Marge Nette) & Objectifs 2027 -->
@@ -170,7 +168,7 @@
                 </div>
             </div>
 
-            <!-- Paiement des Avances & Reliquats au Formaliste & Suivi Intégral -->
+            <!-- Suivi Global des Dossiers -->
             <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                 <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global des Dossiers & Paiements Formaliste</h3>
                 <div id="pilote-formaliste-paiements" class="space-y-3 text-xs text-slate-300">Chargement des dossiers...</div>
@@ -285,7 +283,7 @@
             </div>
         </div>
 
-        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) - Épuré -->
+        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) - Sans Export -->
         <div id="view-formaliste" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
@@ -306,18 +304,30 @@
                 </div>
             </div>
 
-            <div class="flex justify-end">
-                <button onclick="exporterExcelFormaliste()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow">
-                    📊 Exporter (Excel)
-                </button>
-            </div>
-
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                 <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués & Étapes d'Avancement</h3>
                 <div id="formaliste-container" class="space-y-4 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
     </main>
+
+    <!-- MODAL CODE SÉCURITÉ (PIN) -->
+    <div id="modal-pin" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-2xl relative text-center">
+            <div class="flex justify-between items-center">
+                <h3 id="modal-pin-title" class="text-base font-bold text-gold-500">Entrez votre code d'accès</h3>
+                <button onclick="fermerModalPin()" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
+            </div>
+            <form onsubmit="validerCodePin(event)" class="space-y-4 text-xs">
+                <div>
+                    <input type="password" id="input-pin-code" maxlength="8" inputmode="numeric" pattern="[0-9]*" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold-400 font-bold focus:border-gold-500 focus:outline-none" placeholder="••••••••" required>
+                    <p class="text-[11px] text-slate-400 mt-2">Code confidentiel sécurisé</p>
+                </div>
+                <div id="pin-error" class="text-red-400 text-xs hidden font-bold">Code d'accès incorrect</div>
+                <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold py-3 rounded-xl hover:bg-gold-600 transition shadow text-sm">Valider</button>
+            </form>
+        </div>
+    </div>
 
     <!-- MODAL PLAFONDS & OBJECTIFS (Pilote Seul) -->
     <div id="modal-plafonds" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -360,6 +370,15 @@
         const kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentRole = null;
+        let pendingRole = null;
+        let pendingNom = null;
+
+        // Mots de passe sécurisés configurés par profil
+        const PINS_CONFIG = {
+            'pilote': '74920381',  // Mot de passe solide à 8 chiffres pour le Pilote
+            'closer': '051195',    // Code sécurisé pour le Closer
+            'formaliste': '492817' // Code sécurisé pour le Formaliste
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
@@ -402,7 +421,39 @@
             else if (selectType === 'SARL') inputTotal.value = '175000';
         }
 
-        function connexionRapide(role, nom) {
+        // --- GESTION CODE SÉCURITÉ ---
+        function preparerConnexion(role, nom) {
+            pendingRole = role;
+            pendingNom = nom;
+            document.getElementById('modal-pin-title').textContent = `Code d'accès : ${nom}`;
+            document.getElementById('input-pin-code').value = '';
+            document.getElementById('pin-error').classList.add('hidden');
+            document.getElementById('modal-pin').classList.remove('hidden');
+            setTimeout(() => document.getElementById('input-pin-code').focus(), 100);
+        }
+
+        function fermerModalPin() {
+            document.getElementById('modal-pin').classList.add('hidden');
+            pendingRole = null;
+            pendingNom = null;
+        }
+
+        function validerCodePin(event) {
+            event.preventDefault();
+            const saisie = document.getElementById('input-pin-code').value.trim();
+            const errorDiv = document.getElementById('pin-error');
+            
+            if (saisie === PINS_CONFIG[pendingRole]) {
+                fermerModalPin();
+                connecterValide(pendingRole, pendingNom);
+            } else {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('input-pin-code').value = '';
+                document.getElementById('input-pin-code').focus();
+            }
+        }
+
+        function connecterValide(role, nom) {
             currentRole = role;
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('user-badge').classList.remove('hidden');
@@ -615,7 +666,6 @@
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
                 const { data: stats } = await kamaClient.from('closer_stats').select('*');
 
-                // Calculs Closer Activité (Jour / Semaine / Mois)
                 let aujourdhui = new Date().toISOString().split('T')[0];
                 let totalConvJour = 0, totalClientsJour = 0;
                 let totalConvSemaine = 0, totalClientsSemaine = 0;
@@ -651,7 +701,6 @@
                 let coutConv = totalConvJour > 0 ? (totalPub / totalConvJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
                 let coutCac = totalClientsJour > 0 ? (totalPub / totalClientsJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
 
-                // Affichage bloc Activité vs Plafonds
                 const grid = document.getElementById('pilote-activite-closer-grid');
                 let colorConv = totalConvJour >= plafonds.objectif_conversations_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
                 let colorClients = totalClientsJour >= plafonds.objectif_clients_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
@@ -681,7 +730,6 @@
                     </div>
                 `;
 
-                // Calculs Financiers Pilotage
                 let caGlobal = 0, sommeFormalisteVersee = 0;
                 if (dossiers) {
                     dossiers.forEach(d => {
@@ -701,13 +749,11 @@
                 document.getElementById('pilote-marge-nette').textContent = margeNette.toLocaleString() + " FCFA";
                 document.getElementById('total-depense-pub').textContent = totalPub.toLocaleString() + " FCFA";
 
-                // Progression CA Annuel
                 let objAnnuel = plafonds.objectif_annuel_ca || 67320000;
                 let tauxCA = objAnnuel > 0 ? Math.min(100, ((caGlobal / objAnnuel) * 100)).toFixed(1) : 0;
                 document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${objAnnuel.toLocaleString()} F) : ${tauxCA}% réalisé`;
                 document.getElementById('barre-progression-ca').style.width = tauxCA + '%';
 
-                // Gestion des versements formaliste dans le tableau pilote
                 const container = document.getElementById('pilote-formaliste-paiements');
                 if (!dossiers || dossiers.length === 0) {
                     container.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
@@ -718,7 +764,6 @@
                 dossiers.forEach(d => {
                     let avActuelle = Number(d.formaliste_avance || 0);
                     let relActuel = Number(d.formaliste_reliquat_recu || 0);
-                    let formDu = Number(d.formaliste_du || ((d.type_entreprise === 'EI') ? 100000 : 130000));
                     let totalClient = Number(d.montant_total || 0);
                     let encaisseClient = Number(d.montant_encaisse || 0);
 
@@ -793,7 +838,7 @@
             }
         }
 
-        // --- FORMALISTE (Épuré) ---
+        // --- FORMALISTE (Épuré & Sans Export) ---
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
@@ -886,7 +931,7 @@
             chargerDonneesFormaliste();
         }
 
-        // --- EXPORT TABLEUR (CSV Excel compatible UTF-8 BOM) ---
+        // --- EXPORT TABLEUR PILOTE SEULEMENT ---
         async function exporterExcelPilote() {
             try {
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
@@ -898,23 +943,6 @@
                 });
 
                 telechargerFichierCSV(csvContent, "kama_lex_export_pilote.csv");
-            } catch (e) {
-                alert("Erreur d'exportation : " + e.message);
-            }
-        }
-
-        async function exporterExcelFormaliste() {
-            try {
-                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
-                if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
-
-                let csvContent = "\ufeffNumero Dossier;Nom;Prenom;Telephone;Type Entreprise;Statut;Avance Recue Formaliste;Reliquat Recu Formaliste;RCCM;IFU;Difficultes\n";
-                dossiers.forEach(d => {
-                    let relFormRecu = Number(d.formaliste_reliquat_recu || 0);
-                    csvContent += `"${d.numero_dossier}";"${d.nom}";"${d.prenom || ''}";"${d.telephone}";"${d.type_entreprise}";"${d.statut}";${d.formaliste_avance};${relFormRecu > 0 ? relFormRecu : 0};"${d.rccm || ''}";"${d.ifu || ''}";"${d.difficultes || ''}"\n`;
-                });
-
-                telechargerFichierCSV(csvContent, "kama_lex_export_formaliste.csv");
             } catch (e) {
                 alert("Erreur d'exportation : " + e.message);
             }
