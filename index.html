@@ -15,8 +15,7 @@
                         gold: { 500: '#D4AF37', 600: '#AA8C2C', 400: '#E6CA65' }
                     },
                     fontFamily: {
-                        sans: ['"Poppins"', 'sans-serif'],
-                        serif: ['"Poppins"', 'sans-serif']
+                        sans: ['"Poppins"', 'sans-serif']
                     }
                 }
             }
@@ -26,17 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root {
-            --navy-950: #040712;
-            --navy-900: #060B1E;
-            --navy-800: #0B132B;
-            --gold-500: #D4AF37;
-            --gold-600: #AA8C2C;
-            --gold-400: #E6CA65;
-        }
-        body, input, select, textarea, button {
-            font-family: 'Poppins', sans-serif;
-        }
+        body, input, select, textarea, button { font-family: 'Poppins', sans-serif; }
     </style>
 </head>
 <body class="bg-navy-950 text-slate-100 h-full flex flex-col antialiased">
@@ -44,7 +33,7 @@
     <!-- En-tête Global -->
     <header class="bg-navy-900 border-b border-gold-500/30 px-6 py-4 flex justify-between items-center shadow-xl">
         <div class="flex items-center space-x-3">
-            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500 flex items-center justify-center text-gold-500 font-bold text-xl shadow-inner">KL</div>
+            <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500 flex items-center justify-center text-gold-500 font-bold text-xl">KL</div>
             <div>
                 <h1 class="font-bold text-gold-500 tracking-wider text-lg">KAMA LEX</h1>
                 <p class="text-xs text-slate-400 italic">« Savoir pour mieux décider » — Ouagadougou</p>
@@ -56,7 +45,7 @@
         </div>
     </header>
 
-    <!-- Bande d'Annonce Modifiable -->
+    <!-- Bande d'Annonce -->
     <div class="bg-gradient-to-r from-navy-900 via-gold-500/10 to-navy-900 border-b border-gold-500/30 px-6 py-2.5 text-xs text-gold-400 text-center font-medium shadow-inner flex justify-center items-center gap-2">
         <span>📢</span> <span id="texte-annonce">Chargement de la note stratégique...</span>
     </div>
@@ -64,7 +53,7 @@
     <!-- Conteneur Principal -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
         
-        <!-- VUE 1 : CONNEXION RAPIDE (3 Cartes avec demande de mot de passe) -->
+        <!-- VUE 1 : CONNEXION RAPIDE (3 Cartes) -->
         <div id="view-login" class="flex flex-col items-center justify-center h-[75vh] max-w-xl mx-auto">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-8 shadow-2xl w-full relative overflow-hidden space-y-6">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
@@ -92,53 +81,43 @@
             </div>
         </div>
 
-        <!-- VUE 2 : ESPACE PILOTE (ZOURE Aboubakar) -->
+        <!-- VUE 2 : ESPACE PILOTE -->
         <div id="view-pilote" class="space-y-6 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Pilote & Fondateur</span>
                     <h2 class="text-2xl font-bold text-slate-100">Tableau de Bord Stratégique & Trésorerie</h2>
                 </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">ZOURE Aboubakar</div>
-                </div>
+                <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">ZOURE Aboubakar</div>
             </div>
 
-            <!-- Sous-Navigation Pilote -->
             <div class="flex border-b border-gold-500/30 pb-4 gap-3">
                 <button onclick="basculerOngletPilote('dashboard')" id="btn-tab-dashboard" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Tableau de Bord</button>
                 <button onclick="basculerOngletPilote('objectifs')" id="btn-tab-objectifs" class="bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10">🎯 Objectifs 2027</button>
             </div>
 
-            <!-- SECTION A : TABLEAU DE BORD STANDARD -->
+            <!-- SECTION DASHBOARD -->
             <div id="pilote-section-dashboard" class="space-y-8">
                 <div class="flex justify-end gap-3">
-                    <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
-                        ⚙️ Plafonds & Objectifs
-                    </button>
-                    <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg">
-                        📊 Exporter (Excel)
-                    </button>
+                    <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">⚙️ Plafonds & Objectifs</button>
+                    <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Exporter (Excel)</button>
                 </div>
 
-                <!-- Configuration Bande d'Annonce -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Modifier la Bande d'Annonce</h3>
                     <div class="flex gap-3">
-                        <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:border-gold-500" placeholder="Message diffusé à l'équipe...">
+                        <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100" placeholder="Message diffusé à l'équipe...">
                         <button onclick="sauvegarderAnnonce()" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 px-5 rounded-xl hover:bg-gold-600 transition shadow whitespace-nowrap">Mettre à jour</button>
                     </div>
                 </div>
 
-                <!-- Activité du closer vs plafonds -->
                 <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activité du Closer vs Plafonds & Objectifs</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
                 </div>
 
-                <!-- KPIs Financiers -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
+                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
                         <p id="pilote-ca-global" class="text-3xl font-bold text-gold-500">0 FCFA</p>
                         <p class="text-[11px] text-slate-400" id="progression-ca-txt">Objectif CA Annuel : En cours</p>
@@ -146,19 +125,16 @@
                             <div id="barre-progression-ca" class="bg-gold-500 h-full transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
-                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
+                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (Avant Pub)</p>
                         <p id="pilote-marge-brute" class="text-3xl font-bold text-white">0 FCFA</p>
-                        <span class="text-[11px] text-slate-400 block">CA - Sommes versées au formaliste</span>
                     </div>
-                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
+                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Après Pub)</p>
                         <p id="pilote-marge-nette" class="text-3xl font-bold text-emerald-400">0 FCFA</p>
-                        <span class="text-[11px] text-slate-400 block">Marge Brute - Dépenses Pub Meta</span>
                     </div>
                 </div>
 
-                <!-- Publicité & Rapprochement Bancaire -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                         <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Dépense Publicitaire (Meta Ads)</h3>
@@ -178,47 +154,32 @@
                     </div>
                 </div>
 
-                <!-- Paiement des Avances & Reliquats au Formaliste -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global des Dossiers & Paiements Formaliste</h3>
                     <div id="pilote-formaliste-paiements" class="space-y-3 text-xs text-slate-300">Chargement des dossiers...</div>
                 </div>
             </div>
 
-            <!-- SECTION B : OBJECTIFS 2027 (PILOTE SEUL) -->
+            <!-- SECTION OBJECTIFS 2027 -->
             <div id="pilote-section-objectifs" class="space-y-8 hidden">
-                <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                     <div>
                         <h3 class="text-lg font-bold text-gold-500">Pilote - Suivi des Objectifs 2027</h3>
                         <p class="text-xs text-slate-400">Analyse comparative des performances et objectifs budgétaires</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <label class="text-xs font-bold text-slate-300">Période :</label>
-                        <select id="obj-select-periode" onchange="chargerModuleObjectifs2027()" class="bg-navy-950 border border-gold-500/40 rounded-xl px-4 py-2 text-xs text-gold-400 font-bold outline-none">
-                            <option value="annee">Année 2027 (Cumul)</option>
-                            <option value="1">Janvier</option>
-                            <option value="2">Février</option>
-                            <option value="3">Mars</option>
-                            <option value="4">Avril</option>
-                            <option value="5">Mai</option>
-                            <option value="6">Juin</option>
-                            <option value="7">Juillet</option>
-                            <option value="8">Août</option>
-                            <option value="9">Septembre</option>
-                            <option value="10">Octobre</option>
-                            <option value="11">Novembre</option>
-                            <option value="12">Décembre</option>
-                        </select>
-                    </div>
+                    <select id="obj-select-periode" onchange="chargerModuleObjectifs2027()" class="bg-navy-950 border border-gold-500/40 rounded-xl px-4 py-2 text-xs text-gold-400 font-bold outline-none">
+                        <option value="annee">Année 2027 (Cumul)</option>
+                        <option value="1">Janvier</option><option value="2">Février</option><option value="3">Mars</option>
+                        <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
+                        <option value="7">Juillet</option><option value="8">Août</option><option value="9">Septembre</option>
+                        <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option>
+                    </select>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="obj-cartes-indicateurs"></div>
-
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Évolution Mensuelle : CA & Marge Nette (Objectif vs Réalisé)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Évolution Mensuelle : CA & Marge Nette</h3>
                     <div id="obj-graphique-container" class="space-y-4 pt-2 text-xs"></div>
                 </div>
-
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl overflow-x-auto">
                     <div class="flex justify-between items-center">
                         <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Tableau de Bord Budgétaire des 12 Mois</h3>
@@ -229,187 +190,109 @@
             </div>
         </div>
 
-        <!-- VUE 3 : ESPACE CLOSER (Abdoul) -->
+        <!-- VUE 3 : ESPACE CLOSER -->
         <div id="view-closer" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Closer</span>
-                    <h2 class="text-2xl font-bold text-slate-100">WhatsApp, Point Journalier & Intermédiation</h2>
+                    <h2 class="text-2xl font-bold text-slate-100">WhatsApp & Point Journalier</h2>
                 </div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">Abdoul</div>
             </div>
-
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Point Journalier WhatsApp (Objectifs : 34 Conv. & 2 Clients / Jour)</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Point Journalier WhatsApp (Obj: 34 Conv. & 2 Clients)</h3>
                 <form onsubmit="enregistrerStatsCloser(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">Date</label>
-                        <input type="date" id="stat-date" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-150">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">Conversations du Jour</label>
-                        <input type="number" id="stat-conv" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-150" placeholder="Ex: 35">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">Clients Acquis du Jour</label>
-                        <input type="number" id="stat-acquis" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-150" placeholder="Ex: 2">
-                    </div>
-                    <div>
-                        <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 transition shadow">Enregistrer le Point</button>
-                    </div>
+                    <div><label class="block text-xs font-bold text-slate-300 mb-1">Date</label><input type="date" id="stat-date" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-150"></div>
+                    <div><label class="block text-xs font-bold text-slate-300 mb-1">Conversations</label><input type="number" id="stat-conv" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Ex: 35"></div>
+                    <div><label class="block text-xs font-bold text-slate-300 mb-1">Clients Acquis</label><input type="number" id="stat-acquis" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Ex: 2"></div>
+                    <div><button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button></div>
                 </form>
                 <div id="comparaison-objectif-box" class="bg-navy-950 p-4 rounded-xl border border-slate-800 text-xs font-bold flex justify-between items-center">
-                    <span>Performance Journalière :</span>
-                    <span id="statut-objectif-jour" class="font-bold text-gold-500">Chargement...</span>
+                    <span>Performance :</span><span id="statut-objectif-jour" class="font-bold text-gold-500">Chargement...</span>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Enregistrer un Client (Création d'Entreprise)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Enregistrer un Client</h3>
                     <form onsubmit="ajouterDossierCloser(event)" class="space-y-4">
                         <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">Nom</label>
-                                <input type="text" id="closer-nom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Nom">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">Prénom</label>
-                                <input type="text" id="closer-prenom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Prénom">
-                            </div>
+                            <div><label class="block text-xs font-bold text-slate-300 mb-1">Nom</label><input type="text" id="closer-nom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Nom"></div>
+                            <div><label class="block text-xs font-bold text-slate-300 mb-1">Prénom</label><input type="text" id="closer-prenom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Prénom"></div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Téléphone WhatsApp</label>
-                            <input type="text" id="closer-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: 70000000">
-                        </div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp</label><input type="text" id="closer-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Ex: 70000000"></div>
                         <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">Offre</label>
-                                <select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100">
-                                    <option value="EI">EI (Std: 150 000 F)</option>
-                                    <option value="SARL">SARL (Std: 175 000 F)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 mb-1">Net Négocié (Total)</label>
-                                <input type="number" id="closer-total" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-500 font-bold" value="150000">
-                            </div>
+                            <div><label class="block text-xs font-bold text-slate-300 mb-1">Offre</label><select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm"><option value="EI">EI (150k)</option><option value="SARL">SARL (175k)</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-300 mb-1">Total Négocié</label><input type="number" id="closer-total" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-500 font-bold" value="150000"></div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Somme Versée par le Client (Avance ou Reliquat)</label>
-                            <input type="number" id="closer-avance" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Montant encaissé">
-                        </div>
-                        <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl hover:bg-gold-600 shadow">Enregistrer & Transmettre</button>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Somme Versée</label><input type="number" id="closer-avance" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Montant encaissé"></div>
+                        <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl shadow">Enregistrer</button>
                     </form>
                 </div>
-
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Intermédiation Financière (Financement)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Intermédiation Financière</h3>
                     <form onsubmit="ajouterFinancementCloser(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Nom / Entreprise du Demandeur</label>
-                            <input type="text" id="fin-nom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Nom du client">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Contact WhatsApp</label>
-                            <input type="text" id="fin-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Téléphone">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Montant du Financement (FCFA)</label>
-                            <input type="number" id="fin-montant" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-400 font-bold" placeholder="Ex: 5000000">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Objet / Détails du Projet</label>
-                            <textarea id="fin-objet" rows="2" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Achat de matériel..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl hover:bg-gold-600 shadow">Enregistrer le Prospect Financement</button>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Client / Entreprise</label><input type="text" id="fin-nom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Nom"></div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Téléphone</label><input type="text" id="fin-tel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Tél"></div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Montant (FCFA)</label><input type="number" id="fin-montant" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-400 font-bold" placeholder="Montant"></div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Objet</label><textarea id="fin-objet" rows="2" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Détails..."></textarea></div>
+                        <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl shadow">Enregistrer Prospect</button>
                     </form>
                 </div>
             </div>
-
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-3 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistrés & Suivi des Reliquats Clients</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistrés</h3>
                 <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
 
-        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) -->
+        <!-- VUE 4 : ESPACE FORMALISTE -->
         <div id="view-formaliste" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
-                <div>
-                    <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Formaliste (Terrain)</span>
-                    <h2 class="text-2xl font-bold text-slate-100">Suivi et avancement des Dossiers / Formaliste</h2>
-                </div>
+                <div><span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Formaliste</span><h2 class="text-2xl font-bold text-slate-100">Suivi des Dossiers</h2></div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">OUEDRAOGO Adama</div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                    <p class="text-xs font-bold text-slate-400">Total Avances Reçues</p>
-                    <p id="formaliste-total-avances" class="text-2xl font-bold text-gold-500 mt-2">0 FCFA</p>
-                </div>
-                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                    <p class="text-xs font-bold text-slate-400">Total Reliquats Reçus</p>
-                    <p id="formaliste-total-reliquats" class="text-2xl font-bold text-emerald-400 mt-2">0 FCFA</p>
-                </div>
+                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl"><p class="text-xs font-bold text-slate-400">Total Avances</p><p id="formaliste-total-avances" class="text-2xl font-bold text-gold-500 mt-2">0 FCFA</p></div>
+                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl"><p class="text-xs font-bold text-slate-400">Total Reliquats</p><p id="formaliste-total-reliquats" class="text-2xl font-bold text-emerald-400 mt-2">0 FCFA</p></div>
             </div>
-
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués & Étapes d'Avancement</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués</h3>
                 <div id="formaliste-container" class="space-y-4 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
     </main>
 
-    <!-- MODAL PLAFONDS & OBJECTIFS -->
+    <!-- MODAL PLAFONDS -->
     <div id="modal-plafonds" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl relative">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gold-500">Paramétrage Plafonds & Objectifs</h3>
-                <button onclick="fermerModalPlafonds()" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
-            </div>
+        <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-bold text-gold-500">Paramétrage Plafonds</h3><button onclick="fermerModalPlafonds()" class="text-slate-400 text-lg font-bold">&times;</button></div>
             <form onsubmit="sauvegarderPlafondsGlobal(event)" class="space-y-4 text-xs">
-                <div>
-                    <label class="block font-bold text-slate-300 mb-1">Max Coût par Conversation (FCFA)</label>
-                    <input type="number" id="cfg-cpl" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-300 mb-1">Objectif Conversations par Jour</label>
-                    <input type="number" id="cfg-obj-conv" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-300 mb-1">Objectif Clients Acquis par Jour</label>
-                    <input type="number" id="cfg-obj-clients" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-300 mb-1">Max Coût d'Acquisition Client (CAC - FCFA)</label>
-                    <input type="number" id="cfg-cac" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-300 mb-1">Objectif Annuel CA (FCFA)</label>
-                    <input type="number" id="cfg-obj-annuel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-gold-400 font-bold" placeholder="Ex: 67320000">
-                </div>
-                <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold py-3 rounded-xl hover:bg-gold-600 transition shadow">Enregistrer</button>
+                <div><label class="block font-bold text-slate-300 mb-1">Max Coût par Conversation (CPL)</label><input type="number" id="cfg-cpl" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"></div>
+                <div><label class="block font-bold text-slate-300 mb-1">Objectif Conversations / Jour</label><input type="number" id="cfg-obj-conv" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"></div>
+                <div><label class="block font-bold text-slate-300 mb-1">Objectif Clients / Jour</label><input type="number" id="cfg-obj-clients" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"></div>
+                <div><label class="block font-bold text-slate-300 mb-1">Max CAC (FCFA)</label><input type="number" id="cfg-cac" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"></div>
+                <div><label class="block font-bold text-slate-300 mb-1">Objectif CA Annuel (FCFA)</label><input type="number" id="cfg-obj-annuel" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-gold-400 font-bold"></div>
+                <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold py-3 rounded-xl shadow">Enregistrer</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL MOT DE PASSE SÉCURISÉ -->
+    <!-- MODAL MOT DE PASSE -->
     <div id="modal-password" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl relative text-center">
+        <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl text-center">
             <h3 id="modal-pwd-title" class="text-base font-bold text-gold-500">Code d'accès requis</h3>
-            <p class="text-xs text-slate-400">Veuillez entrer votre code de sécurité à 6 chiffres :</p>
+            <p class="text-xs text-slate-400">Entrez votre code à 6 chiffres :</p>
             <form onsubmit="validerCodeAcces(event)" class="space-y-4">
-                <input type="password" id="input-secret-code" maxlength="6" autofocus class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg text-gold-400 font-bold tracking-widest outline-none focus:border-gold-500" placeholder="••••••">
+                <input type="password" id="input-secret-code" maxlength="6" autofocus class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg text-gold-400 font-bold tracking-widest outline-none">
                 <div class="flex gap-2">
-                    <button type="button" onclick="fermerModalPassword()" class="w-1/2 bg-slate-800 text-slate-300 font-bold text-xs py-2.5 rounded-xl hover:bg-slate-700 transition">Annuler</button>
-                    <button type="submit" class="w-1/2 bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 transition">Valider</button>
+                    <button type="button" onclick="fermerModalPassword()" class="w-1/2 bg-slate-800 text-slate-300 font-bold text-xs py-2.5 rounded-xl">Annuler</button>
+                    <button type="submit" class="w-1/2 bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl">Valider</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- JavaScript Application KAMA LEX -->
+    <!-- SCRIPT JAVASCRIPT -->
     <script>
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
@@ -436,7 +319,7 @@
 
         async function chargerBandeauAnnonce() {
             try {
-                const { data } = await kamaClient.from('parametres').select('annonce').limit(1).single();
+                const { data } = await kamaClient.from('parametres').select('annonce').limit(1).maybeSingle();
                 if (data && data.annonce) {
                     document.getElementById('texte-annonce').textContent = data.annonce;
                 } else {
@@ -600,9 +483,8 @@
                 realMargeNette = realMargeBrute - totalPubPeriode;
 
                 afficherCartesIndicateurs(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
-                afficherGraphiqueObjectifs(objectifs, dossiers, pubs);
+                afficherGraphiqueObjectifs(objectifs, dossiers);
                 afficherTableau12Mois(objectifs, dossiers, pubs);
-
             } catch (e) {
                 console.error("Erreur module objectifs 2027:", e);
             }
@@ -616,269 +498,92 @@
 
         function afficherCartesIndicateurs(objD, realD, objCA, realCA, objMB, realMB, objMN, realMN) {
             const container = document.getElementById('obj-cartes-indicateurs');
-            
             let tauxD = objD > 0 ? Math.round((realD / objD) * 100) : 0;
             let tauxCA = objCA > 0 ? Math.round((realCA / objCA) * 100) : 0;
             let tauxMB = objMB > 0 ? Math.round((realMB / objMB) * 100) : 0;
             let tauxMN = objMN > 0 ? Math.round((realMN / objMN) * 100) : 0;
 
-            let eD = realD - objD;
-            let eCA = realCA - objCA;
-            let eMB = realMB - objMB;
-            let eMN = realMN - objMN;
-
-            let cD = getColorProgression(tauxD);
-            let cCA = getColorProgression(tauxCA);
-            let cMB = getColorProgression(tauxMB);
-            let cMN = getColorProgression(tauxMN);
+            let cD = getColorProgression(tauxD), cCA = getColorProgression(tauxCA), cMB = getColorProgression(tauxMB), cMN = getColorProgression(tauxMN);
 
             container.innerHTML = `
                 <div class="p-5 rounded-2xl border ${cD.border} space-y-3 shadow-xl">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nombre de Dossiers</p>
-                    <div class="flex justify-between items-baseline">
-                        <span class="text-2xl font-bold text-slate-100">${realD}</span>
-                        <span class="text-xs text-slate-400">Obj: ${objD}</span>
-                    </div>
-                    <div class="flex justify-between text-xs font-bold">
-                        <span class="${eD >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${eD >= 0 ? '+' : ''}${eD}</span>
-                        <span class="${cD.text}">${tauxD}%</span>
-                    </div>
-                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
-                        <div class="${cD.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxD)}%"></div>
-                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Dossiers</p>
+                    <div class="flex justify-between items-baseline"><span class="text-2xl font-bold">${realD}</span><span class="text-xs text-slate-400">Obj: ${objD}</span></div>
+                    <div class="flex justify-between text-xs font-bold"><span class="${cD.text}">${tauxD}%</span></div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden"><div class="${cD.bg} h-full" style="width: ${Math.min(100, tauxD)}%"></div></div>
                 </div>
-
                 <div class="p-5 rounded-2xl border ${cCA.border} space-y-3 shadow-xl">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires (CA)</p>
-                    <div class="flex justify-between items-baseline">
-                        <span class="text-xl font-bold text-gold-500">${formatFCFA(realCA)}</span>
-                    </div>
-                    <p class="text-[11px] text-slate-400">Objectif : ${formatFCFA(objCA)}</p>
-                    <div class="flex justify-between text-xs font-bold">
-                        <span class="${eCA >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${formatFCFA(eCA)}</span>
-                        <span class="${cCA.text}">${tauxCA}%</span>
-                    </div>
-                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
-                        <div class="${cCA.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxCA)}%"></div>
-                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">CA</p>
+                    <div class="flex justify-between items-baseline"><span class="text-xl font-bold text-gold-500">${formatFCFA(realCA)}</span></div>
+                    <p class="text-[11px] text-slate-400">Obj : ${formatFCFA(objCA)}</p>
+                    <div class="flex justify-between text-xs font-bold"><span class="${cCA.text}">${tauxCA}%</span></div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden"><div class="${cCA.bg} h-full" style="width: ${Math.min(100, tauxCA)}%"></div></div>
                 </div>
-
                 <div class="p-5 rounded-2xl border ${cMB.border} space-y-3 shadow-xl">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute</p>
-                    <div class="flex justify-between items-baseline">
-                        <span class="text-xl font-bold text-white">${formatFCFA(realMB)}</span>
-                    </div>
-                    <p class="text-[11px] text-slate-400">Objectif : ${formatFCFA(objMB)}</p>
-                    <div class="flex justify-between text-xs font-bold">
-                        <span class="${eMB >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${formatFCFA(eMB)}</span>
-                        <span class="${cMB.text}">${tauxMB}%</span>
-                    </div>
-                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
-                        <div class="${cMB.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxMB)}%"></div>
-                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Marge Brute</p>
+                    <div class="flex justify-between items-baseline"><span class="text-xl font-bold text-white">${formatFCFA(realMB)}</span></div>
+                    <p class="text-[11px] text-slate-400">Obj : ${formatFCFA(objMB)}</p>
+                    <div class="flex justify-between text-xs font-bold"><span class="${cMB.text}">${tauxMB}%</span></div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden"><div class="${cMB.bg} h-full" style="width: ${Math.min(100, tauxMB)}%"></div></div>
                 </div>
-
                 <div class="p-5 rounded-2xl border ${cMN.border} space-y-3 shadow-xl">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette</p>
-                    <div class="flex justify-between items-baseline">
-                        <span class="text-xl font-bold text-emerald-400">${formatFCFA(realMN)}</span>
-                    </div>
-                    <p class="text-[11px] text-slate-400">Objectif : ${formatFCFA(objMN)}</p>
-                    <div class="flex justify-between text-xs font-bold">
-                        <span class="${eMN >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${formatFCFA(eMN)}</span>
-                        <span class="${cMN.text}">${tauxMN}%</span>
-                    </div>
-                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
-                        <div class="${cMN.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxMN)}%"></div>
-                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Marge Nette</p>
+                    <div class="flex justify-between items-baseline"><span class="text-xl font-bold text-emerald-400">${formatFCFA(realMN)}</span></div>
+                    <p class="text-[11px] text-slate-400">Obj : ${formatFCFA(objMN)}</p>
+                    <div class="flex justify-between text-xs font-bold"><span class="${cMN.text}">${tauxMN}%</span></div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden"><div class="${cMN.bg} h-full" style="width: ${Math.min(100, tauxMN)}%"></div></div>
                 </div>
             `;
         }
 
-        function afficherGraphiqueObjectifs(objectifs, dossiers, pubs) {
+        function afficherGraphiqueObjectifs(objectifs, dossiers) {
             const container = document.getElementById('obj-graphique-container');
             if (!objectifs) return;
-
             let html = '<div class="space-y-3">';
             objectifs.forEach(o => {
-                let moisNum = o.mois_num;
-                let objCA = Number(o.objectif_ca || 1);
-                
                 let realCA = 0;
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let dt = d.created_at ? new Date(d.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === moisNum) {
-                            realCA += Number(d.montant_encaisse || 0);
-                        }
+                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) realCA += Number(d.montant_encaisse || 0);
                     });
                 }
-
-                let pourcentage = Math.min(100, Math.round((realCA / objCA) * 100));
-                let colorBar = pourcentage >= 100 ? 'bg-emerald-500' : (pourcentage >= 80 ? 'bg-amber-500' : 'bg-gold-500');
-
+                let pourcentage = Math.min(100, Math.round((realCA / (Number(o.objectif_ca) || 1)) * 100));
                 html += `
                     <div class="bg-navy-950 p-3 rounded-xl border border-slate-800 space-y-1">
-                        <div class="flex justify-between font-bold text-xs">
-                            <span class="text-gold-400 w-24">${o.mois_nom}</span>
-                            <span class="text-slate-300">Réalisé : ${formatFCFA(realCA)}</span>
-                            <span class="text-slate-400">Obj : ${formatFCFA(objCA)}</span>
-                            <span class="text-slate-200">${pourcentage}%</span>
-                        </div>
-                        <div class="w-full bg-navy-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                            <div class="${colorBar} h-full transition-all duration-500" style="width: ${pourcentage}%"></div>
-                        </div>
+                        <div class="flex justify-between font-bold text-xs"><span class="text-gold-400">${o.mois_nom}</span><span>Réalisé : ${formatFCFA(realCA)}</span><span>${pourcentage}%</span></div>
+                        <div class="w-full bg-navy-900 rounded-full h-2.5 overflow-hidden"><div class="bg-gold-500 h-full" style="width: ${pourcentage}%"></div></div>
                     </div>
                 `;
             });
-            html += '</div>';
-            container.innerHTML = html;
+            container.innerHTML = html + '</div>';
         }
 
         function afficherTableau12Mois(objectifs, dossiers, pubs) {
             const container = document.getElementById('obj-tableau-12mois');
             if (!objectifs) return;
-
-            let html = `
-                <table class="w-full text-left text-xs border-collapse">
-                    <thead>
-                        <tr class="border-b border-gold-500/30 text-gold-400 uppercase">
-                            <th class="py-3 px-3">Mois</th>
-                            <th class="py-3 px-3">Dossiers (Obj / Réal)</th>
-                            <th class="py-3 px-3">CA (Obj / Réal)</th>
-                            <th class="py-3 px-3">Marge Brute (Obj / Réal)</th>
-                            <th class="py-3 px-3">Marge Nette (Obj / Réal)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800 text-slate-300">
-            `;
-
-            let totObjD = 0, totRealD = 0;
-            let totObjCA = 0, totRealCA = 0;
-            let totObjMB = 0, totRealMB = 0;
-            let totObjMN = 0, totRealMN = 0;
-
+            let html = `<table class="w-full text-left text-xs border-collapse"><thead><tr class="border-b border-gold-500/30 text-gold-400 uppercase"><th class="py-3 px-3">Mois</th><th class="py-3 px-3">Dossiers</th><th class="py-3 px-3">CA</th><th class="py-3 px-3">Marge Brute</th><th class="py-3 px-3">Marge Nette</th></tr></thead><tbody class="divide-y divide-slate-800 text-slate-300">`;
             objectifs.forEach(o => {
-                let mNum = o.mois_num;
-                totObjD += Number(o.objectif_dossiers || 0);
-                totObjCA += Number(o.objectif_ca || 0);
-                totObjMB += Number(o.objectif_marge_brute || 0);
-                totObjMN += Number(o.objectif_marge_nette || 0);
-
                 let realD = 0, realCA = 0, realMB = 0;
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let dt = d.created_at ? new Date(d.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === mNum) {
-                            realD += 1;
-                            realCA += Number(d.montant_encaisse || 0);
-                            let fVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
-                            realMB += (Number(d.montant_encaisse || 0) - fVersee);
+                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) {
+                            realD++; realCA += Number(d.montant_encaisse || 0);
+                            realMB += (Number(d.montant_encaisse || 0) - (Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0)));
                         }
                     });
                 }
-                totRealD += realD;
-                totRealCA += realCA;
-                totRealMB += realMB;
-
                 let realMN = realMB;
                 if (pubs) {
                     pubs.forEach(p => {
                         let dt = p.created_at ? new Date(p.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === mNum) {
-                            realMN -= Number(p.depense_reelle || 0);
-                        }
+                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) realMN -= Number(p.depense_reelle || 0);
                     });
                 }
-                totRealMN += realMN;
-
-                if (editionObjActive) {
-                    html += `
-                        <tr class="hover:bg-navy-950/50 transition">
-                            <td class="py-3 px-3 font-bold text-gold-500">${o.mois_nom}</td>
-                            <td class="py-3 px-3"><input type="number" id="edit-d-${o.id}" value="${o.objectif_dossiers}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-20 text-slate-100"></td>
-                            <td class="py-3 px-3"><input type="number" id="edit-ca-${o.id}" value="${o.objectif_ca}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"></td>
-                            <td class="py-3 px-3"><input type="number" id="edit-mb-${o.id}" value="${o.objectif_marge_brute}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"></td>
-                            <td class="py-3 px-3"><input type="number" id="edit-mn-${o.id}" value="${o.objectif_marge_nette}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"></td>
-                        </tr>
-                    `;
-                } else {
-                    let tauxCA = o.objectif_ca > 0 ? Math.round((realCA / o.objectif_ca) * 100) : 0;
-                    html += `
-                        <tr class="hover:bg-navy-950/50 transition">
-                            <td class="py-3 px-3 font-bold text-gold-500">${o.mois_nom}</td>
-                            <td class="py-3 px-3">${o.objectif_dossiers} / <strong class="text-slate-100">${realD}</strong></td>
-                            <td class="py-3 px-3">${formatFCFA(o.objectif_ca)} / <strong class="text-gold-400">${formatFCFA(realCA)}</strong> (${tauxCA}%)</td>
-                            <td class="py-3 px-3">${formatFCFA(o.objectif_marge_brute)} / <strong class="text-white">${formatFCFA(realMB)}</strong></td>
-                            <td class="py-3 px-3">${formatFCFA(o.objectif_marge_nette)} / <strong class="text-emerald-400">${formatFCFA(realMN)}</strong></td>
-                        </tr>
-                    `;
-                }
+                html += `<tr class="hover:bg-navy-950/50"><td class="py-3 px-3 font-bold text-gold-500">${o.mois_nom}</td><td class="py-3 px-3">${o.objectif_dossiers} / <strong>${realD}</strong></td><td class="py-3 px-3">${formatFCFA(o.objectif_ca)} / <strong class="text-gold-400">${formatFCFA(realCA)}</strong></td><td class="py-3 px-3">${formatFCFA(o.objectif_marge_brute)} / <strong>${formatFCFA(realMB)}</strong></td><td class="py-3 px-3">${formatFCFA(o.objectif_marge_nette)} / <strong class="text-emerald-400">${formatFCFA(realMN)}</strong></td></tr>`;
             });
-
-            let tauxTotalCA = totObjCA > 0 ? Math.round((totRealCA / totObjCA) * 100) : 0;
-            html += `
-                    <tr class="bg-navy-950 font-bold border-t-2 border-gold-500 text-gold-400">
-                        <td class="py-3 px-3">TOTAL ANNÉE 2027</td>
-                        <td class="py-3 px-3">${totObjD} / ${totRealD}</td>
-                        <td class="py-3 px-3">${formatFCFA(totObjCA)} / ${formatFCFA(totRealCA)} (${tauxTotalCA}%)</td>
-                        <td class="py-3 px-3">${formatFCFA(totObjMB)} / ${formatFCFA(totRealMB)}</td>
-                        <td class="py-3 px-3">${formatFCFA(totObjMN)} / ${formatFCFA(totRealMN)}</td>
-                    </tr>
-                </tbody>
-            </table>
-            `;
-
-            if (editionObjActive) {
-                html += `
-                    <div class="flex justify-end pt-4">
-                        <button onclick="sauvegarderObjectifs12Mois()" class="bg-emerald-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl hover:bg-emerald-700 shadow">Enregistrer les Modifications</button>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function basculerModeEditionObjectifs() {
-            editionObjActive = !editionObjActive;
-            const btn = document.getElementById('btn-edit-obj');
-            if (editionObjActive) {
-                btn.textContent = "Verrouiller / Annuler";
-                btn.className = "bg-amber-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow";
-            } else {
-                btn.textContent = "Modifier les Objectifs";
-                btn.className = "bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow";
-            }
-            chargerModuleObjectifs2027();
-        }
-
-        async function sauvegarderObjectifs12Mois() {
-            const { data: objectifs } = await kamaClient.from('objectifs').select('*');
-            if (!objectifs) return;
-
-            for (let o of objectifs) {
-                let dInput = document.getElementById(`edit-d-${o.id}`);
-                let caInput = document.getElementById(`edit-ca-${o.id}`);
-                let mbInput = document.getElementById(`edit-mb-${o.id}`);
-                let mnInput = document.getElementById(`edit-mn-${o.id}`);
-
-                if (dInput && caInput && mbInput && mnInput) {
-                    await kamaClient.from('objectifs').update({
-                        objectif_dossiers: parseInt(dInput.value) || 0,
-                        objectif_ca: parseFloat(caInput.value) || 0,
-                        objectif_marge_brute: parseFloat(mbInput.value) || 0,
-                        objectif_marge_nette: parseFloat(mnInput.value) || 0,
-                        updated_at: new Date()
-                    }).eq('id', o.id);
-                }
-            }
-
-            alert("Objectifs annuels mis à jour avec succès !");
-            editionObjActive = false;
-            document.getElementById('btn-edit-obj').textContent = "Modifier les Objectifs";
-            document.getElementById('btn-edit-obj').className = "bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow";
-            chargerModuleObjectifs2027();
+            container.innerHTML = html + `</tbody></table>`;
         }
 
         async function enregistrerStatsCloser(event) {
@@ -886,114 +591,174 @@
             const datePoint = document.getElementById('stat-date').value || new Date().toISOString().split('T')[0];
             const conv = parseInt(document.getElementById('stat-conv').value) || 0;
             const acquis = parseInt(document.getElementById('stat-acquis').value) || 0;
-
-            const { error } = await kamaClient.from('closer_stats').insert([{
-                date_point: datePoint, conversations: conv, clients_acquis: acquis
-            }]);
-
+            const { error } = await kamaClient.from('closer_stats').insert([{ date_point: datePoint, conversations: conv, clients_acquis: acquis }]);
             if (error) return alert("Erreur : " + error.message);
             alert("Point journalier enregistré !");
-            document.getElementById('stat-conv').value = '';
-            document.getElementById('stat-acquis').value = '';
             chargerStatsCloser();
         }
 
         async function chargerStatsCloser() {
             try {
                 const { data } = await kamaClient.from('closer_stats').select('*');
-                let aujourdhui = new Date().toISOString().split('T')[0];
-                let convJour = 0, acquisJour = 0;
-
-                if (data) {
-                    data.forEach(s => {
-                        if (s.date_point === aujourdhui) {
-                            convJour += Number(s.conversations || 0);
-                            acquisJour += Number(s.clients_acquis || 0);
-                        }
-                    });
-                }
-
-                const plafonds = await recupererPlafonds();
-                let objConv = plafonds.objectif_conversations_jour || 34;
-                let objClients = plafonds.objectif_clients_jour || 2;
-
-                const box = document.getElementById('statut-objectif-jour');
-                let statusText = `Aujourd'hui : ${convJour} conv. (Obj: ${objConv}) | ${acquisJour} clients (Obj: ${objClients})`;
-                if (acquisJour >= objClients && convJour >= objConv) {
-                    box.innerHTML = `<span class="text-emerald-400">✔ Objectifs atteints ! (${statusText})</span>`;
-                } else {
-                    box.innerHTML = `<span class="text-amber-400">⚡ En cours (${statusText})</span>`;
-                }
+                let aujourdhui = new Date().toISOString().split('T')[0], convJour = 0, acquisJour = 0;
+                if (data) data.forEach(s => { if (s.date_point === aujourdhui) { convJour += Number(s.conversations || 0); acquisJour += Number(s.clients_acquis || 0); } });
+                document.getElementById('statut-objectif-jour').innerHTML = `<span class="text-gold-400">Aujourd'hui : ${convJour} conv. | ${acquisJour} clients</span>`;
             } catch (e) {}
         }
 
         async function ajouterDossierCloser(event) {
             event.preventDefault();
-            const nom = document.getElementById('closer-nom').value;
-            const prenom = document.getElementById('closer-prenom').value || '';
-            const telephone = document.getElementById('closer-tel').value;
-            const typeEnt = document.getElementById('closer-type').value;
-            const total = parseFloat(document.getElementById('closer-total').value) || 0;
-            const montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
-            
+            const nom = document.getElementById('closer-nom').value, prenom = document.getElementById('closer-prenom').value || '';
+            const telephone = document.getElementById('closer-tel').value, typeEnt = document.getElementById('closer-type').value;
+            const total = parseFloat(document.getElementById('closer-total').value) || 0, montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
             const numDossier = 'KML N°' + Math.floor(10000 + Math.random() * 90000);
-            let formalisteTotalDu = (typeEnt === 'EI') ? 100000 : 130000;
-
-            const { error } = await kamaClient.from('dossiers').insert([{
-                numero_dossier: numDossier,
-                nom, prenom, telephone, type_entreprise: typeEnt,
-                montant_total: total, montant_encaisse: montantEncaisse,
-                formaliste_du: formalisteTotalDu,
-                formaliste_avance: 0, formaliste_reliquat_recu: 0,
-                statut: '1. Réception du dossier'
-            }]);
-
+            const { error } = await kamaClient.from('dossiers').insert([{ numero_dossier: numDossier, nom, prenom, telephone, type_entreprise: typeEnt, montant_total: total, montant_encaisse: montantEncaisse, formaliste_du: typeEnt === 'EI' ? 100000 : 130000, formaliste_avance: 0, formaliste_reliquat_recu: 0, statut: '1. Réception du dossier' }]);
             if (error) return alert("Erreur : " + error.message);
-            alert(`Dossier ${numDossier} enregistré et transmis !`);
-            document.getElementById('closer-nom').value = '';
-            document.getElementById('closer-prenom').value = '';
-            document.getElementById('closer-tel').value = '';
-            document.getElementById('closer-avance').value = '';
+            alert(`Dossier ${numDossier} enregistré !`);
             chargerDonneesCloser();
         }
 
         async function ajouterFinancementCloser(event) {
             event.preventDefault();
-            const nom = document.getElementById('fin-nom').value;
-            const telephone = document.getElementById('fin-tel').value;
-            const montant = parseFloat(document.getElementById('fin-montant').value) || 0;
-            const objet = document.getElementById('fin-objet').value;
-
+            const nom = document.getElementById('fin-nom').value, telephone = document.getElementById('fin-tel').value;
+            const montant = parseFloat(document.getElementById('fin-montant').value) || 0, objet = document.getElementById('fin-objet').value;
             const { error } = await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
             if (error) return alert("Erreur : " + error.message);
             alert("Prospect financement enregistré !");
-            document.getElementById('fin-nom').value = '';
-            document.getElementById('fin-tel').value = '';
-            document.getElementById('fin-montant').value = '';
-            document.getElementById('fin-objet').value = '';
         }
 
         async function chargerDonneesCloser() {
             const listDiv = document.getElementById('closer-dossiers-list');
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
-                if (!data || data.length === 0) {
-                    listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
-                    return;
-                }
+                if (!data || data.length === 0) { listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
                 let html = '';
                 data.forEach(d => {
-                    let total = Number(d.montant_total || 0);
-                    let encaisse = Number(d.montant_encaisse || 0);
-                    let reliquatClient = total - encaisse;
-                    html += `<div class="bg-navy-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-                        <div>
-                            <span class="font-bold text-gold-500">${d.numero_dossier || 'KML N°...'}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
-                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : ${formatFCFA(encaisse)} | Total : ${formatFCFA(total)} | Statut : <span class="text-gold-400">${d.statut}</span></div>
-                        </div>
-                        <span class="text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded-lg">Reliquat : ${reliquatClient > 0 ? formatFCFA(reliquatClient) : 'Soldé'}</span>
-                    </div>`;
+                    html += `<div class="bg-navy-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs"><div><span class="font-bold text-gold-500">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} (${d.type_entreprise})<div class="text-[11px] text-slate-400">Encaissé : ${formatFCFA(d.montant_encaisse)} | Statut : <span class="text-gold-400">${d.statut}</span></div></div></div>`;
                 });
                 listDiv.innerHTML = html;
-            } catch (e) {
-                listDiv.innerHTML = "<p class='text-slate-400'>Er
+            } catch (e) { listDiv.innerHTML = "<p class='text-slate-400'>Erreur chargement.</p>"; }
+        }
+
+        async function recupererPlafonds() {
+            try {
+                const { data } = await kamaClient.from('plafonds').select('*').limit(1).maybeSingle();
+                if (data) return data;
+            } catch (e) {}
+            return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
+        }
+
+        async function ouvrirModalPlafonds() {
+            const plafonds = await recupererPlafonds();
+            document.getElementById('cfg-cpl').value = plafonds.plafond_cpl;
+            document.getElementById('cfg-obj-conv').value = plafonds.objectif_conversations_jour;
+            document.getElementById('cfg-obj-clients').value = plafonds.objectif_clients_jour;
+            document.getElementById('cfg-cac').value = plafonds.plafond_cac;
+            document.getElementById('cfg-obj-annuel').value = plafonds.objectif_annuel_ca || '';
+            document.getElementById('modal-plafonds').classList.remove('hidden');
+        }
+
+        function fermerModalPlafonds() { document.getElementById('modal-plafonds').classList.add('hidden'); }
+
+        async function sauvegarderPlafondsGlobal(event) {
+            event.preventDefault();
+            const cpl = parseFloat(document.getElementById('cfg-cpl').value) || 500;
+            const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 34;
+            const objClients = parseInt(document.getElementById('cfg-obj-clients').value) || 2;
+            const cac = parseFloat(document.getElementById('cfg-cac').value) || 8000;
+            const objAnnuel = parseFloat(document.getElementById('cfg-obj-annuel').value) || 67320000;
+            const { data: existing } = await kamaClient.from('plafonds').select('id').limit(1);
+            if (existing && existing.length > 0) {
+                await kamaClient.from('plafonds').update({ plafond_cpl: cpl, objectif_conversations_jour: objConv, objectif_clients_jour: objClients, plafond_cac: cac, objectif_annuel_ca: objAnnuel }).eq('id', existing[0].id);
+            } else {
+                await kamaClient.from('plafonds').insert([{ plafond_cpl: cpl, objectif_conversations_jour: objConv, objectif_clients_jour: objClients, plafond_cac: cac, objectif_annuel_ca: objAnnuel }]);
+            }
+            alert("Plafonds mis à jour !");
+            fermerModalPlafonds();
+            chargerDonneesPilote();
+        }
+
+        async function chargerDonneesPilote() {
+            const plafonds = await recupererPlafonds();
+            try {
+                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+                const { data: pubs } = await kamaClient.from('pubs').select('*');
+                let totalPub = 0; if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
+                let caGlobal = 0, sommeForm = 0;
+                if (dossiers) dossiers.forEach(d => { caGlobal += Number(d.montant_encaisse || 0); sommeForm += (Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0)); });
+                let margeBrute = caGlobal - sommeForm, margeNette = margeBrute - totalPub;
+                document.getElementById('pilote-ca-global').textContent = formatFCFA(caGlobal);
+                document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
+                document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
+                document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
+
+                const container = document.getElementById('pilote-formaliste-paiements');
+                if (!dossiers || dossiers.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
+                let html = '<div class="space-y-3">';
+                dossiers.forEach(d => {
+                    html += `<div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2"><div class="flex justify-between"><div><span class="font-bold text-gold-500">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} (${d.type_entreprise})</div></div><div class="flex gap-2 items-center text-xs"><input type="number" id="input-av-${d.id}" value="${d.formaliste_avance || 0}" class="bg-navy-900 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"><button onclick="payerAvanceForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded">Avance</button><input type="number" id="input-rel-${d.id}" value="${d.formaliste_reliquat_recu || 0}" class="bg-navy-900 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"><button onclick="payerReliquatForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded">Reliquat</button></div></div>`;
+                });
+                container.innerHTML = html + '</div>';
+            } catch (e) {}
+        }
+
+        async function payerAvanceForm(id) {
+            const m = parseFloat(document.getElementById(`input-av-${id}`).value) || 0;
+            await kamaClient.from('dossiers').update({ formaliste_avance: m }).eq('id', id);
+            alert("Avance enregistrée !"); chargerDonneesPilote();
+        }
+        async function payerReliquatForm(id) {
+            const m = parseFloat(document.getElementById(`input-rel-${id}`).value) || 0;
+            await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: m }).eq('id', id);
+            alert("Reliquat enregistré !"); chargerDonneesPilote();
+        }
+        async function enregistrerPub(event) {
+            event.preventDefault();
+            const dep = parseFloat(document.getElementById('pub-depense').value) || 0;
+            await kamaClient.from('pubs').insert([{ depense_reelle: dep }]);
+            alert("Dépense pub enregistrée !"); document.getElementById('pub-depense').value = ''; chargerDonneesPilote();
+        }
+        async function sauvegarderSoldeReel() {
+            const solde = parseFloat(document.getElementById('solde-reel-input').value) || 0;
+            const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
+            let sys = 0; if (dossiers) dossiers.forEach(d => sys += Number(d.montant_encaisse || 0));
+            const ecart = solde - sys;
+            document.getElementById('rapprochement-ecart').innerHTML = ecart === 0 ? `<span class="text-emerald-400">✔ Trésorerie exacte.</span>` : `<span class="text-amber-400">⚠ Écart : ${formatFCFA(ecart)}</span>`;
+        }
+
+        async function chargerDonneesFormaliste() {
+            const container = document.getElementById('formaliste-container');
+            try {
+                const { data } = await kamaClient.from('dossiers').select('*');
+                if (!data || data.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
+                let totAv = 0, totRel = 0;
+                data.forEach(d => { totAv += Number(d.formaliste_avance || 0); totRel += Number(d.formaliste_reliquat_recu || 0); });
+                document.getElementById('formaliste-total-avances').textContent = formatFCFA(totAv);
+                document.getElementById('formaliste-total-reliquats').textContent = formatFCFA(totRel);
+
+                let html = '<div class="space-y-4">';
+                data.forEach(d => {
+                    html += `<div class="bg-navy-950 p-4 rounded-2xl border border-slate-800 space-y-2"><div class="flex justify-between"><span class="font-bold text-gold-500">${d.numero_dossier}</span><span>${d.prenom} ${d.nom} (${d.type_entreprise})</span></div><select id="select-statut-${d.id}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100"><option value="1. Réception du dossier">1. Réception</option><option value="2. Réservation de la dénomination">2. Dénomination</option><option value="3. Signature client">3. Signature</option><option value="4. Dossier introduit">4. Introduit</option><option value="5. Dossier formalisé">5. Formalisé</option></select><div class="flex justify-end pt-2"><button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-4 py-2 rounded-xl text-xs">Enregistrer</button></div></div>`;
+                });
+                container.innerHTML = html + '</div>';
+            } catch (e) {}
+        }
+
+        async function mettreAJourDossierFormaliste(id) {
+            const statut = document.getElementById(`select-statut-${id}`).value;
+            await kamaClient.from('dossiers').update({ statut }).eq('id', id);
+            alert("Statut mis à jour !"); chargerDonneesFormaliste();
+        }
+
+        async function exporterExcelPilote() {
+            const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+            if (!dossiers || dossiers.length === 0) return alert("Aucun dossier.");
+            let csv = "\ufeffNumero;Nom;Prenom;Telephone;Type;Total;Encaisse;Statut\n";
+            dossiers.forEach(d => { csv += `"${d.numero_dossier}";"${d.nom}";"${d.prenom}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}"\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kama_lex_export.csv";
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
