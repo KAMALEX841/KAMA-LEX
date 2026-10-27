@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour mieux décider</title>
+    <!-- Favicon Emoji ⚖️ -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -374,9 +376,9 @@
         let pendingNom = null;
 
         const PINS_CONFIG = {
-            'pilote': '05111995',  // Code Pilote
-            'closer': '639204',    // Code Closer distinct
-            'formaliste': '492817' // Code Formaliste
+            'pilote': '05111995',  
+            'closer': '639204',    
+            'formaliste': '492817' 
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -388,9 +390,9 @@
 
         async function chargerBandeauAnnonce() {
             try {
-                const { data } = await kamaClient.from('parametres').select('annonce').limit(1).maybeSingle();
-                if (data && data.annonce) {
-                    document.getElementById('texte-annonce').textContent = data.annonce;
+                const { data, error } = await kamaClient.from('parametres').select('annonce').limit(1).maybeSingle();
+                if (!error && data && data.annonce) {
+                    document.getElementById('texte-annonce').textContent = (data.annonce || '').toString();
                 } else {
                     document.getElementById('texte-annonce').textContent = "Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
                 }
@@ -400,25 +402,29 @@
         }
 
         async function sauvegarderAnnonce() {
-            const texte = document.getElementById('input-annonce').value;
+            const texte = (document.getElementById('input-annonce').value || '').trim();
             if (!texte) return alert('Veuillez entrer un message.');
             try {
-                const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
+                const { data: existing, error: errSelect } = await kamaClient.from('parametres').select('id').limit(1);
+                if (errSelect) throw errSelect;
+                
                 if (existing && existing.length > 0) {
-                    await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing[0].id);
+                    const { error: errUp } = await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing[0].id);
+                    if (errUp) throw errUp;
                 } else {
-                    await kamaClient.from('parametres').insert([{ annonce: texte }]);
+                    const { error: errIns } = await kamaClient.from('parametres').insert([{ annonce: texte }]);
+                    if (errIns) throw errIns;
                 }
                 alert('Bande d\'annonce mise à jour !');
                 document.getElementById('input-annonce').value = '';
                 chargerBandeauAnnonce();
             } catch (err) {
-                alert('Erreur lors de la mise à jour : ' + err.message);
+                alert('Erreur lors de la mise à jour : ' + (err.message || 'Erreur Supabase'));
             }
         }
 
         function changerTarifOffre() {
-            const selectType = document.getElementById('closer-type').value;
+            const selectType = (document.getElementById('closer-type').value || '').trim();
             const inputTotal = document.getElementById('closer-total');
             if (selectType === 'EI') inputTotal.value = '150000';
             else if (selectType === 'SARL') inputTotal.value = '175000';
@@ -426,9 +432,9 @@
 
         // --- GESTION CODE SÉCURITÉ ---
         function preparerConnexion(role, nom) {
-            pendingRole = role;
-            pendingNom = nom;
-            document.getElementById('modal-pin-title').textContent = `Code d'accès : ${nom}`;
+            pendingRole = (role || '').toLowerCase();
+            pendingNom = (nom || '');
+            document.getElementById('modal-pin-title').textContent = `Code d'accès : ${pendingNom}`;
             document.getElementById('input-pin-code').value = '';
             document.getElementById('pin-error').classList.add('hidden');
             document.getElementById('modal-pin').classList.remove('hidden');
@@ -443,10 +449,11 @@
 
         function validerCodePin(event) {
             event.preventDefault();
-            const saisie = document.getElementById('input-pin-code').value.trim();
+            const saisie = (document.getElementById('input-pin-code').value || '').trim();
             const errorDiv = document.getElementById('pin-error');
             
-            if (saisie === PINS_CONFIG[pendingRole]) {
+            const expectedPin = PINS_CONFIG[pendingRole] || '';
+            if (saisie === expectedPin && expectedPin !== '') {
                 fermerModalPin();
                 connecterValide(pendingRole, pendingNom);
             } else {
@@ -457,19 +464,27 @@
         }
 
         function connecterValide(role, nom) {
-            currentRole = role;
+            currentRole = (role || '').toLowerCase().trim();
+            const safeNom = (nom || '');
+
+            if (!['pilote', 'closer', 'formaliste'].includes(currentRole)) {
+                alert("Profil non reconnu : contactez le pilote");
+                deconnexion();
+                return;
+            }
+
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('user-badge').classList.remove('hidden');
-            document.getElementById('badge-nom').textContent = nom + ' (' + role.toUpperCase() + ')';
+            document.getElementById('badge-nom').textContent = safeNom + ' (' + currentRole.toUpperCase() + ')';
 
-            if (role === 'pilote') {
+            if (currentRole === 'pilote') {
                 document.getElementById('view-pilote').classList.remove('hidden');
                 chargerDonneesPilote();
-            } else if (role === 'closer') {
+            } else if (currentRole === 'closer') {
                 document.getElementById('view-closer').classList.remove('hidden');
                 chargerDonneesCloser();
                 chargerStatsCloser();
-            } else if (role === 'formaliste') {
+            } else if (currentRole === 'formaliste') {
                 document.getElementById('view-formaliste').classList.remove('hidden');
                 chargerDonneesFormaliste();
             }
@@ -487,8 +502,8 @@
         // --- PLAFONDS & OBJECTIFS ---
         async function recupererPlafonds() {
             try {
-                const { data } = await kamaClient.from('plafonds').select('*').limit(1).maybeSingle();
-                if (data) return data;
+                const { data, error } = await kamaClient.from('plafonds').select('*').limit(1).maybeSingle();
+                if (!error && data) return data;
             } catch (e) {}
             return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
         }
@@ -516,9 +531,11 @@
             const objAnnuel = parseFloat(document.getElementById('cfg-obj-annuel').value) || 67320000;
 
             try {
-                const { data: existing } = await kamaClient.from('plafonds').select('id').limit(1);
+                const { data: existing, error: errSel } = await kamaClient.from('plafonds').select('id').limit(1);
+                if (errSel) throw errSel;
+
                 if (existing && existing.length > 0) {
-                    await kamaClient.from('plafonds').update({
+                    const { error: errUp } = await kamaClient.from('plafonds').update({
                         plafond_cpl: cpl,
                         objectif_conversations_jour: objConv,
                         objectif_clients_jour: objClients,
@@ -526,45 +543,52 @@
                         objectif_annuel_ca: objAnnuel,
                         updated_at: new Date()
                     }).eq('id', existing[0].id);
+                    if (errUp) throw errUp;
                 } else {
-                    await kamaClient.from('plafonds').insert([{
+                    const { error: errIns } = await kamaClient.from('plafonds').insert([{
                         plafond_cpl: cpl,
                         objectif_conversations_jour: objConv,
                         objectif_clients_jour: objClients,
                         plafond_cac: cac,
                         objectif_annuel_ca: objAnnuel
                     }]);
+                    if (errIns) throw errIns;
                 }
 
                 alert("Plafonds et objectifs mis à jour avec succès !");
                 fermerModalPlafonds();
                 chargerDonneesPilote();
             } catch (err) {
-                alert("Erreur lors de l'enregistrement : " + err.message);
+                alert("Erreur lors de l'enregistrement : " + (err.message || 'Erreur Supabase'));
             }
         }
 
         // --- CLOSER STATS ---
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
-            const datePoint = document.getElementById('stat-date').value || new Date().toISOString().split('T')[0];
+            const datePoint = (document.getElementById('stat-date').value || '').trim() || new Date().toISOString().split('T')[0];
             const conv = parseInt(document.getElementById('stat-conv').value) || 0;
             const acquis = parseInt(document.getElementById('stat-acquis').value) || 0;
 
-            const { error } = await kamaClient.from('closer_stats').insert([{
-                date_point: datePoint, conversations: conv, clients_acquis: acquis
-            }]);
+            try {
+                const { error } = await kamaClient.from('closer_stats').insert([{
+                    date_point: datePoint, conversations: conv, clients_acquis: acquis
+                }]);
 
-            if (error) return alert("Erreur : " + error.message);
-            alert("Point journalier enregistré !");
-            document.getElementById('stat-conv').value = '';
-            document.getElementById('stat-acquis').value = '';
-            chargerStatsCloser();
+                if (error) throw error;
+                alert("Point journalier enregistré !");
+                document.getElementById('stat-conv').value = '';
+                document.getElementById('stat-acquis').value = '';
+                chargerStatsCloser();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         async function chargerStatsCloser() {
             try {
-                const { data } = await kamaClient.from('closer_stats').select('*');
+                const { data, error } = await kamaClient.from('closer_stats').select('*');
+                if (error) throw error;
                 const stats = data || [];
                 let aujourdhui = new Date().toISOString().split('T')[0];
                 let convJour = 0, acquisJour = 0;
@@ -587,60 +611,71 @@
                 } else {
                     box.innerHTML = `<span class="text-amber-400">⚡ En cours (${statusText})</span>`;
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error("Erreur stats closer:", e);
+            }
         }
 
         // --- CLOSER DOSSIERS & FINANCEMENT ---
         async function ajouterDossierCloser(event) {
             event.preventDefault();
-            const nom = document.getElementById('closer-nom').value;
-            const prenom = document.getElementById('closer-prenom').value || '';
-            const telephone = document.getElementById('closer-tel').value;
-            const typeEnt = document.getElementById('closer-type').value;
+            const nom = (document.getElementById('closer-nom').value || '').trim();
+            const prenom = (document.getElementById('closer-prenom').value || '').trim();
+            const telephone = (document.getElementById('closer-tel').value || '').trim();
+            const typeEnt = (document.getElementById('closer-type').value || '').trim();
             const total = parseFloat(document.getElementById('closer-total').value) || 0;
             const montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
             
             const numDossier = 'KML N°' + Math.floor(10000 + Math.random() * 90000);
             let formalisteTotalDu = (typeEnt === 'EI') ? 100000 : 130000;
 
-            const { error } = await kamaClient.from('dossiers').insert([{
-                numero_dossier: numDossier,
-                nom, prenom, telephone, type_entreprise: typeEnt,
-                montant_total: total, montant_encaisse: montantEncaisse,
-                formaliste_du: formalisteTotalDu,
-                formaliste_avance: 0, formaliste_reliquat_recu: 0,
-                statut: '1. Réception du dossier'
-            }]);
+            try {
+                const { error } = await kamaClient.from('dossiers').insert([{
+                    numero_dossier: numDossier,
+                    nom, prenom, telephone, type_entreprise: typeEnt,
+                    montant_total: total, montant_encaisse: montantEncaisse,
+                    formaliste_du: formalisteTotalDu,
+                    formaliste_avance: 0, formaliste_reliquat_recu: 0,
+                    statut: '1. Réception du dossier'
+                }]);
 
-            if (error) return alert("Erreur : " + error.message);
-            alert(`Dossier ${numDossier} enregistré et transmis !`);
-            document.getElementById('closer-nom').value = '';
-            document.getElementById('closer-prenom').value = '';
-            document.getElementById('closer-tel').value = '';
-            document.getElementById('closer-avance').value = '';
-            chargerDonneesCloser();
+                if (error) throw error;
+                alert(`Dossier ${numDossier} enregistré et transmis !`);
+                document.getElementById('closer-nom').value = '';
+                document.getElementById('closer-prenom').value = '';
+                document.getElementById('closer-tel').value = '';
+                document.getElementById('closer-avance').value = '';
+                chargerDonneesCloser();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         async function ajouterFinancementCloser(event) {
             event.preventDefault();
-            const nom = document.getElementById('fin-nom').value;
-            const telephone = document.getElementById('fin-tel').value;
+            const nom = (document.getElementById('fin-nom').value || '').trim();
+            const telephone = (document.getElementById('fin-tel').value || '').trim();
             const montant = parseFloat(document.getElementById('fin-montant').value) || 0;
-            const objet = document.getElementById('fin-objet').value;
+            const objet = (document.getElementById('fin-objet').value || '').trim();
 
-            const { error } = await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Prospect financement enregistré !");
-            document.getElementById('fin-nom').value = '';
-            document.getElementById('fin-tel').value = '';
-            document.getElementById('fin-montant').value = '';
-            document.getElementById('fin-objet').value = '';
+            try {
+                const { error } = await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
+                if (error) throw error;
+                alert("Prospect financement enregistré !");
+                document.getElementById('fin-nom').value = '';
+                document.getElementById('fin-tel').value = '';
+                document.getElementById('fin-montant').value = '';
+                document.getElementById('fin-objet').value = '';
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         async function chargerDonneesCloser() {
             const listDiv = document.getElementById('closer-dossiers-list');
             try {
-                const { data } = await kamaClient.from('dossiers').select('*');
+                const { data, error } = await kamaClient.from('dossiers').select('*');
+                if (error) throw error;
                 const dossiers = data || [];
                 if (dossiers.length === 0) {
                     listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
@@ -653,8 +688,8 @@
                     let reliquatClient = total - encaisse;
                     html += `<div class="bg-navy-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
                         <div>
-                            <span class="font-bold text-gold-500">${d.numero_dossier || 'KML N°...'}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
-                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : ${encaisse.toLocaleString()} F | Total : ${total.toLocaleString()} F | Statut : <span class="text-gold-400">${d.statut}</span></div>
+                            <span class="font-bold text-gold-500">${(d.numero_dossier || 'KML N°...')}</span> - <span class="text-slate-200">${(d.prenom || '')} ${(d.nom || '')} (${(d.type_entreprise || '')})</span>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : ${encaisse.toLocaleString()} F | Total : ${total.toLocaleString()} F | Statut : <span class="text-gold-400">${(d.statut || '')}</span></div>
                         </div>
                         <span class="text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded-lg">Reliquat client : ${reliquatClient > 0 ? reliquatClient.toLocaleString() + ' F' : 'Solde 0 F'}</span>
                     </div>`;
@@ -670,13 +705,13 @@
             const plafonds = await recupererPlafonds();
             try {
                 const resDossiers = await kamaClient.from('dossiers').select('*');
-                const dossiers = resDossiers.data || [];
+                const dossiers = (resDossiers && resDossiers.data) ? resDossiers.data : [];
 
                 const resPubs = await kamaClient.from('pubs').select('*');
-                const pubs = resPubs.data || [];
+                const pubs = (resPubs && resPubs.data) ? resPubs.data : [];
 
                 const resStats = await kamaClient.from('closer_stats').select('*');
-                const stats = resStats.data || [];
+                const stats = (resStats && resStats.data) ? resStats.data : [];
 
                 let aujourdhui = new Date().toISOString().split('T')[0];
                 let totalConvJour = 0, totalClientsJour = 0;
@@ -778,11 +813,11 @@
                     html += `<div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-3">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                             <div>
-                                <span class="font-bold text-gold-500">${d.numero_dossier}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
-                                <div class="text-[11px] text-slate-400 mt-0.5">Statut : <span class="text-gold-400">${d.statut}</span> | Tél : ${d.telephone}</div>
+                                <span class="font-bold text-gold-500">${(d.numero_dossier || '')}</span> - <span class="text-slate-200">${(d.prenom || '')} ${(d.nom || '')} (${(d.type_entreprise || '')})</span>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Statut : <span class="text-gold-400">${(d.statut || '')}</span> | Tél : ${(d.telephone || '')}</div>
                                 <div class="text-[11px] text-slate-300">Client Encaissé : <strong>${encaisseClient.toLocaleString()} F</strong> / Total : ${totalClient.toLocaleString()} F</div>
-                                <div class="text-[11px] text-slate-400">RCCM : ${d.rccm || 'Non renseigné'} | IFU : ${d.ifu || 'Non renseigné'}</div>
-                                <div class="text-[11px] text-slate-400 italic">Difficultés : ${d.difficultes || 'Aucune'}</div>
+                                <div class="text-[11px] text-slate-400">RCCM : ${(d.rccm || 'Non renseigné')} | IFU : ${(d.ifu || 'Non renseigné')}</div>
+                                <div class="text-[11px] text-slate-400 italic">Difficultés : ${(d.difficultes || 'Aucune')}</div>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800/80 items-center text-xs">
@@ -807,35 +842,50 @@
         }
 
         async function payerAvanceForm(id) {
-            const montant = parseFloat(document.getElementById(`input-av-${id}`).value) || 0;
-            const { error } = await kamaClient.from('dossiers').update({ formaliste_avance: montant }).eq('id', id);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Avance formaliste enregistrée !");
-            chargerDonneesPilote();
+            const el = document.getElementById(`input-av-${id}`);
+            const montant = el ? (parseFloat(el.value) || 0) : 0;
+            try {
+                const { error } = await kamaClient.from('dossiers').update({ formaliste_avance: montant }).eq('id', id);
+                if (error) throw error;
+                alert("Avance formaliste enregistrée !");
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         async function payerReliquatForm(id) {
-            const montant = parseFloat(document.getElementById(`input-rel-${id}`).value) || 0;
-            const { error } = await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: montant }).eq('id', id);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Reliquat formaliste enregistré !");
-            chargerDonneesPilote();
+            const el = document.getElementById(`input-rel-${id}`);
+            const montant = el ? (parseFloat(el.value) || 0) : 0;
+            try {
+                const { error } = await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: montant }).eq('id', id);
+                if (error) throw error;
+                alert("Reliquat formaliste enregistré !");
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         async function enregistrerPub(event) {
             event.preventDefault();
             const depense = parseFloat(document.getElementById('pub-depense').value) || 0;
-            const { error } = await kamaClient.from('pubs').insert([{ depense_reelle: depense }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Dépense publicitaire enregistrée !");
-            document.getElementById('pub-depense').value = '';
-            chargerDonneesPilote();
+            try {
+                const { error } = await kamaClient.from('pubs').insert([{ depense_reelle: depense }]);
+                if (error) throw error;
+                alert("Dépense publicitaire enregistrée !");
+                document.getElementById('pub-depense').value = '';
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         async function sauvegarderSoldeReel() {
             const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
             try {
-                const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
+                const { data: dossiers, error } = await kamaClient.from('dossiers').select('montant_encaisse');
+                if (error) throw error;
                 let systemeMontant = 0;
                 if (dossiers) dossiers.forEach(d => systemeMontant += Number(d.montant_encaisse || 0));
 
@@ -847,14 +897,17 @@
                 } else {
                     ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
                 }
-            } catch(e) {}
+            } catch(e) {
+                alert("Erreur lors du rapprochement : " + (e.message || 'Erreur Supabase'));
+            }
         }
 
         // --- FORMALISTE ---
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
-                const { data } = await kamaClient.from('dossiers').select('*');
+                const { data, error } = await kamaClient.from('dossiers').select('*');
+                if (error) throw error;
                 const dossiers = data || [];
                 if (dossiers.length === 0) {
                     container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribué.</p>";
@@ -876,13 +929,13 @@
                 dossiers.forEach(d => {
                     let avanceForm = Number(d.formaliste_avance || 0);
                     let reliquatFormRecu = Number(d.formaliste_reliquat_recu || 0);
-                    let statutActuel = d.statut || '1. Réception du dossier';
+                    let statutActuel = (d.statut || '1. Réception du dossier');
                     let isFormalise = statutActuel.includes('5.') || statutActuel.toLowerCase().includes('formalisé');
 
                     html += `<div class="bg-navy-950 p-4 rounded-2xl border border-slate-800 space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-gold-500">${d.numero_dossier}</span>
-                            <span class="text-xs text-slate-300">Client : <strong>${d.prenom} ${d.nom} (${d.type_entreprise})</strong> - Tél : ${d.telephone}</span>
+                            <span class="font-bold text-gold-500">${(d.numero_dossier || '')}</span>
+                            <span class="text-xs text-slate-300">Client : <strong>${(d.prenom || '')} ${(d.nom || '')} (${(d.type_entreprise || '')})</strong> - Tél : ${(d.telephone || '')}</span>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center text-xs pt-2 border-t border-slate-800">
                             <div>
@@ -904,16 +957,16 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">Difficultés éventuelles</label>
-                                <input type="text" id="input-diff-${d.id}" value="${d.difficultes || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="Notes terrain...">
+                                <input type="text" id="input-diff-${d.id}" value="${(d.difficultes || '')}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="Notes terrain...">
                             </div>
                             ${isFormalise ? `
                             <div>
                                 <label class="block text-slate-400 mb-1">Numéro RCCM</label>
-                                <input type="text" id="input-rccm-${d.id}" value="${d.rccm || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="RCCM...">
+                                <input type="text" id="input-rccm-${d.id}" value="${(d.rccm || '')}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="RCCM...">
                             </div>
                             <div>
                                 <label class="block text-slate-400 mb-1">Numéro IFU</label>
-                                <input type="text" id="input-ifu-${d.id}" value="${d.ifu || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="IFU...">
+                                <input type="text" id="input-ifu-${d.id}" value="${(d.ifu || '')}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="IFU...">
                             </div>
                             ` : ''}
                         </div>
@@ -931,36 +984,42 @@
         }
 
         async function mettreAJourDossierFormaliste(id) {
-            const nouveauStatut = document.getElementById(`select-statut-${id}`).value;
+            const selectEl = document.getElementById(`select-statut-${id}`);
+            const nouveauStatut = selectEl ? (selectEl.value || '') : '';
             const diffInput = document.getElementById(`input-diff-${id}`);
             const rccmInput = document.getElementById(`input-rccm-${id}`);
             const ifuInput = document.getElementById(`input-ifu-${id}`);
 
             let updates = { statut: nouveauStatut };
-            if (diffInput) updates.difficultes = diffInput.value;
-            if (rccmInput) updates.rccm = rccmInput.value;
-            if (ifuInput) updates.ifu = ifuInput.value;
+            if (diffInput) updates.difficultes = diffInput.value || '';
+            if (rccmInput) updates.rccm = rccmInput.value || '';
+            if (ifuInput) updates.ifu = ifuInput.value || '';
 
-            const { error } = await kamaClient.from('dossiers').update(updates).eq('id', id);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Dossier mis à jour avec succès !");
-            chargerDonneesFormaliste();
+            try {
+                const { error } = await kamaClient.from('dossiers').update(updates).eq('id', id);
+                if (error) throw error;
+                alert("Dossier mis à jour avec succès !");
+                chargerDonneesFormaliste();
+            } catch (err) {
+                alert("Erreur : " + (err.message || 'Erreur Supabase'));
+            }
         }
 
         // --- EXPORT TABLEUR PILOTE SEULEMENT ---
         async function exporterExcelPilote() {
             try {
-                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+                const { data: dossiers, error } = await kamaClient.from('dossiers').select('*');
+                if (error) throw error;
                 if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
 
                 let csvContent = "\ufeffNumero Dossier;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Avance Formaliste;Reliquat Formaliste Recu;RCCM;IFU;Difficultes;Date\n";
                 dossiers.forEach(d => {
-                    csvContent += `"${d.numero_dossier}";"${d.nom}";"${d.prenom || ''}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";${d.formaliste_avance};${d.formaliste_reliquat_recu};"${d.rccm || ''}";"${d.ifu || ''}";"${d.difficultes || ''}";"${d.created_at || ''}"\n`;
+                    csvContent += `"${(d.numero_dossier || '')}";"${(d.nom || '')}";"${(d.prenom || '')}";"${(d.telephone || '')}";"${(d.type_entreprise || '')}";${(d.montant_total || 0)};${(d.montant_encaisse || 0)};"${(d.statut || '')}";${(d.formaliste_avance || 0)};${(d.formaliste_reliquat_recu || 0)};"${(d.rccm || '')}";"${(d.ifu || '')}";"${(d.difficultes || '')}";"${(d.created_at || '')}"\n`;
                 });
 
                 telechargerFichierCSV(csvContent, "kama_lex_export_pilote.csv");
             } catch (e) {
-                alert("Erreur d'exportation : " + e.message);
+                alert("Erreur d'exportation : " + (e.message || 'Erreur Supabase'));
             }
         }
 
