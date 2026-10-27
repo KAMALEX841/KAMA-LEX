@@ -214,16 +214,12 @@
                 </div>
 
                 <!-- Cartes des 4 indicateurs principaux -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="obj-cartes-indicateurs">
-                    <!-- Rempli dynamiquement -->
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="obj-cartes-indicateurs"></div>
 
-                <!-- Graphique simple Objectif vs Réalisé (Mois par mois - CA & Marge Nette) -->
+                <!-- Graphique simple Objectif vs Réalisé -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Évolution Mensuelle : CA & Marge Nette (Objectif vs Réalisé)</h3>
-                    <div id="obj-graphique-container" class="space-y-4 pt-2 text-xs">
-                        <!-- Rempli dynamiquement -->
-                    </div>
+                    <div id="obj-graphique-container" class="space-y-4 pt-2 text-xs"></div>
                 </div>
 
                 <!-- Tableau complet des 12 mois modifiable -->
@@ -232,9 +228,7 @@
                         <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Tableau de Bord Budgétaire des 12 Mois</h3>
                         <button onclick="basculerModeEditionObjectifs()" id="btn-edit-obj" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow">Modifier les Objectifs</button>
                     </div>
-                    <div id="obj-tableau-12mois">
-                        <!-- Rempli dynamiquement -->
-                    </div>
+                    <div id="obj-tableau-12mois"></div>
                 </div>
             </div>
         </div>
@@ -347,7 +341,7 @@
             </div>
         </div>
 
-        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) - Sans Export -->
+        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) -->
         <div id="view-formaliste" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
@@ -375,7 +369,7 @@
         </div>
     </main>
 
-    <!-- MODAL PLAFONDS & OBJECTIFS (Pilote Seul) -->
+    <!-- MODAL PLAFONDS & OBJECTIFS -->
     <div id="modal-plafonds" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl relative">
             <div class="flex justify-between items-center">
@@ -539,7 +533,6 @@
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // --- GESTION DES ONGLETS PILOTE ---
         function basculerOngletPilote(onglet) {
             const btnDash = document.getElementById('btn-tab-dashboard');
             const btnObj = document.getElementById('btn-tab-objectifs');
@@ -561,12 +554,10 @@
             }
         }
 
-        // --- FORMATAGE FCFA AVEC ESPACE ---
         function formatFCFA(montant) {
             return Number(montant || 0).toLocaleString('fr-FR').replace(/\s/g, ' ') + ' FCFA';
         }
 
-        // --- MODULE OBJECTIFS 2027 ---
         async function chargerModuleObjectifs2027() {
             try {
                 const periode = document.getElementById('obj-select-periode').value;
@@ -574,7 +565,6 @@
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
 
-                // Calculs globaux ou par mois
                 let realDossiers = 0, realCA = 0, realMargeBrute = 0, realMargeNette = 0;
                 let objDossiers = 0, objCA = 0, objMargeBrute = 0, objMargeNette = 0;
 
@@ -589,7 +579,6 @@
                     });
                 }
 
-                // Filtrage et calcul des réalisés
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let dateRef = d.created_at ? new Date(d.created_at) : new Date();
@@ -618,17 +607,12 @@
                 }
                 realMargeNette = realMargeBrute - totalPubPeriode;
 
-                // Affichage des cartes d'indicateurs
-                afficherCartes Indicateurs(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
-
-                // Affichage du graphique simple
+                afficherCartesIndicateurs(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
                 afficherGraphiqueObjectifs(objectifs, dossiers, pubs);
-
-                // Affichage du tableau des 12 mois
                 afficherTableau12Mois(objectifs, dossiers, pubs);
 
             } catch (e) {
-                console.error("Erreur chargement objectifs 2027:", e);
+                console.error("Erreur module objectifs 2027:", e);
             }
         }
 
@@ -905,7 +889,6 @@
             chargerModuleObjectifs2027();
         }
 
-        // --- CLOSER & FORMALISTE & PILOTE DASHBOARD FONCTIONS HABITUELLES ---
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
             const datePoint = document.getElementById('stat-date').value || new Date().toISOString().split('T')[0];
@@ -1228,106 +1211,4 @@
 
         async function sauvegarderSoldeReel() {
             const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
-            const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
-            let systemeMontant = 0;
-            if (dossiers) dossiers.forEach(d => systemeMontant += Number(d.montant_encaisse || 0));
-
-            const ecart = soldeReel - systemeMontant;
-            const ecartDiv = document.getElementById('rapprochement-ecart');
-
-            if (ecart === 0) {
-                ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">✔ Rapprochement parfait : Trésorerie exacte.</span>`;
-            } else {
-                ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${formatFCFA(ecart)}</span>`;
-            }
-        }
-
-        async function chargerDonneesFormaliste() {
-            const container = document.getElementById('formaliste-container');
-            try {
-                const { data } = await kamaClient.from('dossiers').select('*');
-                if (!data || data.length === 0) {
-                    container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribué.</p>";
-                    return;
-                }
-
-                let totalAvancesRecues = 0, totalReliquatsRecus = 0;
-                data.forEach(d => {
-                    totalAvancesRecues += Number(d.formaliste_avance || 0);
-                    totalReliquatsRecus += Number(d.formaliste_reliquat_recu || 0);
-                });
-
-                document.getElementById('formaliste-total-avances').textContent = formatFCFA(totalAvancesRecues);
-                document.getElementById('formaliste-total-reliquats').textContent = formatFCFA(totalReliquatsRecus);
-
-                let html = '<div class="space-y-4">';
-                data.forEach(d => {
-                    let avanceForm = Number(d.formaliste_avance || 0);
-                    let reliquatFormRecu = Number(d.formaliste_reliquat_recu || 0);
-                    let statutActuel = d.statut || '1. Réception du dossier';
-                    let isFormalise = statutActuel.includes('5.') || statutActuel.toLowerCase().includes('formalisé');
-
-                    html += `<div class="bg-navy-950 p-4 rounded-2xl border border-slate-800 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-gold-500">${d.numero_dossier}</span>
-                            <span class="text-xs text-slate-300">Client : <strong>${d.prenom} ${d.nom} (${d.type_entreprise})</strong> - Tél : ${d.telephone}</span>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center text-xs pt-2 border-t border-slate-800">
-                            <div>
-                                <label class="block text-slate-400 mb-1 font-bold">Étape d'avancement</label>
-                                <select id="select-statut-${d.id}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
-                                    <option value="1. Réception du dossier" ${statutActuel.includes('1.')?'selected':''}>1. Réception du dossier</option>
-                                    <option value="2. Réservation de la dénomination" ${statutActuel.includes('2.')?'selected':''}>2. Réservation de la dénomination</option>
-                                    <option value="3. Signature client" ${statutActuel.includes('3.')?'selected':''}>3. Signature client</option>
-                                    <option value="4. Dossier introduit" ${statutActuel.includes('4.')?'selected':''}>4. Dossier introduit</option>
-                                    <option value="5. Dossier formalisé" ${statutActuel.includes('5.')?'selected':''}>5. Dossier formalisé</option>
-                                </select>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="text-gold-400">Avance reçue : <strong>${formatFCFA(avanceForm)}</strong></div>
-                                ${reliquatFormRecu > 0 ? `<div class="text-emerald-400">Reliquat reçu : <strong>${formatFCFA(reliquatFormRecu)}</strong></div>` : ''}
-                            </div>
-                        </div>
-                        <div class="flex justify-end pt-2">
-                            <button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-4 py-2 rounded-xl hover:bg-gold-600 transition text-xs shadow">Enregistrer</button>
-                        </div>
-                    </div>`;
-                });
-                html += '</div>';
-                container.innerHTML = html;
-            } catch (e) {}
-        }
-
-        async function mettreAJourDossierFormaliste(id) {
-            const nouveauStatut = document.getElementById(`select-statut-${id}`).value;
-            const { error } = await kamaClient.from('dossiers').update({ statut: nouveauStatut }).eq('id', id);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Dossier mis à jour !");
-            chargerDonneesFormaliste();
-        }
-
-        async function exporterExcelPilote() {
-            try {
-                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
-                if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
-
-                let csvContent = "\ufeffNumero Dossier;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Avance Formaliste;Reliquat Formaliste Recu;Date\n";
-                dossiers.forEach(d => {
-                    csvContent += `"${d.numero_dossier}";"${d.nom}";"${d.prenom || ''}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";${d.formaliste_avance};${d.formaliste_reliquat_recu};"${d.created_at || ''}"\n`;
-                });
-
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.setAttribute("href", url);
-                link.setAttribute("download", "kama_lex_export_pilote.csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (e) {
-                alert("Erreur d'exportation : " + e.message);
-            }
-        }
-    </script>
-</body>
-</html>
+            const { data: dossiers } = await kamaClient.from
