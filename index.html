@@ -93,87 +93,149 @@
         </div>
 
         <!-- VUE 2 : ESPACE PILOTE (ZOURE Aboubakar) -->
-        <div id="view-pilote" class="space-y-8 hidden">
+        <div id="view-pilote" class="space-y-6 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Pilote & Fondateur</span>
                     <h2 class="text-2xl font-bold text-slate-100">Tableau de Bord Stratégique & Trésorerie</h2>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
+                    <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">ZOURE Aboubakar</div>
+                </div>
+            </div>
+
+            <!-- Sous-Navigation Pilote -->
+            <div class="flex border-b border-gold-500/30 pb-4 gap-3">
+                <button onclick="basculerOngletPilote('dashboard')" id="btn-tab-dashboard" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Tableau de Bord</button>
+                <button onclick="basculerOngletPilote('objectifs')" id="btn-tab-objectifs" class="bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10">🎯 Objectifs 2027</button>
+            </div>
+
+            <!-- SECTION A : TABLEAU DE BORD STANDARD -->
+            <div id="pilote-section-dashboard" class="space-y-8">
+                <div class="flex justify-end gap-3">
                     <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
                         ⚙️ Plafonds & Objectifs
                     </button>
                     <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg">
                         📊 Exporter (Excel)
                     </button>
-                    <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">ZOURE Aboubakar</div>
+                </div>
+
+                <!-- Configuration Bande d'Annonce -->
+                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Modifier la Bande d'Annonce</h3>
+                    <div class="flex gap-3">
+                        <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:border-gold-500" placeholder="Message diffusé à l'équipe...">
+                        <button onclick="sauvegarderAnnonce()" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 px-5 rounded-xl hover:bg-gold-600 transition shadow whitespace-nowrap">Mettre à jour</button>
+                    </div>
+                </div>
+
+                <!-- Activité du closer vs plafonds -->
+                <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activité du Closer vs Plafonds & Objectifs</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
+                </div>
+
+                <!-- KPIs Financiers -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
+                        <p id="pilote-ca-global" class="text-3xl font-bold text-gold-500">0 FCFA</p>
+                        <p class="text-[11px] text-slate-400" id="progression-ca-txt">Objectif CA Annuel : En cours</p>
+                        <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
+                            <div id="barre-progression-ca" class="bg-gold-500 h-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (Avant Pub)</p>
+                        <p id="pilote-marge-brute" class="text-3xl font-bold text-white">0 FCFA</p>
+                        <span class="text-[11px] text-slate-400 block">CA - Sommes versées au formaliste</span>
+                    </div>
+                    <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Après Pub)</p>
+                        <p id="pilote-marge-nette" class="text-3xl font-bold text-emerald-400">0 FCFA</p>
+                        <span class="text-[11px] text-slate-400 block">Marge Brute - Dépenses Pub Meta</span>
+                    </div>
+                </div>
+
+                <!-- Publicité & Rapprochement Bancaire -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Dépense Publicitaire (Meta Ads)</h3>
+                        <form onsubmit="enregistrerPub(event)" class="flex gap-3">
+                            <input type="number" id="pub-depense" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Montant en FCFA">
+                            <button type="submit" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button>
+                        </form>
+                        <p class="text-xs font-bold text-slate-400">Total Publicité Investi : <strong id="total-depense-pub" class="text-red-400">0 FCFA</strong></p>
+                    </div>
+                    <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Trésorerie</h3>
+                        <div class="flex gap-3">
+                            <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Solde réel Banque / Caisse">
+                            <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Vérifier</button>
+                        </div>
+                        <div id="rapprochement-ecart" class="text-xs pt-1 font-bold"></div>
+                    </div>
+                </div>
+
+                <!-- Paiement des Avances & Reliquats au Formaliste -->
+                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global des Dossiers & Paiements Formaliste</h3>
+                    <div id="pilote-formaliste-paiements" class="space-y-3 text-xs text-slate-300">Chargement des dossiers...</div>
                 </div>
             </div>
 
-            <!-- Configuration Bande d'Annonce -->
-            <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Modifier la Bande d'Annonce</h3>
-                <div class="flex gap-3">
-                    <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:border-gold-500" placeholder="Message diffusé à l'équipe...">
-                    <button onclick="sauvegarderAnnonce()" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 px-5 rounded-xl hover:bg-gold-600 transition shadow whitespace-nowrap">Mettre à jour</button>
+            <!-- SECTION B : OBJECTIFS 2027 (PILOTE SEUL) -->
+            <div id="pilote-section-objectifs" class="space-y-8 hidden">
+                <!-- Sélecteur de mois / Année -->
+                <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gold-500">Pilote - Suivi des Objectifs 2027</h3>
+                        <p class="text-xs text-slate-400">Analyse comparative des performances et objectifs budgétaires</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="text-xs font-bold text-slate-300">Période :</label>
+                        <select id="obj-select-periode" onchange="chargerModuleObjectifs2027()" class="bg-navy-950 border border-gold-500/40 rounded-xl px-4 py-2 text-xs text-gold-400 font-bold outline-none">
+                            <option value="annee">Année 2027 (Cumul)</option>
+                            <option value="1">Janvier</option>
+                            <option value="2">Février</option>
+                            <option value="3">Mars</option>
+                            <option value="4">Avril</option>
+                            <option value="5">Mai</option>
+                            <option value="6">Juin</option>
+                            <option value="7">Juillet</option>
+                            <option value="8">Août</option>
+                            <option value="9">Septembre</option>
+                            <option value="10">Octobre</option>
+                            <option value="11">Novembre</option>
+                            <option value="12">Décembre</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Activité du closer vs plafonds -->
-            <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activité du Closer vs Plafonds & Objectifs</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid">
+                <!-- Cartes des 4 indicateurs principaux -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="obj-cartes-indicateurs">
                     <!-- Rempli dynamiquement -->
                 </div>
-            </div>
 
-            <!-- KPIs Financiers (CA, Marge Brute, Marge Nette) & Objectifs 2027 -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
-                    <p id="pilote-ca-global" class="text-3xl font-bold text-gold-500">0 FCFA</p>
-                    <p class="text-[11px] text-slate-400" id="progression-ca-txt">Objectif CA Annuel : En cours</p>
-                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
-                        <div id="barre-progression-ca" class="bg-gold-500 h-full transition-all duration-500" style="width: 0%"></div>
+                <!-- Graphique simple Objectif vs Réalisé (Mois par mois - CA & Marge Nette) -->
+                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Évolution Mensuelle : CA & Marge Nette (Objectif vs Réalisé)</h3>
+                    <div id="obj-graphique-container" class="space-y-4 pt-2 text-xs">
+                        <!-- Rempli dynamiquement -->
                     </div>
                 </div>
-                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (Avant Pub)</p>
-                    <p id="pilote-marge-brute" class="text-3xl font-bold text-white">0 FCFA</p>
-                    <span class="text-[11px] text-slate-400 block">CA - Sommes versées au formaliste</span>
-                </div>
-                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Après Pub)</p>
-                    <p id="pilote-marge-nette" class="text-3xl font-bold text-emerald-400">0 FCFA</p>
-                    <span class="text-[11px] text-slate-400 block">Marge Brute - Dépenses Pub Meta</span>
-                </div>
-            </div>
 
-            <!-- Publicité & Rapprochement Bancaire -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Dépense Publicitaire (Meta Ads)</h3>
-                    <form onsubmit="enregistrerPub(event)" class="flex gap-3">
-                        <input type="number" id="pub-depense" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Montant en FCFA">
-                        <button type="submit" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button>
-                    </form>
-                    <p class="text-xs font-bold text-slate-400">Total Publicité Investi : <strong id="total-depense-pub" class="text-red-400">0 FCFA</strong></p>
-                </div>
-
-                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Trésorerie</h3>
-                    <div class="flex gap-3">
-                        <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Solde réel Banque / Caisse">
-                        <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Vérifier</button>
+                <!-- Tableau complet des 12 mois modifiable -->
+                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl overflow-x-auto">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Tableau de Bord Budgétaire des 12 Mois</h3>
+                        <button onclick="basculerModeEditionObjectifs()" id="btn-edit-obj" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow">Modifier les Objectifs</button>
                     </div>
-                    <div id="rapprochement-ecart" class="text-xs pt-1 font-bold"></div>
+                    <div id="obj-tableau-12mois">
+                        <!-- Rempli dynamiquement -->
+                    </div>
                 </div>
-            </div>
-
-            <!-- Paiement des Avances & Reliquats au Formaliste & Suivi Intégral -->
-            <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global des Dossiers & Paiements Formaliste</h3>
-                <div id="pilote-formaliste-paiements" class="space-y-3 text-xs text-slate-300">Chargement des dossiers...</div>
             </div>
         </div>
 
@@ -285,7 +347,7 @@
             </div>
         </div>
 
-        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) - Épuré sans Export -->
+        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) - Sans Export -->
         <div id="view-formaliste" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
@@ -371,6 +433,7 @@
         let currentRole = null;
         let pendingRole = null;
         let pendingNom = null;
+        let editionObjActive = false;
 
         const CODES_ACCES = {
             'pilote': '051195',
@@ -456,7 +519,7 @@
 
             if (role === 'pilote') {
                 document.getElementById('view-pilote').classList.remove('hidden');
-                chargerDonneesPilote();
+                basculerOngletPilote('dashboard');
             } else if (role === 'closer') {
                 document.getElementById('view-closer').classList.remove('hidden');
                 chargerDonneesCloser();
@@ -476,63 +539,373 @@
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // --- PLAFONDS & OBJECTIFS ---
-        async function recupererPlafonds() {
-            try {
-                const { data } = await kamaClient.from('plafonds').select('*').limit(1).single();
-                if (data) return data;
-            } catch (e) {}
-            return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
-        }
+        // --- GESTION DES ONGLETS PILOTE ---
+        function basculerOngletPilote(onglet) {
+            const btnDash = document.getElementById('btn-tab-dashboard');
+            const btnObj = document.getElementById('btn-tab-objectifs');
+            const secDash = document.getElementById('pilote-section-dashboard');
+            const secObj = document.getElementById('pilote-section-objectifs');
 
-        async function ouvrirModalPlafonds() {
-            const plafonds = await recupererPlafonds();
-            document.getElementById('cfg-cpl').value = plafonds.plafond_cpl;
-            document.getElementById('cfg-obj-conv').value = plafonds.objectif_conversations_jour;
-            document.getElementById('cfg-obj-clients').value = plafonds.objectif_clients_jour;
-            document.getElementById('cfg-cac').value = plafonds.plafond_cac;
-            document.getElementById('cfg-obj-annuel').value = plafonds.objectif_annuel_ca || '';
-            document.getElementById('modal-plafonds').classList.remove('hidden');
-        }
-
-        function fermerModalPlafonds() {
-            document.getElementById('modal-plafonds').classList.add('hidden');
-        }
-
-        async function sauvegarderPlafondsGlobal(event) {
-            event.preventDefault();
-            const cpl = parseFloat(document.getElementById('cfg-cpl').value) || 500;
-            const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 34;
-            const objClients = parseInt(document.getElementById('cfg-obj-clients').value) || 2;
-            const cac = parseFloat(document.getElementById('cfg-cac').value) || 8000;
-            const objAnnuel = parseFloat(document.getElementById('cfg-obj-annuel').value) || 67320000;
-
-            const { data: existing } = await kamaClient.from('plafonds').select('id').limit(1);
-            if (existing && existing.length > 0) {
-                await kamaClient.from('plafonds').update({
-                    plafond_cpl: cpl,
-                    objectif_conversations_jour: objConv,
-                    objectif_clients_jour: objClients,
-                    plafond_cac: cac,
-                    objectif_annuel_ca: objAnnuel,
-                    updated_at: new Date()
-                }).eq('id', existing[0].id);
+            if (onglet === 'dashboard') {
+                btnDash.className = "bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow";
+                btnObj.className = "bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10";
+                secDash.classList.remove('hidden');
+                secObj.classList.add('hidden');
+                chargerDonneesPilote();
             } else {
-                await kamaClient.from('plafonds').insert([{
-                    plafond_cpl: cpl,
-                    objectif_conversations_jour: objConv,
-                    objectif_clients_jour: objClients,
-                    plafond_cac: cac,
-                    objectif_annuel_ca: objAnnuel
-                }]);
+                btnObj.className = "bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow";
+                btnDash.className = "bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10";
+                secObj.classList.remove('hidden');
+                secDash.classList.add('hidden');
+                chargerModuleObjectifs2027();
+            }
+        }
+
+        // --- FORMATAGE FCFA AVEC ESPACE ---
+        function formatFCFA(montant) {
+            return Number(montant || 0).toLocaleString('fr-FR').replace(/\s/g, ' ') + ' FCFA';
+        }
+
+        // --- MODULE OBJECTIFS 2027 ---
+        async function chargerModuleObjectifs2027() {
+            try {
+                const periode = document.getElementById('obj-select-periode').value;
+                const { data: objectifs } = await kamaClient.from('objectifs').select('*').order('mois_num', { ascending: true });
+                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+                const { data: pubs } = await kamaClient.from('pubs').select('*');
+
+                // Calculs globaux ou par mois
+                let realDossiers = 0, realCA = 0, realMargeBrute = 0, realMargeNette = 0;
+                let objDossiers = 0, objCA = 0, objMargeBrute = 0, objMargeNette = 0;
+
+                if (objectifs) {
+                    objectifs.forEach(o => {
+                        if (periode === 'annee' || String(o.mois_num) === periode) {
+                            objDossiers += Number(o.objectif_dossiers || 0);
+                            objCA += Number(o.objectif_ca || 0);
+                            objMargeBrute += Number(o.objectif_marge_brute || 0);
+                            objMargeNette += Number(o.objectif_marge_nette || 0);
+                        }
+                    });
+                }
+
+                // Filtrage et calcul des réalisés
+                if (dossiers) {
+                    dossiers.forEach(d => {
+                        let dateRef = d.created_at ? new Date(d.created_at) : new Date();
+                        let moisDossier = dateRef.getMonth() + 1;
+                        let anneeDossier = dateRef.getFullYear();
+
+                        if (anneeDossier === 2027 && (periode === 'annee' || String(moisDossier) === periode)) {
+                            realDossiers += 1;
+                            realCA += Number(d.montant_encaisse || 0);
+                            let formVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
+                            realMargeBrute += (Number(d.montant_encaisse || 0) - formVersee);
+                        }
+                    });
+                }
+
+                let totalPubPeriode = 0;
+                if (pubs) {
+                    pubs.forEach(p => {
+                        let datePub = p.created_at ? new Date(p.created_at) : new Date();
+                        let moisPub = datePub.getMonth() + 1;
+                        let anneePub = datePub.getFullYear();
+                        if (anneePub === 2027 && (periode === 'annee' || String(moisPub) === periode)) {
+                            totalPubPeriode += Number(p.depense_reelle || 0);
+                        }
+                    });
+                }
+                realMargeNette = realMargeBrute - totalPubPeriode;
+
+                // Affichage des cartes d'indicateurs
+                afficherCartes Indicateurs(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
+
+                // Affichage du graphique simple
+                afficherGraphiqueObjectifs(objectifs, dossiers, pubs);
+
+                // Affichage du tableau des 12 mois
+                afficherTableau12Mois(objectifs, dossiers, pubs);
+
+            } catch (e) {
+                console.error("Erreur chargement objectifs 2027:", e);
+            }
+        }
+
+        function getColorProgression(taux) {
+            if (taux >= 100) return { bg: 'bg-emerald-500', text: 'text-emerald-400', border: 'border-emerald-500/40 bg-emerald-950/20' };
+            if (taux >= 80) return { bg: 'bg-amber-500', text: 'text-amber-400', border: 'border-amber-500/40 bg-amber-950/20' };
+            return { bg: 'bg-red-500', text: 'text-red-400', border: 'border-red-500/40 bg-red-950/20' };
+        }
+
+        function afficherCartesIndicateurs(objD, realD, objCA, realCA, objMB, realMB, objMN, realMN) {
+            const container = document.getElementById('obj-cartes-indicateurs');
+            
+            let tauxD = objD > 0 ? Math.round((realD / objD) * 100) : 0;
+            let tauxCA = objCA > 0 ? Math.round((realCA / objCA) * 100) : 0;
+            let tauxMB = objMB > 0 ? Math.round((realMB / objMB) * 100) : 0;
+            let tauxMN = objMN > 0 ? Math.round((realMN / objMN) * 100) : 0;
+
+            let eD = realD - objD;
+            let eCA = realCA - objCA;
+            let eMB = realMB - objMB;
+            let eMN = realMN - objMN;
+
+            let cD = getColorProgression(tauxD);
+            let cCA = getColorProgression(tauxCA);
+            let cMB = getColorProgression(tauxMB);
+            let cMN = getColorProgression(tauxMN);
+
+            container.innerHTML = `
+                <div class="p-5 rounded-2xl border ${cD.border} space-y-3 shadow-xl">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nombre de Dossiers</p>
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-2xl font-bold text-slate-100">${realD}</span>
+                        <span class="text-xs text-slate-400">Obj: ${objD}</span>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="${eD >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${eD >= 0 ? '+' : ''}${eD}</span>
+                        <span class="${cD.text}">${tauxD}%</span>
+                    </div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
+                        <div class="${cD.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxD)}%"></div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border ${cCA.border} space-y-3 shadow-xl">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires (CA)</p>
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xl font-bold text-gold-500">${formatFCFA(realCA)}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Objectif : ${formatFCFA(objCA)}</p>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="${eCA >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${formatFCFA(eCA)}</span>
+                        <span class="${cCA.text}">${tauxCA}%</span>
+                    </div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
+                        <div class="${cCA.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxCA)}%"></div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border ${cMB.border} space-y-3 shadow-xl">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute</p>
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xl font-bold text-white">${formatFCFA(realMB)}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Objectif : ${formatFCFA(objMB)}</p>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="${eMB >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${formatFCFA(eMB)}</span>
+                        <span class="${cMB.text}">${tauxMB}%</span>
+                    </div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
+                        <div class="${cMB.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxMB)}%"></div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border ${cMN.border} space-y-3 shadow-xl">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette</p>
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-xl font-bold text-emerald-400">${formatFCFA(realMN)}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Objectif : ${formatFCFA(objMN)}</p>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="${eMN >= 0 ? 'text-emerald-400' : 'text-red-400'}">Écart : ${formatFCFA(eMN)}</span>
+                        <span class="${cMN.text}">${tauxMN}%</span>
+                    </div>
+                    <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
+                        <div class="${cMN.bg} h-full transition-all duration-500" style="width: ${Math.min(100, tauxMN)}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function afficherGraphiqueObjectifs(objectifs, dossiers, pubs) {
+            const container = document.getElementById('obj-graphique-container');
+            if (!objectifs) return;
+
+            let html = '<div class="space-y-3">';
+            objectifs.forEach(o => {
+                let moisNum = o.mois_num;
+                let objCA = Number(o.objectif_ca || 1);
+                
+                let realCA = 0;
+                if (dossiers) {
+                    dossiers.forEach(d => {
+                        let dt = d.created_at ? new Date(d.created_at) : new Date();
+                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === moisNum) {
+                            realCA += Number(d.montant_encaisse || 0);
+                        }
+                    });
+                }
+
+                let pourcentage = Math.min(100, Math.round((realCA / objCA) * 100));
+                let colorBar = pourcentage >= 100 ? 'bg-emerald-500' : (pourcentage >= 80 ? 'bg-amber-500' : 'bg-gold-500');
+
+                html += `
+                    <div class="bg-navy-950 p-3 rounded-xl border border-slate-800 space-y-1">
+                        <div class="flex justify-between font-bold text-xs">
+                            <span class="text-gold-400 w-24">${o.mois_nom}</span>
+                            <span class="text-slate-300">Réalisé : ${formatFCFA(realCA)}</span>
+                            <span class="text-slate-400">Obj : ${formatFCFA(objCA)}</span>
+                            <span class="text-slate-200">${pourcentage}%</span>
+                        </div>
+                        <div class="w-full bg-navy-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                            <div class="${colorBar} h-full transition-all duration-500" style="width: ${pourcentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function afficherTableau12Mois(objectifs, dossiers, pubs) {
+            const container = document.getElementById('obj-tableau-12mois');
+            if (!objectifs) return;
+
+            let html = `
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-gold-500/30 text-gold-400 uppercase">
+                            <th class="py-3 px-3">Mois</th>
+                            <th class="py-3 px-3">Dossiers (Obj / Réal)</th>
+                            <th class="py-3 px-3">CA (Obj / Réal)</th>
+                            <th class="py-3 px-3">Marge Brute (Obj / Réal)</th>
+                            <th class="py-3 px-3">Marge Nette (Obj / Réal)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300">
+            `;
+
+            let totObjD = 0, totRealD = 0;
+            let totObjCA = 0, totRealCA = 0;
+            let totObjMB = 0, totRealMB = 0;
+            let totObjMN = 0, totRealMN = 0;
+
+            objectifs.forEach(o => {
+                let mNum = o.mois_num;
+                totObjD += Number(o.objectif_dossiers || 0);
+                totObjCA += Number(o.objectif_ca || 0);
+                totObjMB += Number(o.objectif_marge_brute || 0);
+                totObjMN += Number(o.objectif_marge_nette || 0);
+
+                let realD = 0, realCA = 0, realMB = 0;
+                if (dossiers) {
+                    dossiers.forEach(d => {
+                        let dt = d.created_at ? new Date(d.created_at) : new Date();
+                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === mNum) {
+                            realD += 1;
+                            realCA += Number(d.montant_encaisse || 0);
+                            let fVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
+                            realMB += (Number(d.montant_encaisse || 0) - fVersee);
+                        }
+                    });
+                }
+                totRealD += realD;
+                totRealCA += realCA;
+                totRealMB += realMB;
+
+                let realMN = realMB;
+                if (pubs) {
+                    pubs.forEach(p => {
+                        let dt = p.created_at ? new Date(p.created_at) : new Date();
+                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === mNum) {
+                            realMN -= Number(p.depense_reelle || 0);
+                        }
+                    });
+                }
+                totRealMN += realMN;
+
+                if (editionObjActive) {
+                    html += `
+                        <tr class="hover:bg-navy-950/50 transition">
+                            <td class="py-3 px-3 font-bold text-gold-500">${o.mois_nom}</td>
+                            <td class="py-3 px-3"><input type="number" id="edit-d-${o.id}" value="${o.objectif_dossiers}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-20 text-slate-100"></td>
+                            <td class="py-3 px-3"><input type="number" id="edit-ca-${o.id}" value="${o.objectif_ca}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"></td>
+                            <td class="py-3 px-3"><input type="number" id="edit-mb-${o.id}" value="${o.objectif_marge_brute}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"></td>
+                            <td class="py-3 px-3"><input type="number" id="edit-mn-${o.id}" value="${o.objectif_marge_nette}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"></td>
+                        </tr>
+                    `;
+                } else {
+                    let tauxCA = o.objectif_ca > 0 ? Math.round((realCA / o.objectif_ca) * 100) : 0;
+                    html += `
+                        <tr class="hover:bg-navy-950/50 transition">
+                            <td class="py-3 px-3 font-bold text-gold-500">${o.mois_nom}</td>
+                            <td class="py-3 px-3">${o.objectif_dossiers} / <strong class="text-slate-100">${realD}</strong></td>
+                            <td class="py-3 px-3">${formatFCFA(o.objectif_ca)} / <strong class="text-gold-400">${formatFCFA(realCA)}</strong> (${tauxCA}%)</td>
+                            <td class="py-3 px-3">${formatFCFA(o.objectif_marge_brute)} / <strong class="text-white">${formatFCFA(realMB)}</strong></td>
+                            <td class="py-3 px-3">${formatFCFA(o.objectif_marge_nette)} / <strong class="text-emerald-400">${formatFCFA(realMN)}</strong></td>
+                        </tr>
+                    `;
+                }
+            });
+
+            let tauxTotalCA = totObjCA > 0 ? Math.round((totRealCA / totObjCA) * 100) : 0;
+            html += `
+                    <tr class="bg-navy-950 font-bold border-t-2 border-gold-500 text-gold-400">
+                        <td class="py-3 px-3">TOTAL ANNÉE 2027</td>
+                        <td class="py-3 px-3">${totObjD} / ${totRealD}</td>
+                        <td class="py-3 px-3">${formatFCFA(totObjCA)} / ${formatFCFA(totRealCA)} (${tauxTotalCA}%)</td>
+                        <td class="py-3 px-3">${formatFCFA(totObjMB)} / ${formatFCFA(totRealMB)}</td>
+                        <td class="py-3 px-3">${formatFCFA(totObjMN)} / ${formatFCFA(totRealMN)}</td>
+                    </tr>
+                </tbody>
+            </table>
+            `;
+
+            if (editionObjActive) {
+                html += `
+                    <div class="flex justify-end pt-4">
+                        <button onclick="sauvegarderObjectifs12Mois()" class="bg-emerald-600 text-white font-bold text-xs px-6 py-2.5 rounded-xl hover:bg-emerald-700 shadow">Enregistrer les Modifications</button>
+                    </div>
+                `;
             }
 
-            alert("Plafonds et objectifs mis à jour avec succès !");
-            fermerModalPlafonds();
-            chargerDonneesPilote();
+            container.innerHTML = html;
         }
 
-        // --- CLOSER STATS ---
+        function basculerModeEditionObjectifs() {
+            editionObjActive = !editionObjActive;
+            const btn = document.getElementById('btn-edit-obj');
+            if (editionObjActive) {
+                btn.textContent = "Verrouiller / Annuler";
+                btn.className = "bg-amber-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow";
+            } else {
+                btn.textContent = "Modifier les Objectifs";
+                btn.className = "bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow";
+            }
+            chargerModuleObjectifs2027();
+        }
+
+        async function sauvegarderObjectifs12Mois() {
+            const { data: objectifs } = await kamaClient.from('objectifs').select('*');
+            if (!objectifs) return;
+
+            for (let o of objectifs) {
+                let dInput = document.getElementById(`edit-d-${o.id}`);
+                let caInput = document.getElementById(`edit-ca-${o.id}`);
+                let mbInput = document.getElementById(`edit-mb-${o.id}`);
+                let mnInput = document.getElementById(`edit-mn-${o.id}`);
+
+                if (dInput && caInput && mbInput && mnInput) {
+                    await kamaClient.from('objectifs').update({
+                        objectif_dossiers: parseInt(dInput.value) || 0,
+                        objectif_ca: parseFloat(caInput.value) || 0,
+                        objectif_marge_brute: parseFloat(mbInput.value) || 0,
+                        objectif_marge_nette: parseFloat(mnInput.value) || 0,
+                        updated_at: new Date()
+                    }).eq('id', o.id);
+                }
+            }
+
+            alert("Objectifs annuels mis à jour avec succès !");
+            editionObjActive = false;
+            document.getElementById('btn-edit-obj').textContent = "Modifier les Objectifs";
+            document.getElementById('btn-edit-obj').className = "bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow";
+            chargerModuleObjectifs2027();
+        }
+
+        // --- CLOSER & FORMALISTE & PILOTE DASHBOARD FONCTIONS HABITUELLES ---
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
             const datePoint = document.getElementById('stat-date').value || new Date().toISOString().split('T')[0];
@@ -579,7 +952,6 @@
             } catch (e) {}
         }
 
-        // --- CLOSER DOSSIERS & FINANCEMENT ---
         async function ajouterDossierCloser(event) {
             event.preventDefault();
             const nom = document.getElementById('closer-nom').value;
@@ -642,9 +1014,9 @@
                     html += `<div class="bg-navy-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
                         <div>
                             <span class="font-bold text-gold-500">${d.numero_dossier || 'KML N°...'}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
-                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : ${encaisse.toLocaleString()} F | Total : ${total.toLocaleString()} F | Statut : <span class="text-gold-400">${d.statut}</span></div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : ${formatFCFA(encaisse)} | Total : ${formatFCFA(total)} | Statut : <span class="text-gold-400">${d.statut}</span></div>
                         </div>
-                        <span class="text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded-lg">Reliquat client : ${reliquatClient > 0 ? reliquatClient.toLocaleString() + ' F' : 'Solde 0 F'}</span>
+                        <span class="text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded-lg">Reliquat : ${reliquatClient > 0 ? formatFCFA(reliquatClient) : 'Soldé'}</span>
                     </div>`;
                 });
                 listDiv.innerHTML = html;
@@ -653,7 +1025,55 @@
             }
         }
 
-        // --- PILOTE & FINANCES ---
+        async function recupererPlafonds() {
+            try {
+                const { data } = await kamaClient.from('plafonds').select('*').limit(1).single();
+                if (data) return data;
+            } catch (e) {}
+            return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
+        }
+
+        async function ouvrirModalPlafonds() {
+            const plafonds = await recupererPlafonds();
+            document.getElementById('cfg-cpl').value = plafonds.plafond_cpl;
+            document.getElementById('cfg-obj-conv').value = plafonds.objectif_conversations_jour;
+            document.getElementById('cfg-obj-clients').value = plafonds.objectif_clients_jour;
+            document.getElementById('cfg-cac').value = plafonds.plafond_cac;
+            document.getElementById('cfg-obj-annuel').value = plafonds.objectif_annuel_ca || '';
+            document.getElementById('modal-plafonds').classList.remove('hidden');
+        }
+
+        function fermerModalPlafonds() {
+            document.getElementById('modal-plafonds').classList.add('hidden');
+        }
+
+        async function sauvegarderPlafondsGlobal(event) {
+            event.preventDefault();
+            const cpl = parseFloat(document.getElementById('cfg-cpl').value) || 500;
+            const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 34;
+            const objClients = parseInt(document.getElementById('cfg-obj-clients').value) || 2;
+            const cac = parseFloat(document.getElementById('cfg-cac').value) || 8000;
+            const objAnnuel = parseFloat(document.getElementById('cfg-obj-annuel').value) || 67320000;
+
+            const { data: existing } = await kamaClient.from('plafonds').select('id').limit(1);
+            if (existing && existing.length > 0) {
+                await kamaClient.from('plafonds').update({
+                    plafond_cpl: cpl, objectif_conversations_jour: objConv,
+                    objectif_clients_jour: objClients, plafond_cac: cac,
+                    objectif_annuel_ca: objAnnuel, updated_at: new Date()
+                }).eq('id', existing[0].id);
+            } else {
+                await kamaClient.from('plafonds').insert([{
+                    plafond_cpl: cpl, objectif_conversations_jour: objConv,
+                    objectif_clients_jour: objClients, plafond_cac: cac, objectif_annuel_ca: objAnnuel
+                }]);
+            }
+
+            alert("Plafonds et objectifs mis à jour avec succès !");
+            fermerModalPlafonds();
+            chargerDonneesPilote();
+        }
+
         async function chargerDonneesPilote() {
             const plafonds = await recupererPlafonds();
             try {
@@ -675,18 +1095,9 @@
                     stats.forEach(s => {
                         let c = Number(s.conversations || 0);
                         let a = Number(s.clients_acquis || 0);
-                        if (s.date_point === aujourdhui) {
-                            totalConvJour += c;
-                            totalClientsJour += a;
-                        }
-                        if (new Date(s.date_point) >= debutSemaine) {
-                            totalConvSemaine += c;
-                            totalClientsSemaine += a;
-                        }
-                        if (s.date_point && s.date_point.startsWith(moisEnCours)) {
-                            totalConvMois += c;
-                            totalClientsMois += a;
-                        }
+                        if (s.date_point === aujourdhui) { totalConvJour += c; totalClientsJour += a; }
+                        if (new Date(s.date_point) >= debutSemaine) { totalConvSemaine += c; totalClientsSemaine += a; }
+                        if (s.date_point && s.date_point.startsWith(moisEnCours)) { totalConvMois += c; totalClientsMois += a; }
                     });
                 }
 
@@ -715,13 +1126,13 @@
                     </div>
                     <div class="p-4 rounded-xl border ${colorCpl} space-y-1">
                         <p class="text-slate-400">Coût / Conv. (CPL)</p>
-                        <p class="text-xl font-bold">${Number(coutConv).toLocaleString()} F</p>
-                        <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cpl.toLocaleString()} F</p>
+                        <p class="text-xl font-bold">${formatFCFA(coutConv)}</p>
+                        <p class="text-[10px] text-slate-400">Plafond max : ${formatFCFA(plafonds.plafond_cpl)}</p>
                     </div>
                     <div class="p-4 rounded-xl border ${colorCac} space-y-1">
                         <p class="text-slate-400">Coût Acquis. (CAC)</p>
-                        <p class="text-xl font-bold">${Number(coutCac).toLocaleString()} F</p>
-                        <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cac.toLocaleString()} F</p>
+                        <p class="text-xl font-bold">${formatFCFA(coutCac)}</p>
+                        <p class="text-[10px] text-slate-400">Plafond max : ${formatFCFA(plafonds.plafond_cac)}</p>
                     </div>
                 `;
 
@@ -739,14 +1150,14 @@
                 let margeBrute = caGlobal - sommeFormalisteVersee;
                 let margeNette = margeBrute - totalPub;
 
-                document.getElementById('pilote-ca-global').textContent = caGlobal.toLocaleString() + " FCFA";
-                document.getElementById('pilote-marge-brute').textContent = margeBrute.toLocaleString() + " FCFA";
-                document.getElementById('pilote-marge-nette').textContent = margeNette.toLocaleString() + " FCFA";
-                document.getElementById('total-depense-pub').textContent = totalPub.toLocaleString() + " FCFA";
+                document.getElementById('pilote-ca-global').textContent = formatFCFA(caGlobal);
+                document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
+                document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
+                document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
 
                 let objAnnuel = plafonds.objectif_annuel_ca || 67320000;
                 let tauxCA = objAnnuel > 0 ? Math.min(100, ((caGlobal / objAnnuel) * 100)).toFixed(1) : 0;
-                document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${objAnnuel.toLocaleString()} F) : ${tauxCA}% réalisé`;
+                document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${formatFCFA(objAnnuel)}) : ${tauxCA}% réalisé`;
                 document.getElementById('barre-progression-ca').style.width = tauxCA + '%';
 
                 const container = document.getElementById('pilote-formaliste-paiements');
@@ -767,9 +1178,7 @@
                             <div>
                                 <span class="font-bold text-gold-500">${d.numero_dossier}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
                                 <div class="text-[11px] text-slate-400 mt-0.5">Statut : <span class="text-gold-400">${d.statut}</span> | Tél : ${d.telephone}</div>
-                                <div class="text-[11px] text-slate-300">Client Encaissé : <strong>${encaisseClient.toLocaleString()} F</strong> / Total : ${totalClient.toLocaleString()} F</div>
-                                <div class="text-[11px] text-slate-400">RCCM : ${d.rccm || 'Non renseigné'} | IFU : ${d.ifu || 'Non renseigné'}</div>
-                                <div class="text-[11px] text-slate-400 italic">Difficultés : ${d.difficultes || 'Aucune'}</div>
+                                <div class="text-[11px] text-slate-300">Client Encaissé : <strong>${formatFCFA(encaisseClient)}</strong> / Total : ${formatFCFA(totalClient)}</div>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800/80 items-center text-xs">
@@ -829,11 +1238,10 @@
             if (ecart === 0) {
                 ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">✔ Rapprochement parfait : Trésorerie exacte.</span>`;
             } else {
-                ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
+                ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${formatFCFA(ecart)}</span>`;
             }
         }
 
-        // --- FORMALISTE (Épuré sans export) ---
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
@@ -849,8 +1257,8 @@
                     totalReliquatsRecus += Number(d.formaliste_reliquat_recu || 0);
                 });
 
-                document.getElementById('formaliste-total-avances').textContent = totalAvancesRecues.toLocaleString() + " FCFA";
-                document.getElementById('formaliste-total-reliquats').textContent = totalReliquatsRecus.toLocaleString() + " FCFA";
+                document.getElementById('formaliste-total-avances').textContent = formatFCFA(totalAvancesRecues);
+                document.getElementById('formaliste-total-reliquats').textContent = formatFCFA(totalReliquatsRecus);
 
                 let html = '<div class="space-y-4">';
                 data.forEach(d => {
@@ -876,30 +1284,12 @@
                                 </select>
                             </div>
                             <div class="space-y-1">
-                                <div class="text-gold-400">Avance reçue : <strong>${avanceForm.toLocaleString()} F</strong></div>
-                                ${reliquatFormRecu > 0 ? `<div class="text-emerald-400">Reliquat reçu : <strong>${reliquatFormRecu.toLocaleString()} F</strong></div>` : ''}
+                                <div class="text-gold-400">Avance reçue : <strong>${formatFCFA(avanceForm)}</strong></div>
+                                ${reliquatFormRecu > 0 ? `<div class="text-emerald-400">Reliquat reçu : <strong>${formatFCFA(reliquatFormRecu)}</strong></div>` : ''}
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Difficultés éventuelles</label>
-                                <input type="text" id="input-diff-${d.id}" value="${d.difficultes || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="Notes terrain...">
-                            </div>
-                            ${isFormalise ? `
-                            <div>
-                                <label class="block text-slate-400 mb-1">Numéro RCCM</label>
-                                <input type="text" id="input-rccm-${d.id}" value="${d.rccm || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="RCCM...">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Numéro IFU</label>
-                                <input type="text" id="input-ifu-${d.id}" value="${d.ifu || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-slate-100" placeholder="IFU...">
-                            </div>
-                            ` : ''}
-                        </div>
-
                         <div class="flex justify-end pt-2">
-                            <button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-4 py-2 rounded-xl hover:bg-gold-600 transition text-xs shadow">Enregistrer les modifications</button>
+                            <button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-4 py-2 rounded-xl hover:bg-gold-600 transition text-xs shadow">Enregistrer</button>
                         </div>
                     </div>`;
                 });
@@ -910,47 +1300,33 @@
 
         async function mettreAJourDossierFormaliste(id) {
             const nouveauStatut = document.getElementById(`select-statut-${id}`).value;
-            const diffInput = document.getElementById(`input-diff-${id}`);
-            const rccmInput = document.getElementById(`input-rccm-${id}`);
-            const ifuInput = document.getElementById(`input-ifu-${id}`);
-
-            let updates = { statut: nouveauStatut };
-            if (diffInput) updates.difficultes = diffInput.value;
-            if (rccmInput) updates.rccm = rccmInput.value;
-            if (ifuInput) updates.ifu = ifuInput.value;
-
-            const { error } = await kamaClient.from('dossiers').update(updates).eq('id', id);
+            const { error } = await kamaClient.from('dossiers').update({ statut: nouveauStatut }).eq('id', id);
             if (error) return alert("Erreur : " + error.message);
-            alert("Dossier mis à jour avec succès !");
+            alert("Dossier mis à jour !");
             chargerDonneesFormaliste();
         }
 
-        // --- EXPORT TABLEUR (Pilote Seul) ---
         async function exporterExcelPilote() {
             try {
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
 
-                let csvContent = "\ufeffNumero Dossier;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Avance Formaliste;Reliquat Formaliste Recu;RCCM;IFU;Difficultes;Date\n";
+                let csvContent = "\ufeffNumero Dossier;Nom;Prenom;Telephone;Type Entreprise;Montant Total;Montant Encaisse;Statut;Avance Formaliste;Reliquat Formaliste Recu;Date\n";
                 dossiers.forEach(d => {
-                    csvContent += `"${d.numero_dossier}";"${d.nom}";"${d.prenom || ''}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";${d.formaliste_avance};${d.formaliste_reliquat_recu};"${d.rccm || ''}";"${d.ifu || ''}";"${d.difficultes || ''}";"${d.created_at || ''}"\n`;
+                    csvContent += `"${d.numero_dossier}";"${d.nom}";"${d.prenom || ''}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";${d.formaliste_avance};${d.formaliste_reliquat_recu};"${d.created_at || ''}"\n`;
                 });
 
-                telechargerFichierCSV(csvContent, "kama_lex_export_pilote.csv");
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", "kama_lex_export_pilote.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             } catch (e) {
                 alert("Erreur d'exportation : " + e.message);
             }
-        }
-
-        function telechargerFichierCSV(content, filename) {
-            const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>
