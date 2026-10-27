@@ -64,7 +64,7 @@
     <!-- Conteneur Principal -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
         
-        <!-- VUE 1 : CONNEXION RAPIDE SECURISEE (3 Cartes) -->
+        <!-- VUE 1 : CONNEXION RAPIDE SECURISEE (3 Cartes avec fonctions directes) -->
         <div id="view-login" class="flex flex-col items-center justify-center h-[75vh] max-w-xl mx-auto">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-8 shadow-2xl w-full relative overflow-hidden space-y-6">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
@@ -73,17 +73,17 @@
                     <p class="text-xs text-slate-400 mt-1">Selectionnez votre profil et entrez votre code confidentiel</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <button onclick="preparerConnexion('pilote', 'ZOURE Aboubakar')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
+                    <button onclick="ouvrirPilote()" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">ZA</div>
                         <div class="font-bold text-gold-400 text-sm">ZOURE</div>
                         <div class="text-[11px] text-slate-400">Pilote & Fondateur</div>
                     </button>
-                    <button onclick="preparerConnexion('closer', 'Abdoul')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
+                    <button onclick="ouvrirCloser()" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">AB</div>
                         <div class="font-bold text-gold-400 text-sm">Abdoul</div>
                         <div class="text-[11px] text-slate-400">Closer WhatsApp</div>
                     </button>
-                    <button onclick="preparerConnexion('formaliste', 'OUEDRAOGO Adama')" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
+                    <button onclick="ouvrirFormaliste()" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">OA</div>
                         <div class="font-bold text-gold-400 text-sm">OUEDRAOGO</div>
                         <div class="text-[11px] text-slate-400">Formaliste Terrain</div>
@@ -424,9 +424,26 @@
             else if (selectType === 'SARL') inputTotal.value = '175000';
         }
 
-        function preparerConnexion(role, nom) {
-            pendingRole = (role || '').toLowerCase().trim();
-            pendingNom = (nom || '');
+        // --- FONCTIONS DE CONNEXION INDÉPENDANTES (ZÉRO AMBIGUÏTÉ) ---
+        function ouvrirPilote() {
+            pendingRole = 'pilote';
+            pendingNom = 'ZOURE Aboubakar';
+            afficherModalPin();
+        }
+
+        function ouvrirCloser() {
+            pendingRole = 'closer';
+            pendingNom = 'Abdoul';
+            afficherModalPin();
+        }
+
+        function ouvrirFormaliste() {
+            pendingRole = 'formaliste';
+            pendingNom = 'OUEDRAOGO Adama';
+            afficherModalPin();
+        }
+
+        function afficherModalPin() {
             document.getElementById('modal-pin-title').textContent = `Code d'acces : ${pendingNom}`;
             document.getElementById('input-pin-code').value = '';
             document.getElementById('pin-error').classList.add('hidden');
@@ -457,16 +474,10 @@
         }
 
         function connecterValide(role, nom) {
-            let r = (role || '').toLowerCase().trim();
-            if (r.includes('pilot') || r === 'zoure') r = 'pilote';
-            else if (r.includes('clos') || r === 'abdoul') r = 'closer';
-            else if (r.includes('form') || r === 'ouedraogo') r = 'formaliste';
-            else r = 'pilote';
+            currentRole = role;
+            const safeNom = nom;
 
-            currentRole = r;
-            const safeNom = (nom || '');
-
-            // CORRECTION : Masquer explicitement TOUTES les vues avant d'afficher la bonne
+            // Masquer explicitement toutes les vues
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('view-pilote').classList.add('hidden');
             document.getElementById('view-closer').classList.add('hidden');
