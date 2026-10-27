@@ -464,6 +464,7 @@
             document.getElementById('user-badge').classList.remove('hidden');
             document.getElementById('badge-nom').textContent = safeNom + ' (' + currentRole.toUpperCase() + ')';
 
+            // Affichage direct de la vue correspondante
             if (currentRole === 'pilote') {
                 document.getElementById('view-pilote').classList.remove('hidden');
                 chargerDonneesPilote();
