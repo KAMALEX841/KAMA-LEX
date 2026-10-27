@@ -65,17 +65,17 @@
                     <button onclick="ouvrirPilote()" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">ZA</div>
                         <div class="font-bold text-gold-400 text-sm">ZOURE</div>
-                        <div class="text-[11px] text-slate-400">Pilote (6 Chiffres)</div>
+                        <div class="text-[11px] text-slate-400">Pilote (Code: 123456)</div>
                     </button>
                     <button onclick="ouvrirCloser()" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">AB</div>
                         <div class="font-bold text-gold-400 text-sm">Abdoul</div>
-                        <div class="text-[11px] text-slate-400">Closer (4 Chiffres)</div>
+                        <div class="text-[11px] text-slate-400">Closer (Code: 1234)</div>
                     </button>
                     <button onclick="ouvrirFormaliste()" class="bg-navy-950 border border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/10 p-5 rounded-xl text-center transition space-y-2 group shadow-lg cursor-pointer">
                         <div class="w-10 h-10 mx-auto rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold text-sm">OA</div>
                         <div class="font-bold text-gold-400 text-sm">OUEDRAOGO</div>
-                        <div class="text-[11px] text-slate-400">Formaliste (4 Chiffres)</div>
+                        <div class="text-[11px] text-slate-400">Formaliste (Code: 5678)</div>
                     </button>
                 </div>
             </div>
@@ -359,7 +359,7 @@
         let pendingRole = null;
         let pendingNom = null;
 
-        // Codes PIN configurés : Pilote (6 chiffres), Closer (4 chiffres), Formaliste (4 chiffres)
+        // Codes PIN configurés : Pilote (123456), Closer (1234), Formaliste (5678)
         const PINS_CONFIG = {
             'pilote': '123456',  
             'closer': '1234',    
@@ -467,8 +467,11 @@
             document.getElementById('view-closer').classList.add('hidden');
             document.getElementById('view-formaliste').classList.add('hidden');
 
+            const badgeNom = document.getElementById('badge-nom');
+            if (badgeNom) {
+                badgeNom.textContent = nom + ' (' + (currentRole ? currentRole.toUpperCase() : '') + ')';
+            }
             document.getElementById('user-badge').classList.remove('hidden');
-            document.getElementById('badge-nom').textContent = nom + ' (' + currentRole.toUpperCase() + ')';
 
             if (currentRole === 'pilote') {
                 document.getElementById('view-pilote').classList.remove('hidden');
