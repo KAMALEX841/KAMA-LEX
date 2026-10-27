@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour mieux décider</title>
-    <!-- Favicon Emoji ⚖️ -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -49,7 +47,7 @@
             <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500 flex items-center justify-center text-gold-500 font-bold text-xl shadow-inner">KL</div>
             <div>
                 <h1 class="font-bold text-gold-500 tracking-wider text-lg">KAMA LEX</h1>
-                <p class="text-xs text-slate-400 italic">« Savoir pour mieux décider » — Ouagadougou</p>
+                <p class="text-xs text-slate-400 italic">"Savoir pour mieux décider" - Ouagadougou</p>
             </div>
         </div>
         <div id="user-badge" class="hidden flex items-center space-x-4 text-sm">
@@ -58,9 +56,9 @@
         </div>
     </header>
 
-    <!-- Bande d'Annonce Modifiable (Texte par défaut immédiat) -->
+    <!-- Bande d'Annonce Modifiable -->
     <div class="bg-gradient-to-r from-navy-900 via-gold-500/10 to-navy-900 border-b border-gold-500/30 px-6 py-2.5 text-xs text-gold-400 text-center font-medium shadow-inner flex justify-center items-center gap-2">
-        <span>📢</span> <span id="texte-annonce">Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.</span>
+        <span>[Note]</span> <span id="texte-annonce">Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.</span>
     </div>
 
     <!-- Conteneur Principal -->
@@ -94,7 +92,7 @@
             </div>
         </div>
 
-        <!-- VUE 2 : ESPACE PILOTE (ZOURE Aboubakar) -->
+        <!-- VUE 2 : ESPACE PILOTE -->
         <div id="view-pilote" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -103,10 +101,10 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
                     <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
-                        ⚙️ Plafonds & Objectifs
+                        Plafonds & Objectifs
                     </button>
                     <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg">
-                        📊 Exporter (Excel)
+                        Exporter (Excel)
                     </button>
                     <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">ZOURE Aboubakar</div>
                 </div>
@@ -127,7 +125,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
             </div>
 
-            <!-- KPIs Financiers (CA, Marge Brute, Marge Nette) -->
+            <!-- KPIs Financiers -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
@@ -149,7 +147,7 @@
                 </div>
             </div>
 
-            <!-- Publicité & Rapprochement Bancaire -->
+            <!-- Publicité & Rapprochement -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Dépense Publicitaire (Meta Ads)</h3>
@@ -278,7 +276,7 @@
                 </div>
             </div>
 
-            <!-- Liste des dossiers enregistrés par le Closer -->
+            <!-- Liste des dossiers -->
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-3 shadow-xl">
                 <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistrés & Suivi des Reliquats Clients</h3>
                 <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">Chargement...</div>
@@ -322,7 +320,7 @@
             </div>
             <form onsubmit="validerCodePin(event)" class="space-y-4 text-xs">
                 <div>
-                    <input type="password" id="input-pin-code" maxlength="8" inputmode="numeric" pattern="[0-9]*" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold-400 font-bold focus:border-gold-500 focus:outline-none" placeholder="••••••••" required>
+                    <input type="password" id="input-pin-code" maxlength="8" inputmode="numeric" pattern="[0-9]*" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold-400 font-bold focus:border-gold-500 focus:outline-none" placeholder="........" required>
                     <p class="text-[11px] text-slate-400 mt-2">Code confidentiel sécurisé</p>
                 </div>
                 <div id="pin-error" class="text-red-400 text-xs hidden font-bold">Code d'accès incorrect</div>
@@ -331,7 +329,7 @@
         </div>
     </div>
 
-    <!-- MODAL PLAFONDS & OBJECTIFS (Pilote Seul) -->
+    <!-- MODAL PLAFONDS & OBJECTIFS -->
     <div id="modal-plafonds" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl relative">
             <div class="flex justify-between items-center">
@@ -376,7 +374,7 @@
         let pendingNom = null;
 
         const PINS_CONFIG = {
-            'pilote': '05111995',  
+            'pilote': '051195',  
             'closer': '639204',    
             'formaliste': '492817' 
         };
@@ -394,9 +392,7 @@
                 if (!error && data && data.length > 0 && data[0].annonce) {
                     document.getElementById('texte-annonce').textContent = (data[0].annonce || '').toString();
                 }
-            } catch (e) {
-                // Conserve le texte par défaut si la table est vide ou injoignable
-            }
+            } catch (e) {}
         }
 
         async function sauvegarderAnnonce() {
@@ -428,7 +424,6 @@
             else if (selectType === 'SARL') inputTotal.value = '175000';
         }
 
-        // --- GESTION CODE SÉCURITÉ ---
         function preparerConnexion(role, nom) {
             pendingRole = (role || '').toLowerCase().trim();
             pendingNom = (nom || '');
@@ -502,7 +497,6 @@
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // --- PLAFONDS & OBJECTIFS ---
         async function recupererPlafonds() {
             try {
                 const { data, error } = await kamaClient.from('plafonds').select('*').limit(1);
@@ -566,7 +560,6 @@
             }
         }
 
-        // --- CLOSER STATS ---
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
             const datePoint = (document.getElementById('stat-date').value || '').trim() || new Date().toISOString().split('T')[0];
@@ -610,16 +603,13 @@
                 const box = document.getElementById('statut-objectif-jour');
                 let statusText = `Aujourd'hui : ${convJour} conv. (Obj: ${objConv}) | ${acquisJour} clients (Obj: ${objClients})`;
                 if (acquisJour >= objClients && convJour >= objConv) {
-                    box.innerHTML = `<span class="text-emerald-400">✔ Objectifs atteints ! (${statusText})</span>`;
+                    box.innerHTML = `<span class="text-emerald-400">Objectifs atteints ! (${statusText})</span>`;
                 } else {
-                    box.innerHTML = `<span class="text-amber-400">⚡ En cours (${statusText})</span>`;
+                    box.innerHTML = `<span class="text-amber-400">En cours (${statusText})</span>`;
                 }
-            } catch (e) {
-                console.error("Erreur stats closer:", e);
-            }
+            } catch (e) {}
         }
 
-        // --- CLOSER DOSSIERS & FINANCEMENT ---
         async function ajouterDossierCloser(event) {
             event.preventDefault();
             const nom = (document.getElementById('closer-nom').value || '').trim();
@@ -703,7 +693,6 @@
             }
         }
 
-        // --- PILOTE & FINANCES ---
         async function chargerDonneesPilote() {
             const plafonds = await recupererPlafonds();
             try {
@@ -839,9 +828,7 @@
                 });
                 html += '</div>';
                 container.innerHTML = html;
-            } catch (e) {
-                console.error("Erreur pilote :", e);
-            }
+            } catch (e) {}
         }
 
         async function payerAvanceForm(id) {
@@ -896,16 +883,15 @@
                 const ecartDiv = document.getElementById('rapprochement-ecart');
 
                 if (ecart === 0) {
-                    ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">✔ Rapprochement parfait : Trésorerie exacte.</span>`;
+                    ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">Rapprochement parfait : Trésorerie exacte.</span>`;
                 } else {
-                    ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
+                    ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
                 }
             } catch(e) {
                 alert("Erreur lors du rapprochement : " + (e.message || 'Erreur Supabase'));
             }
         }
 
-        // --- FORMALISTE ---
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
@@ -1008,7 +994,6 @@
             }
         }
 
-        // --- EXPORT TABLEUR PILOTE SEULEMENT ---
         async function exporterExcelPilote() {
             try {
                 const { data: dossiers, error } = await kamaClient.from('dossiers').select('*');
