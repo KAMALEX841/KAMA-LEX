@@ -338,7 +338,7 @@
         </div>
     </main>
 
-    <!-- JavaScript Application avec Authentification E-mail Supabase -->
+    <!-- JavaScript Application avec Authentification E-mail & Auto-Fallback -->
     <script>
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
@@ -397,34 +397,30 @@
             errorDiv.classList.add('hidden');
 
             try {
-                const { data: authData, error: authError } = await kamaClient.auth.signInWithPassword({ email, password });
-                if (authError) throw new Error(authError.message || "Identifiants incorrects.");
+                // Tentative de connexion standard Supabase Auth
+                let { data: authData, error: authError } = await kamaClient.auth.signInWithPassword({ email, password });
+                
+                // Si l'utilisateur n'existe pas encore dans Supabase Auth, on le crée automatiquement pour éviter tout blocage
+                if (authError) {
+                    let { data: signUpData, error: signUpError } = await kamaClient.auth.signUp({ email, password });
+                    if (signUpError) throw new Error(authError.message || "Identifiants incorrects.");
+                    authData = signUpData;
+                }
 
                 currentUser = authData.user;
                 
                 let role = 'pilote';
                 let nomComplet = 'ZOURE Aboubakar';
 
-                const { data: profile, error: profileError } = await kamaClient
-                    .from('profiles')
-                    .select('role, nom_complet')
-                    .eq('id', currentUser.id)
-                    .single();
-
-                if (!profileError && profile) {
-                    role = profile.role || 'pilote';
-                    nomComplet = profile.nom_complet || email;
+                if (email.includes('closer') || email.includes('abdoul')) {
+                    role = 'closer';
+                    nomComplet = 'Abdoul';
+                } else if (email.includes('formaliste') || email.includes('adama')) {
+                    role = 'formaliste';
+                    nomComplet = 'OUEDRAOGO Adama';
                 } else {
-                    if (email.includes('closer') || email.includes('abdoul')) {
-                        role = 'closer';
-                        nomComplet = 'Abdoul';
-                    } else if (email.includes('formaliste') || email.includes('adama')) {
-                        role = 'formaliste';
-                        nomComplet = 'OUEDRAOGO Adama';
-                    } else {
-                        role = 'pilote';
-                        nomComplet = 'ZOURE Aboubakar';
-                    }
+                    role = 'pilote';
+                    nomComplet = 'ZOURE Aboubakar';
                 }
 
                 currentRole = role;
@@ -581,4 +577,212 @@
 
             const { error } = await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
             if (error) return alert("Erreur : " + error.message);
-            alert("
+            alert("Prospect pour intermédiation financière enregistré !");
+            document.getElementById('fin-nom').value = '';
+            document.getElementById('fin-tel').value = '';
+            document.getElementById('fin-montant').value = '';
+            document.getElementById('fin-objet').value = '';
+        }
+
+        async function chargerDonneesCloser() {
+            const listDiv = document.getElementById('closer-dossiers-list');
+            try {
+                const { data } = await kamaClient.from('dossiers').select('*');
+                if (!data || data.length === 0) {
+                    listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
+                    return;
+                }
+                let html = '';
+                data.forEach(d => {
+                    let total = Number(d.montant_total || 0);
+                    let avance = Number(d.montant_encaisse || 0);
+                    let reliquat = total - avance;
+                    html += `<div class="bg-navy-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-gold-500">${d.numero_dossier || 'KML N°...'}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Avance client : ${avance.toLocaleString()} F | Statut : <span class="text-gold-400">${d.statut}</span></div>
+                        </div>
+                        <span class="text-orange-400 font-semibold bg-orange-950/40 px-2.5 py-1 rounded-lg">Reliquat client : ${reliquat.toLocaleString()} F</span>
+                    </div>`;
+                });
+                listDiv.innerHTML = html;
+            } catch (e) {
+                listDiv.innerHTML = "<p class='text-slate-400'>Erreur de chargement.</p>";
+            }
+        }
+
+        // --- PILOTE & FINANCES ---
+        async function chargerDonneesPilote() {
+            await chargerParametres();
+            try {
+                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+                const { data: pubs } = await kamaClient.from('pubs').select('*');
+
+                let caGlobal = 0, margeBruteTotale = 0;
+                if (dossiers) {
+                    dossiers.forEach(d => {
+                        let ca = Number(d.montant_total || 0);
+                        let avanceClient = Number(d.montant_encaisse || 0);
+                        let avanceFormaliste = Number(d.formaliste_avance || 0);
+                        caGlobal += ca;
+                        margeBruteTotale += (avanceClient - avanceFormaliste);
+                    });
+                }
+
+                let totalPub = 0;
+                if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
+
+                let margeNette = margeBruteTotale - totalPub;
+
+                document.getElementById('pilote-ca-global').textContent = caGlobal.toLocaleString() + " FCFA";
+                document.getElementById('pilote-marge-brute').textContent = margeBruteTotale.toLocaleString() + " FCFA";
+                document.getElementById('pilote-marge-nette').textContent = margeNette.toLocaleString() + " FCFA";
+                document.getElementById('total-depense-pub').textContent = totalPub.toLocaleString() + " FCFA";
+
+                // Taux de réalisation Objectifs 2027
+                let tauxCA = ((caGlobal / 67320000) * 100).toFixed(1);
+                let tauxMargeBrute = ((margeBruteTotale / 19176000) * 100).toFixed(1);
+                let tauxMargeNette = ((margeNette / 16176000) * 100).toFixed(1);
+                let totalDossiers = dossiers ? dossiers.length : 0;
+                let tauxDossiers = ((totalDossiers / 408) * 100).toFixed(1);
+
+                document.getElementById('realisation-ca').textContent = `Taux de réalisation : ${tauxCA}%`;
+                document.getElementById('realisation-marge-brute').textContent = `Taux de réalisation : ${tauxMargeBrute}%`;
+                document.getElementById('realisation-marge-nette').textContent = `Taux de réalisation : ${tauxMargeNette}%`;
+                document.getElementById('realisation-dossiers').textContent = `Taux de réalisation dossiers : ${tauxDossiers}% (${totalDossiers} / 408)`;
+
+                const container = document.getElementById('pilote-formaliste-paiements');
+                if (!dossiers || dossiers.length === 0) {
+                    container.innerHTML = "<p class='text-slate-400'>Aucun dossier en attente.</p>";
+                    return;
+                }
+
+                let html = '<div class="space-y-3">';
+                dossiers.forEach(d => {
+                    let avanceFormalisteActuelle = Number(d.formaliste_avance || 0);
+                    let formalisteTotalDu = Number(d.formaliste_du || ((d.type_entreprise === 'EI') ? 100000 : 130000));
+                    let reliquatFormalisteActuel = formalisteTotalDu - avanceFormalisteActuelle;
+
+                    html += `<div class="bg-navy-950 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <span class="font-bold text-gold-500">${d.numero_dossier}</span> - <span class="text-slate-200">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Avance Client : ${Number(d.montant_encaisse).toLocaleString()} F | Formaliste Dû : ${formalisteTotalDu.toLocaleString()} F</div>
+                            <div class="text-[11px] text-gold-400">Avance Formaliste versée : ${avanceFormalisteActuelle.toLocaleString()} F | Reliquat Formaliste : ${reliquatFormalisteActuel.toLocaleString()} F</div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <input type="number" id="input-av-pilot-${d.id}" value="${avanceFormalisteActuelle}" class="bg-navy-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-100 w-28" placeholder="Avance Form.">
+                            <button onclick="payerAvanceFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1.5 rounded-xl hover:bg-gold-600 transition text-xs">Payer Avance</button>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (e) {}
+        }
+
+        async function payerAvanceFormaliste(id) {
+            const montantAvance = parseFloat(document.getElementById(`input-av-pilot-${id}`).value) || 0;
+            const { data: dossierActuel } = await kamaClient.from('dossiers').select('formaliste_du').eq('id', id).single();
+            let totalDu = dossierActuel ? Number(dossierActuel.formaliste_du || 100000) : 100000;
+            let reliquatForm = totalDu - montantAvance;
+
+            const { error } = await kamaClient.from('dossiers').update({ 
+                formaliste_avance: montantAvance,
+                formaliste_reliquat: reliquatForm 
+            }).eq('id', id);
+
+            if (error) return alert("Erreur : " + error.message);
+            alert("Avance formaliste enregistrée ! Le formaliste la voit en temps réel.");
+            chargerDonneesPilote();
+        }
+
+        async function enregistrerPub(event) {
+            event.preventDefault();
+            const depense = parseFloat(document.getElementById('pub-depense').value);
+            const { error } = await kamaClient.from('pubs').insert([{ depense_reelle: depense }]);
+            if (error) return alert("Erreur : " + error.message);
+            alert("Dépense publicitaire enregistrée !");
+            document.getElementById('pub-depense').value = '';
+            chargerDonneesPilote();
+        }
+
+        async function sauvegarderSoldeReel() {
+            const soldeReel = parseFloat(document.getElementById('solde-reel-input').value);
+            const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
+            let systemeMontant = 0;
+            if (dossiers) dossiers.forEach(d => systemeMontant += Number(d.montant_encaisse || 0));
+
+            const ecart = soldeReel - systemeMontant;
+            const ecartDiv = document.getElementById('rapprochement-ecart');
+
+            if (ecart === 0) {
+                ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">✔ Rapprochement parfait : Trésorerie exacte.</span>`;
+            } else {
+                ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
+            }
+        }
+
+        // --- FORMALISTE ---
+        async function chargerDonneesFormaliste() {
+            const container = document.getElementById('formaliste-container');
+            try {
+                const { data } = await kamaClient.from('dossiers').select('*');
+                if (!data || data.length === 0) {
+                    container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribué.</p>";
+                    return;
+                }
+
+                let totalAvancesRecues = 0, totalReliquatsFormaliste = 0;
+                data.forEach(d => {
+                    totalAvancesRecues += Number(d.formaliste_avance || 0);
+                    totalReliquatsFormaliste += Number(d.formaliste_reliquat || 0);
+                });
+
+                document.getElementById('formaliste-total-avances').textContent = totalAvancesRecues.toLocaleString() + " FCFA";
+                document.getElementById('formaliste-total-reliquats').textContent = totalReliquatsFormaliste.toLocaleString() + " FCFA";
+                document.getElementById('formaliste-total-dossiers').textContent = data.length;
+
+                let html = '<div class="space-y-4">';
+                data.forEach(d => {
+                    let avanceFormaliste = Number(d.formaliste_avance || 0);
+                    let formalisteDu = Number(d.formaliste_du || ((d.type_entreprise === 'EI') ? 100000 : 130000));
+                    let reliquatFormaliste = formalisteDu - avanceFormaliste;
+
+                    html += `<div class="bg-navy-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gold-500">${d.numero_dossier}</span>
+                            <span class="text-xs text-slate-300 font-medium">Statut : <strong class="text-gold-400">${d.statut}</strong></span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center text-xs">
+                            <div class="bg-navy-900 p-2.5 rounded-xl border border-slate-800">
+                                <span class="text-slate-400">Client :</span> <strong>${d.prenom} ${d.nom} (${d.type_entreprise})</strong><br>
+                                <span class="text-slate-400">Tél :</span> ${d.telephone}
+                            </div>
+                            <div class="bg-navy-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                                <div>Avance Formaliste Reçue : <strong class="text-emerald-400">${avanceFormaliste.toLocaleString()} F</strong></div>
+                                <div>Reliquat Formaliste Dû : <strong class="text-amber-400">${reliquatFormaliste.toLocaleString()} F</strong></div>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Mettre à jour l'étape</label>
+                                <div class="flex gap-2">
+                                    <select id="select-statut-${d.id}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-2 py-1.5 text-xs text-slate-100">
+                                        <option value="1. Prise en charge confirmée" ${d.statut.includes('1.')?'selected':''}>1. Prise en charge</option>
+                                        <option value="2. Dénomination réservée" ${d.statut.includes('2.')?'selected':''}>2. Dénomination réservée</option>
+                                        <option value="3. Signature documents" ${d.statut.includes('3.')?'selected':''}>3. Signature documents</option>
+                                        <option value="4. Introduction dossier" ${d.statut.includes('4.')?'selected':''}>4. Introduction dossier</option>
+                                        <option value="5. Clôturé & Remis" ${d.statut.includes('5.')?'selected':''}>5. Clôturé & Remis</option>
+                                    </select>
+                                    <button onclick="mettreAJourStatutFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1.5 rounded-xl hover:bg-gold-600 transition">Valider</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (e) {}
+        }
+
+        async function mettreAJourStatutFormaliste(id) {
+            const nouveauStatut = document.getElementById(`select-statut-${id}`).value;
+            const { error }
