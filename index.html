@@ -64,7 +64,7 @@
     <!-- Conteneur Principal -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
         
-        <!-- VUE 1 : CONNEXION RAPIDE SECURISEE (3 Cartes avec fonctions directes) -->
+        <!-- VUE 1 : CONNEXION RAPIDE SECURISEE (3 Cartes) -->
         <div id="view-login" class="flex flex-col items-center justify-center h-[75vh] max-w-xl mx-auto">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-8 shadow-2xl w-full relative overflow-hidden space-y-6">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
@@ -367,7 +367,12 @@
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
         
-        const kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let kamaClient = null;
+        try {
+            kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {
+            console.error("Erreur initialisation Supabase:", e);
+        }
 
         let currentRole = null;
         let pendingRole = null;
@@ -387,15 +392,18 @@
         });
 
         async function chargerBandeauAnnonce() {
+            if (!kamaClient) return;
             try {
                 const { data, error } = await kamaClient.from('parametres').select('*').limit(1);
                 if (!error && data && data.length > 0 && data[0].annonce) {
-                    document.getElementById('texte-annonce').textContent = (data[0].annonce || '').toString();
+                    const el = document.getElementById('texte-annonce');
+                    if (el) el.textContent = (data[0].annonce || '').toString();
                 }
             } catch (e) {}
         }
 
         async function sauvegarderAnnonce() {
+            if (!kamaClient) return alert('Supabase non connecte.');
             const texte = (document.getElementById('input-annonce').value || '').trim();
             if (!texte) return alert('Veuillez entrer un message.');
             try {
@@ -420,11 +428,11 @@
         function changerTarifOffre() {
             const selectType = (document.getElementById('closer-type').value || '').trim();
             const inputTotal = document.getElementById('closer-total');
+            if (!inputTotal) return;
             if (selectType === 'EI') inputTotal.value = '150000';
             else if (selectType === 'SARL') inputTotal.value = '175000';
         }
 
-        // --- FONCTIONS DE CONNEXION INDÉPENDANTES (ZÉRO AMBIGUÏTÉ) ---
         function ouvrirPilote() {
             pendingRole = 'pilote';
             pendingNom = 'ZOURE Aboubakar';
@@ -509,6 +517,7 @@
         }
 
         async function recupererPlafonds() {
+            if (!kamaClient) return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
             try {
                 const { data, error } = await kamaClient.from('plafonds').select('*').limit(1);
                 if (!error && data && data.length > 0) return data[0];
@@ -532,6 +541,7 @@
 
         async function sauvegarderPlafondsGlobal(event) {
             event.preventDefault();
+            if (!kamaClient) return alert('Supabase non connecte.');
             const cpl = parseFloat(document.getElementById('cfg-cpl').value) || 500;
             const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 34;
             const objClients = parseInt(document.getElementById('cfg-obj-clients').value) || 2;
@@ -573,6 +583,7 @@
 
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
+            if (!kamaClient) return alert('Supabase non connecte.');
             const datePoint = (document.getElementById('stat-date').value || '').trim() || new Date().toISOString().split('T')[0];
             const conv = parseInt(document.getElementById('stat-conv').value) || 0;
             const acquis = parseInt(document.getElementById('stat-acquis').value) || 0;
@@ -593,6 +604,7 @@
         }
 
         async function chargerStatsCloser() {
+            if (!kamaClient) return;
             try {
                 const { data, error } = await kamaClient.from('closer_stats').select('*');
                 if (error) throw error;
@@ -612,6 +624,7 @@
                 let objClients = plafonds.objectif_clients_jour || 2;
 
                 const box = document.getElementById('statut-objectif-jour');
+                if (!box) return;
                 let statusText = `Aujourd'hui : ${convJour} conv. (Obj: ${objConv}) | ${acquisJour} clients (Obj: ${objClients})`;
                 if (acquisJour >= objClients && convJour >= objConv) {
                     box.innerHTML = `<span class="text-emerald-400">Objectifs atteints ! (${statusText})</span>`;
@@ -623,6 +636,7 @@
 
         async function ajouterDossierCloser(event) {
             event.preventDefault();
+            if (!kamaClient) return alert('Supabase non connecte.');
             const nom = (document.getElementById('closer-nom').value || '').trim();
             const prenom = (document.getElementById('closer-prenom').value || '').trim();
             const telephone = (document.getElementById('closer-tel').value || '').trim();
@@ -657,6 +671,7 @@
 
         async function ajouterFinancementCloser(event) {
             event.preventDefault();
+            if (!kamaClient) return alert('Supabase non connecte.');
             const nom = (document.getElementById('fin-nom').value || '').trim();
             const telephone = (document.getElementById('fin-tel').value || '').trim();
             const montant = parseFloat(document.getElementById('fin-montant').value) || 0;
@@ -677,6 +692,7 @@
 
         async function chargerDonneesCloser() {
             const listDiv = document.getElementById('closer-dossiers-list');
+            if (!listDiv || !kamaClient) return;
             try {
                 const { data, error } = await kamaClient.from('dossiers').select('*');
                 if (error) throw error;
@@ -706,6 +722,7 @@
 
         async function chargerDonneesPilote() {
             const plafonds = await recupererPlafonds();
+            if (!kamaClient) return;
             try {
                 const resDossiers = await kamaClient.from('dossiers').select('*');
                 const dossiers = (resDossiers && resDossiers.data) ? resDossiers.data : [];
@@ -750,33 +767,35 @@
                 let coutCac = totalClientsJour > 0 ? (totalPub / totalClientsJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
 
                 const grid = document.getElementById('pilote-activite-closer-grid');
-                let colorConv = totalConvJour >= plafonds.objectif_conversations_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
-                let colorClients = totalClientsJour >= plafonds.objectif_clients_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
-                let colorCpl = Number(coutConv) <= plafonds.plafond_cpl ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-red-400 border-red-500/40 bg-red-950/20';
-                let colorCac = Number(coutCac) <= plafonds.plafond_cac ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-red-400 border-red-500/40 bg-red-950/20';
+                if (grid) {
+                    let colorConv = totalConvJour >= plafonds.objectif_conversations_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
+                    let colorClients = totalClientsJour >= plafonds.objectif_clients_jour ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-amber-400 border-amber-500/40 bg-amber-950/20';
+                    let colorCpl = Number(coutConv) <= plafonds.plafond_cpl ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-red-400 border-red-500/40 bg-red-950/20';
+                    let colorCac = Number(coutCac) <= plafonds.plafond_cac ? 'text-emerald-400 border-emerald-500/40 bg-emerald-950/20' : 'text-red-400 border-red-500/40 bg-red-950/20';
 
-                grid.innerHTML = `
-                    <div class="p-4 rounded-xl border ${colorConv} space-y-1">
-                        <p class="text-slate-400">Conversations (Jour)</p>
-                        <p class="text-xl font-bold">${totalConvJour} <span class="text-xs font-normal">(Obj: ${plafonds.objectif_conversations_jour})</span></p>
-                        <p class="text-[10px] text-slate-400">Semaine: ${totalConvSemaine} | Mois: ${totalConvMois}</p>
-                    </div>
-                    <div class="p-4 rounded-xl border ${colorClients} space-y-1">
-                        <p class="text-slate-400">Clients Acquis (Jour)</p>
-                        <p class="text-xl font-bold">${totalClientsJour} <span class="text-xs font-normal">(Obj: ${plafonds.objectif_clients_jour})</span></p>
-                        <p class="text-[10px] text-slate-400">Semaine: ${totalClientsSemaine} | Mois: ${totalClientsMois}</p>
-                    </div>
-                    <div class="p-4 rounded-xl border ${colorCpl} space-y-1">
-                        <p class="text-slate-400">Cout / Conv. (CPL)</p>
-                        <p class="text-xl font-bold">${Number(coutConv).toLocaleString()} F</p>
-                        <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cpl.toLocaleString()} F</p>
-                    </div>
-                    <div class="p-4 rounded-xl border ${colorCac} space-y-1">
-                        <p class="text-slate-400">Cout Acquisition (CAC)</p>
-                        <p class="text-xl font-bold">${Number(coutCac).toLocaleString()} F</p>
-                        <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cac.toLocaleString()} F</p>
-                    </div>
-                `;
+                    grid.innerHTML = `
+                        <div class="p-4 rounded-xl border ${colorConv} space-y-1">
+                            <p class="text-slate-400">Conversations (Jour)</p>
+                            <p class="text-xl font-bold">${totalConvJour} <span class="text-xs font-normal">(Obj: ${plafonds.objectif_conversations_jour})</span></p>
+                            <p class="text-[10px] text-slate-400">Semaine: ${totalConvSemaine} | Mois: ${totalConvMois}</p>
+                        </div>
+                        <div class="p-4 rounded-xl border ${colorClients} space-y-1">
+                            <p class="text-slate-400">Clients Acquis (Jour)</p>
+                            <p class="text-xl font-bold">${totalClientsJour} <span class="text-xs font-normal">(Obj: ${plafonds.objectif_clients_jour})</span></p>
+                            <p class="text-[10px] text-slate-400">Semaine: ${totalClientsSemaine} | Mois: ${totalClientsMois}</p>
+                        </div>
+                        <div class="p-4 rounded-xl border ${colorCpl} space-y-1">
+                            <p class="text-slate-400">Cout / Conv. (CPL)</p>
+                            <p class="text-xl font-bold">${Number(coutConv).toLocaleString()} F</p>
+                            <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cpl.toLocaleString()} F</p>
+                        </div>
+                        <div class="p-4 rounded-xl border ${colorCac} space-y-1">
+                            <p class="text-slate-400">Cout Acquisition (CAC)</p>
+                            <p class="text-xl font-bold">${Number(coutCac).toLocaleString()} F</p>
+                            <p class="text-[10px] text-slate-400">Plafond max : ${plafonds.plafond_cac.toLocaleString()} F</p>
+                        </div>
+                    `;
+                }
 
                 let caGlobal = 0, sommeFormalisteVersee = 0;
                 dossiers.forEach(d => {
@@ -801,6 +820,7 @@
                 document.getElementById('barre-progression-ca').style.width = tauxCA + '%';
 
                 const container = document.getElementById('pilote-formaliste-paiements');
+                if (!container) return;
                 if (dossiers.length === 0) {
                     container.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
                     return;
@@ -843,6 +863,7 @@
         }
 
         async function payerAvanceForm(id) {
+            if (!kamaClient) return;
             const el = document.getElementById(`input-av-${id}`);
             const montant = el ? (parseFloat(el.value) || 0) : 0;
             try {
@@ -856,6 +877,7 @@
         }
 
         async function payerReliquatForm(id) {
+            if (!kamaClient) return;
             const el = document.getElementById(`input-rel-${id}`);
             const montant = el ? (parseFloat(el.value) || 0) : 0;
             try {
@@ -870,6 +892,7 @@
 
         async function enregistrerPub(event) {
             event.preventDefault();
+            if (!kamaClient) return;
             const depense = parseFloat(document.getElementById('pub-depense').value) || 0;
             try {
                 const { error } = await kamaClient.from('pubs').insert([{ depense_reelle: depense }]);
@@ -883,6 +906,7 @@
         }
 
         async function sauvegarderSoldeReel() {
+            if (!kamaClient) return;
             const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
             try {
                 const { data: dossiers, error } = await kamaClient.from('dossiers').select('montant_encaisse');
@@ -892,6 +916,7 @@
 
                 const ecart = soldeReel - systemeMontant;
                 const ecartDiv = document.getElementById('rapprochement-ecart');
+                if (!ecartDiv) return;
 
                 if (ecart === 0) {
                     ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">Rapprochement parfait : Tresorerie exacte.</span>`;
@@ -903,14 +928,17 @@
 
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
+            if (!container || !kamaClient) return;
             try {
                 const { data, error } = await kamaClient.from('dossiers').select('*');
                 if (error) throw error;
                 const dossiers = data || [];
                 if (dossiers.length === 0) {
                     container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribue.</p>";
-                    document.getElementById('formaliste-total-avances').textContent = "0 FCFA";
-                    document.getElementById('formaliste-total-reliquats').textContent = "0 FCFA";
+                    const avEl = document.getElementById('formaliste-total-avances');
+                    const relEl = document.getElementById('formaliste-total-reliquats');
+                    if (avEl) avEl.textContent = "0 FCFA";
+                    if (relEl) relEl.textContent = "0 FCFA";
                     return;
                 }
 
@@ -920,8 +948,10 @@
                     totalReliquatsRecus += Number(d.formaliste_reliquat_recu || 0);
                 });
 
-                document.getElementById('formaliste-total-avances').textContent = totalAvancesRecues.toLocaleString() + " FCFA";
-                document.getElementById('formaliste-total-reliquats').textContent = totalReliquatsRecus.toLocaleString() + " FCFA";
+                const avEl = document.getElementById('formaliste-total-avances');
+                const relEl = document.getElementById('formaliste-total-reliquats');
+                if (avEl) avEl.textContent = totalAvancesRecues.toLocaleString() + " FCFA";
+                if (relEl) relEl.textContent = totalReliquatsRecus.toLocaleString() + " FCFA";
 
                 let html = '<div class="space-y-4">';
                 dossiers.forEach(d => {
@@ -982,6 +1012,7 @@
         }
 
         async function mettreAJourDossierFormaliste(id) {
+            if (!kamaClient) return;
             const selectEl = document.getElementById(`select-statut-${id}`);
             const nouveauStatut = selectEl ? (selectEl.value || '') : '';
             const diffInput = document.getElementById(`input-diff-${id}`);
@@ -1004,6 +1035,7 @@
         }
 
         async function exporterExcelPilote() {
+            if (!kamaClient) return;
             try {
                 const { data: dossiers, error } = await kamaClient.from('dossiers').select('*');
                 if (error) throw error;
