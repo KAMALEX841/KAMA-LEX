@@ -466,7 +466,12 @@
             currentRole = r;
             const safeNom = (nom || '');
 
+            // CORRECTION : Masquer explicitement TOUTES les vues avant d'afficher la bonne
             document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-pilote').classList.add('hidden');
+            document.getElementById('view-closer').classList.add('hidden');
+            document.getElementById('view-formaliste').classList.add('hidden');
+
             document.getElementById('user-badge').classList.remove('hidden');
             document.getElementById('badge-nom').textContent = safeNom + ' (' + currentRole.toUpperCase() + ')';
 
