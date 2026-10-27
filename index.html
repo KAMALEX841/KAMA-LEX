@@ -125,7 +125,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
             </div>
 
-            <!-- KPIs Financiers (CA, Marge Brute, Marge Nette) & Objectifs 2027 -->
+            <!-- KPIs Financiers (CA, Marge Brute, Marge Nette) -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden space-y-2">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
@@ -283,7 +283,7 @@
             </div>
         </div>
 
-        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) - Sans Export -->
+        <!-- VUE 4 : ESPACE FORMALISTE (OUEDRAOGO Adama) -->
         <div id="view-formaliste" class="space-y-8 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
@@ -373,10 +373,9 @@
         let pendingRole = null;
         let pendingNom = null;
 
-        // Mots de passe sécurisés configurés par profil
         const PINS_CONFIG = {
             'pilote': '05111995',  // Code Pilote
-            'closer': '639204',    // Nouveau code distinct pour le Closer
+            'closer': '639204',    // Code Closer distinct
             'formaliste': '492817' // Code Formaliste
         };
 
@@ -389,7 +388,7 @@
 
         async function chargerBandeauAnnonce() {
             try {
-                const { data } = await kamaClient.from('parametres').select('annonce').limit(1).single();
+                const { data } = await kamaClient.from('parametres').select('annonce').limit(1).maybeSingle();
                 if (data && data.annonce) {
                     document.getElementById('texte-annonce').textContent = data.annonce;
                 } else {
@@ -403,15 +402,19 @@
         async function sauvegarderAnnonce() {
             const texte = document.getElementById('input-annonce').value;
             if (!texte) return alert('Veuillez entrer un message.');
-            const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
-            if (existing && existing.length > 0) {
-                await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing[0].id);
-            } else {
-                await kamaClient.from('parametres').insert([{ annonce: texte }]);
+            try {
+                const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
+                if (existing && existing.length > 0) {
+                    await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing[0].id);
+                } else {
+                    await kamaClient.from('parametres').insert([{ annonce: texte }]);
+                }
+                alert('Bande d\'annonce mise à jour !');
+                document.getElementById('input-annonce').value = '';
+                chargerBandeauAnnonce();
+            } catch (err) {
+                alert('Erreur lors de la mise à jour : ' + err.message);
             }
-            alert('Bande d\'annonce mise à jour !');
-            document.getElementById('input-annonce').value = '';
-            chargerBandeauAnnonce();
         }
 
         function changerTarifOffre() {
@@ -484,7 +487,7 @@
         // --- PLAFONDS & OBJECTIFS ---
         async function recupererPlafonds() {
             try {
-                const { data } = await kamaClient.from('plafonds').select('*').limit(1).single();
+                const { data } = await kamaClient.from('plafonds').select('*').limit(1).maybeSingle();
                 if (data) return data;
             } catch (e) {}
             return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
@@ -512,29 +515,33 @@
             const cac = parseFloat(document.getElementById('cfg-cac').value) || 8000;
             const objAnnuel = parseFloat(document.getElementById('cfg-obj-annuel').value) || 67320000;
 
-            const { data: existing } = await kamaClient.from('plafonds').select('id').limit(1);
-            if (existing && existing.length > 0) {
-                await kamaClient.from('plafonds').update({
-                    plafond_cpl: cpl,
-                    objectif_conversations_jour: objConv,
-                    objectif_clients_jour: objClients,
-                    plafond_cac: cac,
-                    objectif_annuel_ca: objAnnuel,
-                    updated_at: new Date()
-                }).eq('id', existing[0].id);
-            } else {
-                await kamaClient.from('plafonds').insert([{
-                    plafond_cpl: cpl,
-                    objectif_conversations_jour: objConv,
-                    objectif_clients_jour: objClients,
-                    plafond_cac: cac,
-                    objectif_annuel_ca: objAnnuel
-                }]);
-            }
+            try {
+                const { data: existing } = await kamaClient.from('plafonds').select('id').limit(1);
+                if (existing && existing.length > 0) {
+                    await kamaClient.from('plafonds').update({
+                        plafond_cpl: cpl,
+                        objectif_conversations_jour: objConv,
+                        objectif_clients_jour: objClients,
+                        plafond_cac: cac,
+                        objectif_annuel_ca: objAnnuel,
+                        updated_at: new Date()
+                    }).eq('id', existing[0].id);
+                } else {
+                    await kamaClient.from('plafonds').insert([{
+                        plafond_cpl: cpl,
+                        objectif_conversations_jour: objConv,
+                        objectif_clients_jour: objClients,
+                        plafond_cac: cac,
+                        objectif_annuel_ca: objAnnuel
+                    }]);
+                }
 
-            alert("Plafonds et objectifs mis à jour avec succès !");
-            fermerModalPlafonds();
-            chargerDonneesPilote();
+                alert("Plafonds et objectifs mis à jour avec succès !");
+                fermerModalPlafonds();
+                chargerDonneesPilote();
+            } catch (err) {
+                alert("Erreur lors de l'enregistrement : " + err.message);
+            }
         }
 
         // --- CLOSER STATS ---
@@ -558,17 +565,16 @@
         async function chargerStatsCloser() {
             try {
                 const { data } = await kamaClient.from('closer_stats').select('*');
+                const stats = data || [];
                 let aujourdhui = new Date().toISOString().split('T')[0];
                 let convJour = 0, acquisJour = 0;
 
-                if (data) {
-                    data.forEach(s => {
-                        if (s.date_point === aujourdhui) {
-                            convJour += Number(s.conversations || 0);
-                            acquisJour += Number(s.clients_acquis || 0);
-                        }
-                    });
-                }
+                stats.forEach(s => {
+                    if (s.date_point === aujourdhui) {
+                        convJour += Number(s.conversations || 0);
+                        acquisJour += Number(s.clients_acquis || 0);
+                    }
+                });
 
                 const plafonds = await recupererPlafonds();
                 let objConv = plafonds.objectif_conversations_jour || 34;
@@ -635,12 +641,13 @@
             const listDiv = document.getElementById('closer-dossiers-list');
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
-                if (!data || data.length === 0) {
+                const dossiers = data || [];
+                if (dossiers.length === 0) {
                     listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
                     return;
                 }
                 let html = '';
-                data.forEach(d => {
+                dossiers.forEach(d => {
                     let total = Number(d.montant_total || 0);
                     let encaisse = Number(d.montant_encaisse || 0);
                     let reliquatClient = total - encaisse;
@@ -654,7 +661,7 @@
                 });
                 listDiv.innerHTML = html;
             } catch (e) {
-                listDiv.innerHTML = "<p class='text-slate-400'>Erreur de chargement.</p>";
+                listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
             }
         }
 
@@ -662,9 +669,14 @@
         async function chargerDonneesPilote() {
             const plafonds = await recupererPlafonds();
             try {
-                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
-                const { data: pubs } = await kamaClient.from('pubs').select('*');
-                const { data: stats } = await kamaClient.from('closer_stats').select('*');
+                const resDossiers = await kamaClient.from('dossiers').select('*');
+                const dossiers = resDossiers.data || [];
+
+                const resPubs = await kamaClient.from('pubs').select('*');
+                const pubs = resPubs.data || [];
+
+                const resStats = await kamaClient.from('closer_stats').select('*');
+                const stats = resStats.data || [];
 
                 let aujourdhui = new Date().toISOString().split('T')[0];
                 let totalConvJour = 0, totalClientsJour = 0;
@@ -676,27 +688,25 @@
                 debutSemaine.setDate(maintenant.getDate() - 7);
                 let moisEnCours = maintenant.toISOString().slice(0, 7);
 
-                if (stats) {
-                    stats.forEach(s => {
-                        let c = Number(s.conversations || 0);
-                        let a = Number(s.clients_acquis || 0);
-                        if (s.date_point === aujourdhui) {
-                            totalConvJour += c;
-                            totalClientsJour += a;
-                        }
-                        if (new Date(s.date_point) >= debutSemaine) {
-                            totalConvSemaine += c;
-                            totalClientsSemaine += a;
-                        }
-                        if (s.date_point && s.date_point.startsWith(moisEnCours)) {
-                            totalConvMois += c;
-                            totalClientsMois += a;
-                        }
-                    });
-                }
+                stats.forEach(s => {
+                    let c = Number(s.conversations || 0);
+                    let a = Number(s.clients_acquis || 0);
+                    if (s.date_point === aujourdhui) {
+                        totalConvJour += c;
+                        totalClientsJour += a;
+                    }
+                    if (new Date(s.date_point) >= debutSemaine) {
+                        totalConvSemaine += c;
+                        totalClientsSemaine += a;
+                    }
+                    if (s.date_point && s.date_point.startsWith(moisEnCours)) {
+                        totalConvMois += c;
+                        totalClientsMois += a;
+                    }
+                });
 
                 let totalPub = 0;
-                if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
+                pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
 
                 let coutConv = totalConvJour > 0 ? (totalPub / totalConvJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
                 let coutCac = totalClientsJour > 0 ? (totalPub / totalClientsJour).toFixed(1) : (totalPub > 0 ? totalPub : 0);
@@ -731,15 +741,13 @@
                 `;
 
                 let caGlobal = 0, sommeFormalisteVersee = 0;
-                if (dossiers) {
-                    dossiers.forEach(d => {
-                        let encaisse = Number(d.montant_encaisse || 0);
-                        let avForm = Number(d.formaliste_avance || 0);
-                        let relFormRecu = Number(d.formaliste_reliquat_recu || 0);
-                        caGlobal += encaisse;
-                        sommeFormalisteVersee += (avForm + relFormRecu);
-                    });
-                }
+                dossiers.forEach(d => {
+                    let encaisse = Number(d.montant_encaisse || 0);
+                    let avForm = Number(d.formaliste_avance || 0);
+                    let relFormRecu = Number(d.formaliste_reliquat_recu || 0);
+                    caGlobal += encaisse;
+                    sommeFormalisteVersee += (avForm + relFormRecu);
+                });
 
                 let margeBrute = caGlobal - sommeFormalisteVersee;
                 let margeNette = margeBrute - totalPub;
@@ -755,7 +763,7 @@
                 document.getElementById('barre-progression-ca').style.width = tauxCA + '%';
 
                 const container = document.getElementById('pilote-formaliste-paiements');
-                if (!dossiers || dossiers.length === 0) {
+                if (dossiers.length === 0) {
                     container.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>";
                     return;
                 }
@@ -793,7 +801,9 @@
                 });
                 html += '</div>';
                 container.innerHTML = html;
-            } catch (e) {}
+            } catch (e) {
+                console.error("Erreur pilote :", e);
+            }
         }
 
         async function payerAvanceForm(id) {
@@ -824,32 +834,37 @@
 
         async function sauvegarderSoldeReel() {
             const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
-            const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
-            let systemeMontant = 0;
-            if (dossiers) dossiers.forEach(d => systemeMontant += Number(d.montant_encaisse || 0));
+            try {
+                const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
+                let systemeMontant = 0;
+                if (dossiers) dossiers.forEach(d => systemeMontant += Number(d.montant_encaisse || 0));
 
-            const ecart = soldeReel - systemeMontant;
-            const ecartDiv = document.getElementById('rapprochement-ecart');
+                const ecart = soldeReel - systemeMontant;
+                const ecartDiv = document.getElementById('rapprochement-ecart');
 
-            if (ecart === 0) {
-                ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">✔ Rapprochement parfait : Trésorerie exacte.</span>`;
-            } else {
-                ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
-            }
+                if (ecart === 0) {
+                    ecartDiv.innerHTML = `<span class="text-emerald-400 font-bold">✔ Rapprochement parfait : Trésorerie exacte.</span>`;
+                } else {
+                    ecartDiv.innerHTML = `<span class="text-amber-400 font-bold">⚠ Écart constaté : ${ecart.toLocaleString()} FCFA</span>`;
+                }
+            } catch(e) {}
         }
 
-        // --- FORMALISTE (Épuré & Sans Export) ---
+        // --- FORMALISTE ---
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
-                if (!data || data.length === 0) {
+                const dossiers = data || [];
+                if (dossiers.length === 0) {
                     container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribué.</p>";
+                    document.getElementById('formaliste-total-avances').textContent = "0 FCFA";
+                    document.getElementById('formaliste-total-reliquats').textContent = "0 FCFA";
                     return;
                 }
 
                 let totalAvancesRecues = 0, totalReliquatsRecus = 0;
-                data.forEach(d => {
+                dossiers.forEach(d => {
                     totalAvancesRecues += Number(d.formaliste_avance || 0);
                     totalReliquatsRecus += Number(d.formaliste_reliquat_recu || 0);
                 });
@@ -858,7 +873,7 @@
                 document.getElementById('formaliste-total-reliquats').textContent = totalReliquatsRecus.toLocaleString() + " FCFA";
 
                 let html = '<div class="space-y-4">';
-                data.forEach(d => {
+                dossiers.forEach(d => {
                     let avanceForm = Number(d.formaliste_avance || 0);
                     let reliquatFormRecu = Number(d.formaliste_reliquat_recu || 0);
                     let statutActuel = d.statut || '1. Réception du dossier';
@@ -886,7 +901,6 @@
                             </div>
                         </div>
 
-                        <!-- Difficultés et RCCM / IFU si formalisé -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">Difficultés éventuelles</label>
@@ -911,7 +925,9 @@
                 });
                 html += '</div>';
                 container.innerHTML = html;
-            } catch (e) {}
+            } catch (e) {
+                container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribué.</p>";
+            }
         }
 
         async function mettreAJourDossierFormaliste(id) {
