@@ -457,19 +457,8 @@
         }
 
         function connecterValide(role, nom) {
-            let r = (role || '').toLowerCase().trim();
-            if (r.includes('pilot')) r = 'pilote';
-            if (r.includes('clos')) r = 'closer';
-            if (r.includes('form')) r = 'formaliste';
-
-            currentRole = r;
+            currentRole = (role || '').toLowerCase().trim();
             const safeNom = (nom || '');
-
-            if (!['pilote', 'closer', 'formaliste'].includes(currentRole)) {
-                alert("Profil non reconnu : contactez le pilote");
-                deconnexion();
-                return;
-            }
 
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('user-badge').classList.remove('hidden');
