@@ -111,11 +111,6 @@
                     </div>
                 </div>
 
-                <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Activité du Closer vs Plafonds & Objectifs</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs" id="pilote-activite-closer-grid"></div>
-                </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
@@ -183,7 +178,6 @@
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl overflow-x-auto">
                     <div class="flex justify-between items-center">
                         <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Tableau de Bord Budgétaire des 12 Mois</h3>
-                        <button onclick="basculerModeEditionObjectifs()" id="btn-edit-obj" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl transition shadow">Modifier les Objectifs</button>
                     </div>
                     <div id="obj-tableau-12mois"></div>
                 </div>
@@ -302,7 +296,6 @@
         let currentRole = null;
         let pendingRole = null;
         let pendingNom = null;
-        let editionObjActive = false;
 
         const CODES_ACCES = {
             'pilote': '051195',
@@ -334,7 +327,6 @@
             const texte = document.getElementById('input-annonce').value;
             if (!texte) return alert('Veuillez entrer un message.');
 
-            // Nettoyage et insertion de la nouvelle annonce en base
             await kamaClient.from('parametres').delete().neq('id', '00000000-0000-0000-0000-000000000000');
             const { error } = await kamaClient.from('parametres').insert([{ annonce: texte }]);
 
@@ -690,10 +682,17 @@
                 let caGlobal = 0, sommeForm = 0;
                 if (dossiers) dossiers.forEach(d => { caGlobal += Number(d.montant_encaisse || 0); sommeForm += (Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0)); });
                 let margeBrute = caGlobal - sommeForm, margeNette = margeBrute - totalPub;
+                
                 document.getElementById('pilote-ca-global').textContent = formatFCFA(caGlobal);
                 document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
                 document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
                 document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
+
+                // Calcul dynamique de la barre de progression CA annuel
+                let objAnnuel = plafonds.objectif_annuel_ca || 67320000;
+                let tauxProgressionCA = objAnnuel > 0 ? Math.min(100, Math.round((caGlobal / objAnnuel) * 100)) : 0;
+                document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${formatFCFA(objAnnuel)}) : ${tauxProgressionCA}%`;
+                document.getElementById('barre-progression-ca').style.width = tauxProgressionCA + '%';
 
                 const container = document.getElementById('pilote-formaliste-paiements');
                 if (!dossiers || dossiers.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
