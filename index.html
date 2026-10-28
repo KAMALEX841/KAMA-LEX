@@ -111,7 +111,6 @@
                     </div>
                 </div>
 
-                <!-- CARTES FINANCIÈRES GLOBALES -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global</p>
@@ -122,42 +121,24 @@
                         </div>
                     </div>
                     <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (CA - Frais Formaliste)</p>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (Avant Pub)</p>
                         <p id="pilote-marge-brute" class="text-3xl font-bold text-white">0 FCFA</p>
                     </div>
                     <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Brute - Pubs - Autres)</p>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Nette (Après Pub)</p>
                         <p id="pilote-marge-nette" class="text-3xl font-bold text-emerald-400">0 FCFA</p>
                     </div>
                 </div>
 
-                <!-- SECTION SAISIE DÉPENSES (META ADS & AUTRES DÉPENSES) -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Pubs (Meta Ads)</h3>
-                        <form onsubmit="enregistrerPub(event)" class="space-y-3">
-                            <input type="number" id="pub-depense" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Montant en FCFA">
-                            <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer Pub</button>
-                        </form>
-                        <p class="text-xs font-bold text-slate-400 pt-1">Total Pub : <strong id="total-depense-pub" class="text-red-400">0 FCFA</strong></p>
-                    </div>
-
-                    <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl md:col-span-2">
-                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Autres Dépenses (Salaires, Charges...)</h3>
-                        <form onsubmit="enregistrerAutreDepense(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <input type="text" id="autre-dep-intitule" required class="bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Intitulé (ex: Salaire Closer)">
-                            <input type="number" id="autre-dep-montant" required class="bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Montant FCFA">
-                            <button type="submit" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 rounded-xl hover:bg-gold-600 shadow">Ajouter Dépense</button>
-                        </form>
-                        <div class="flex justify-between items-center text-xs font-bold text-slate-400 pt-1">
-                            <span>Total Autres Dépenses : <strong id="total-autres-depenses" class="text-red-400">0 FCFA</strong></span>
-                        </div>
-                        <div id="liste-autres-depenses" class="max-h-28 overflow-y-auto space-y-1 text-xs text-slate-300"></div>
-                    </div>
-                </div>
-
-                <!-- RAPPROCHEMENT & DOSSIERS -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Saisie Dépense Publicitaire (Meta Ads)</h3>
+                        <form onsubmit="enregistrerPub(event)" class="flex gap-3">
+                            <input type="number" id="pub-depense" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Montant en FCFA">
+                            <button type="submit" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button>
+                        </form>
+                        <p class="text-xs font-bold text-slate-400">Total Publicité Investi : <strong id="total-depense-pub" class="text-red-400">0 FCFA</strong></p>
+                    </div>
                     <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                         <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Trésorerie</h3>
                         <div class="flex gap-3">
@@ -237,7 +218,7 @@
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Offre</label><select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm"><option value="EI">EI (150k)</option><option value="SARL">SARL (175k)</option></select></div>
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Total Négocié</label><input type="number" id="closer-total" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-500 font-bold" value="150000"></div>
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Somme Versée (Avance)</label><input type="number" id="closer-avance" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Montant encaissé"></div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Somme Versée</label><input type="number" id="closer-avance" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Montant encaissé"></div>
                         <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl shadow">Enregistrer</button>
                     </form>
                 </div>
@@ -343,33 +324,21 @@
         }
 
         async function sauvegarderAnnonce() {
-    const texte = document.getElementById('input-annonce').value;
-    if (!texte) return alert('Veuillez entrer un message.');
+            const texte = document.getElementById('input-annonce').value;
+            if (!texte) return alert('Veuillez entrer un message.');
 
-    try {
-        // 1. On cherche s'il existe déjà une ligne de paramètre
-        const { data: existing } = await kamaClient.from('parametres').select('id').limit(1).maybeSingle();
+            await kamaClient.from('parametres').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+            const { error } = await kamaClient.from('parametres').insert([{ annonce: texte }]);
 
-        let error;
-        if (existing && existing.id) {
-            // Si elle existe, on la met à jour proprement
-            const res = await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing.id);
-            error = res.error;
-        } else {
-            // Sinon, on l'insère
-            const res = await kamaClient.from('parametres').insert([{ annonce: texte }]);
-            error = res.error;
+            if (error) {
+                return alert("Erreur lors de la mise à jour : " + error.message);
+            }
+
+            alert('Bande d\'annonce mise à jour avec succès !');
+            document.getElementById('input-annonce').value = '';
+            chargerBandeauAnnonce();
         }
 
-        if (error) throw error;
-
-        alert('Bande d\'annonce mise à jour avec succès !');
-        document.getElementById('input-annonce').value = '';
-        chargerBandeauAnnonce();
-    } catch (err) {
-        alert("Erreur lors de la mise à jour : " + err.message);
-    }
-}
         function changerTarifOffre() {
             const selectType = document.getElementById('closer-type').value;
             const inputTotal = document.getElementById('closer-total');
@@ -465,7 +434,6 @@
                 const { data: objectifs } = await kamaClient.from('objectifs').select('*').order('mois_num', { ascending: true });
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
-                const { data: autresDep } = await kamaClient.from('autres_depenses').select('*');
 
                 let realDossiers = 0, realCA = 0, realMargeBrute = 0, realMargeNette = 0;
                 let objDossiers = 0, objCA = 0, objMargeBrute = 0, objMargeNette = 0;
@@ -489,10 +457,9 @@
 
                         if (anneeDossier === 2027 && (periode === 'annee' || String(moisDossier) === periode)) {
                             realDossiers += 1;
-                            let caDossier = Number(d.montant_encaisse || 0);
+                            realCA += Number(d.montant_encaisse || 0);
                             let formVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
-                            realCA += caDossier;
-                            realMargeBrute += (caDossier - formVersee);
+                            realMargeBrute += (Number(d.montant_encaisse || 0) - formVersee);
                         }
                     });
                 }
@@ -501,27 +468,18 @@
                 if (pubs) {
                     pubs.forEach(p => {
                         let datePub = p.created_at ? new Date(p.created_at) : new Date();
-                        if (datePub.getFullYear() === 2027 && (periode === 'annee' || String(datePub.getMonth() + 1) === periode)) {
+                        let moisPub = datePub.getMonth() + 1;
+                        let anneePub = datePub.getFullYear();
+                        if (anneePub === 2027 && (periode === 'annee' || String(moisPub) === periode)) {
                             totalPubPeriode += Number(p.depense_reelle || 0);
                         }
                     });
                 }
-
-                let totalAutresPeriode = 0;
-                if (autresDep) {
-                    autresDep.forEach(ad => {
-                        let dateAd = ad.created_at ? new Date(ad.created_at) : new Date();
-                        if (dateAd.getFullYear() === 2027 && (periode === 'annee' || String(dateAd.getMonth() + 1) === periode)) {
-                            totalAutresPeriode += Number(ad.montant || 0);
-                        }
-                    });
-                }
-
-                realMargeNette = realMargeBrute - totalPubPeriode - totalAutresPeriode;
+                realMargeNette = realMargeBrute - totalPubPeriode;
 
                 afficherCartesIndicateurs(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
                 afficherGraphiqueObjectifs(objectifs, dossiers);
-                afficherTableau12Mois(objectifs, dossiers, pubs, autresDep);
+                afficherTableau12Mois(objectifs, dossiers, pubs);
             } catch (e) {
                 console.error("Erreur module objectifs 2027:", e);
             }
@@ -596,7 +554,7 @@
             container.innerHTML = html + '</div>';
         }
 
-        function afficherTableau12Mois(objectifs, dossiers, pubs, autresDep) {
+        function afficherTableau12Mois(objectifs, dossiers, pubs) {
             const container = document.getElementById('obj-tableau-12mois');
             if (!objectifs) return;
             let html = `<table class="w-full text-left text-xs border-collapse"><thead><tr class="border-b border-gold-500/30 text-gold-400 uppercase"><th class="py-3 px-3">Mois</th><th class="py-3 px-3">Dossiers</th><th class="py-3 px-3">CA</th><th class="py-3 px-3">Marge Brute</th><th class="py-3 px-3">Marge Nette</th></tr></thead><tbody class="divide-y divide-slate-800 text-slate-300">`;
@@ -606,11 +564,8 @@
                     dossiers.forEach(d => {
                         let dt = d.created_at ? new Date(d.created_at) : new Date();
                         if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) {
-                            realD++;
-                            let caD = Number(d.montant_encaisse || 0);
-                            let fVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
-                            realCA += caD;
-                            realMB += (caD - fVersee);
+                            realD++; realCA += Number(d.montant_encaisse || 0);
+                            realMB += (Number(d.montant_encaisse || 0) - (Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0)));
                         }
                     });
                 }
@@ -619,12 +574,6 @@
                     pubs.forEach(p => {
                         let dt = p.created_at ? new Date(p.created_at) : new Date();
                         if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) realMN -= Number(p.depense_reelle || 0);
-                    });
-                }
-                if (autresDep) {
-                    autresDep.forEach(ad => {
-                        let dt = ad.created_at ? new Date(ad.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) realMN -= Number(ad.montant || 0);
                     });
                 }
                 html += `<tr class="hover:bg-navy-950/50"><td class="py-3 px-3 font-bold text-gold-500">${o.mois_nom}</td><td class="py-3 px-3">${o.objectif_dossiers} / <strong>${realD}</strong></td><td class="py-3 px-3">${formatFCFA(o.objectif_ca)} / <strong class="text-gold-400">${formatFCFA(realCA)}</strong></td><td class="py-3 px-3">${formatFCFA(o.objectif_marge_brute)} / <strong>${formatFCFA(realMB)}</strong></td><td class="py-3 px-3">${formatFCFA(o.objectif_marge_nette)} / <strong class="text-emerald-400">${formatFCFA(realMN)}</strong></td></tr>`;
@@ -729,53 +678,22 @@
             try {
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
-                const { data: autresDep } = await kamaClient.from('autres_depenses').select('*');
-
-                // 1. Calcul Total Pubs
-                let totalPub = 0;
-                if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
-                document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
-
-                // 2. Calcul Total Autres Dépenses & Affichage de la liste
-                let totalAutres = 0;
-                const listeAutresDiv = document.getElementById('liste-autres-depenses');
-                if (autresDep && autresDep.length > 0) {
-                    let htmlAutres = '';
-                    autresDep.forEach(ad => {
-                        totalAutres += Number(ad.montant || 0);
-                        htmlAutres += `<div class="flex justify-between bg-navy-950 px-3 py-1 rounded border border-slate-800"><span>${ad.intitule}</span><strong class="text-red-400">${formatFCFA(ad.montant)}</strong></div>`;
-                    });
-                    listeAutresDiv.innerHTML = htmlAutres;
-                } else {
-                    listeAutresDiv.innerHTML = "<span class='text-slate-500 italic'>Aucune autre dépense enregistrée.</span>";
-                }
-                document.getElementById('total-autres-depenses').textContent = formatFCFA(totalAutres);
-
-                // 3. Calcul CA, Marge Brute et Marge Nette selon tes règles exactes
-                let caGlobal = 0, sommeFormVersee = 0;
-                if (dossiers) {
-                    dossiers.forEach(d => {
-                        let caDossier = Number(d.montant_encaisse || 0);
-                        let formDossier = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
-                        caGlobal += caDossier;
-                        sommeFormVersee += formDossier;
-                    });
-                }
-
-                let margeBrute = caGlobal - sommeFormVersee;
-                let margeNette = margeBrute - totalPub - totalAutres;
-
+                let totalPub = 0; if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
+                let caGlobal = 0, sommeForm = 0;
+                if (dossiers) dossiers.forEach(d => { caGlobal += Number(d.montant_encaisse || 0); sommeForm += (Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0)); });
+                let margeBrute = caGlobal - sommeForm, margeNette = margeBrute - totalPub;
+                
                 document.getElementById('pilote-ca-global').textContent = formatFCFA(caGlobal);
                 document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
                 document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
+                document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
 
-                // Barre de progression CA Annuel
+                // Calcul dynamique de la barre de progression CA annuel
                 let objAnnuel = plafonds.objectif_annuel_ca || 67320000;
                 let tauxProgressionCA = objAnnuel > 0 ? Math.min(100, Math.round((caGlobal / objAnnuel) * 100)) : 0;
                 document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${formatFCFA(objAnnuel)}) : ${tauxProgressionCA}%`;
                 document.getElementById('barre-progression-ca').style.width = tauxProgressionCA + '%';
 
-                // Rendu des dossiers pour le suivi formaliste du pilote
                 const container = document.getElementById('pilote-formaliste-paiements');
                 if (!dossiers || dossiers.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
                 let html = '<div class="space-y-3">';
@@ -783,9 +701,7 @@
                     html += `<div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2"><div class="flex justify-between"><div><span class="font-bold text-gold-500">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} (${d.type_entreprise})</div></div><div class="flex gap-2 items-center text-xs"><input type="number" id="input-av-${d.id}" value="${d.formaliste_avance || 0}" class="bg-navy-900 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"><button onclick="payerAvanceForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded">Avance</button><input type="number" id="input-rel-${d.id}" value="${d.formaliste_reliquat_recu || 0}" class="bg-navy-900 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100"><button onclick="payerReliquatForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded">Reliquat</button></div></div>`;
                 });
                 container.innerHTML = html + '</div>';
-            } catch (e) {
-                console.error("Erreur chargement données pilote:", e);
-            }
+            } catch (e) {}
         }
 
         async function payerAvanceForm(id) {
@@ -803,17 +719,6 @@
             const dep = parseFloat(document.getElementById('pub-depense').value) || 0;
             await kamaClient.from('pubs').insert([{ depense_reelle: dep }]);
             alert("Dépense pub enregistrée !"); document.getElementById('pub-depense').value = ''; chargerDonneesPilote();
-        }
-        async function enregistrerAutreDepense(event) {
-            event.preventDefault();
-            const intitule = document.getElementById('autre-dep-intitule').value;
-            const montant = parseFloat(document.getElementById('autre-dep-montant').value) || 0;
-            const { error } = await kamaClient.from('autres_depenses').insert([{ intitule, montant }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Autre dépense enregistrée !");
-            document.getElementById('autre-dep-intitule').value = '';
-            document.getElementById('autre-dep-montant').value = '';
-            chargerDonneesPilote();
         }
         async function sauvegarderSoldeReel() {
             const solde = parseFloat(document.getElementById('solde-reel-input').value) || 0;
