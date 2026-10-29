@@ -101,7 +101,7 @@
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Modifier la Bande d'Annonce</h3>
                     <div class="flex gap-3">
-                        <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100" placeholder="Message diffusé à l'équipe...">
+                        <input type="text" id="input-annonce" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100" placeholder="Message diffusé...">
                         <button onclick="sauvegarderAnnonce()" class="bg-gold-500 text-navy-950 font-bold text-xs py-2 px-5 rounded-xl hover:bg-gold-600 transition shadow whitespace-nowrap">Mettre à jour</button>
                     </div>
                 </div>
@@ -152,9 +152,9 @@
                     </div>
                 </div>
 
-                <!-- Vue globale de TOUS les dossiers pour le Pilote -->
+                <!-- Vue globale de TOUS les dossiers avec Saisie des Paiements Formaliste -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global de Tous les Dossiers & Versements Formaliste</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global de Tous les Dossiers & Saisie des Versements Formaliste</h3>
                     <div id="pilote-tous-dossiers" class="space-y-3 text-xs text-slate-300">Chargement...</div>
                 </div>
             </div>
@@ -229,7 +229,7 @@
                         <div><label class="block text-xs font-bold text-slate-300 mb-1">Client / Entreprise</label><input type="text" id="fin-nom" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Nom"></div>
                         <div><label class="block text-xs font-bold text-slate-300 mb-1">Téléphone</label><input type="text" id="fin-tel" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Tél"></div>
                         <div><label class="block text-xs font-bold text-slate-300 mb-1">Montant Recherché (FCFA)</label><input type="number" id="fin-montant" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-400 font-bold" placeholder="Montant"></div>
-                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Objet du Financement</label><textarea id="fin-objet" rows="2" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Détails du projet..."></textarea></div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Objet du Financement</label><textarea id="fin-objet" rows="2" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Détails..."></textarea></div>
                         <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-3 rounded-xl shadow">Enregistrer le Prospect Financement</button>
                     </form>
                 </div>
@@ -451,7 +451,8 @@
                         let moisDossier = dateRef.getMonth() + 1;
                         let anneeDossier = dateRef.getFullYear();
 
-                        if (anneeDossier === 2027 && (periode === 'annee' || String(moisDossier) === periode)) {
+                        // Correction : on prend en compte les dossiers créés (si 2026/2027 pour les tests ou si année correspondante)
+                        if (periode === 'annee' || (anneeDossier === 2027 && String(moisDossier) === periode)) {
                             realDossiers += 1;
                             let caDossier = Number(d.montant_encaisse || 0);
                             let formVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
@@ -465,7 +466,7 @@
                 if (pubs) {
                     pubs.forEach(p => {
                         let datePub = p.created_at ? new Date(p.created_at) : new Date();
-                        if (datePub.getFullYear() === 2027 && (periode === 'annee' || String(datePub.getMonth() + 1) === periode)) {
+                        if (periode === 'annee' || (datePub.getFullYear() === 2027 && String(datePub.getMonth() + 1) === periode)) {
                             totalPubPeriode += Number(p.depense_reelle || 0);
                         }
                     });
@@ -475,7 +476,7 @@
                 if (autresDep) {
                     autresDep.forEach(ad => {
                         let dateAd = ad.created_at ? new Date(ad.created_at) : new Date();
-                        if (dateAd.getFullYear() === 2027 && (periode === 'annee' || String(dateAd.getMonth() + 1) === periode)) {
+                        if (periode === 'annee' || (dateAd.getFullYear() === 2027 && String(dateAd.getMonth() + 1) === periode)) {
                             totalAutresPeriode += Number(ad.montant || 0);
                         }
                     });
@@ -543,7 +544,7 @@
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let dt = d.created_at ? new Date(d.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) {
+                        if ((dt.getMonth() + 1) === o.mois_num) {
                             realD++;
                             let caD = Number(d.montant_encaisse || 0);
                             let fVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
@@ -556,13 +557,13 @@
                 if (pubs) {
                     pubs.forEach(p => {
                         let dt = p.created_at ? new Date(p.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) realMN -= Number(p.depense_reelle || 0);
+                        if ((dt.getMonth() + 1) === o.mois_num) realMN -= Number(p.depense_reelle || 0);
                     });
                 }
                 if (autresDep) {
                     autresDep.forEach(ad => {
                         let dt = ad.created_at ? new Date(ad.created_at) : new Date();
-                        if (dt.getFullYear() === 2027 && (dt.getMonth() + 1) === o.mois_num) realMN -= Number(ad.montant || 0);
+                        if ((dt.getMonth() + 1) === o.mois_num) realMN -= Number(ad.montant || 0);
                     });
                 }
                 let troD = o.objectif_dossiers > 0 ? Math.round((realD / o.objectif_dossiers) * 100) : 0;
@@ -705,7 +706,6 @@
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let caDossier = Number(d.montant_encaisse || 0);
-                        // On comptabilise les versements formaliste validés ou saisis
                         let formDossier = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
                         caGlobal += caDossier;
                         sommeFormVersee += formDossier;
@@ -719,7 +719,7 @@
                 document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
                 document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
 
-                // Affichage global de TOUS les dossiers pour le Pilote (Exigence 2 & 3)
+                // Affichage global de TOUS les dossiers avec Saisie des versements formaliste par le Pilote
                 const containerDossiers = document.getElementById('pilote-tous-dossiers');
                 if (!dossiers || dossiers.length === 0) { containerDossiers.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>"; }
                 else {
@@ -727,23 +727,52 @@
                     dossiers.forEach(d => {
                         let reliquatClient = Number(d.montant_total || 0) - Number(d.montant_encaisse || 0);
                         htmlD += `
-                            <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                            <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-3">
                                 <div class="flex justify-between items-center flex-wrap gap-2">
                                     <div>
                                         <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> — <strong class="text-slate-200">${d.prenom} ${d.nom}</strong> (${d.type_entreprise})
                                     </div>
                                     <span class="bg-navy-900 border border-gold-500/30 px-3 py-1 rounded text-gold-400 font-bold">${d.statut}</span>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs pt-1 text-slate-300">
-                                    <div>Encaissement Client : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> / Reliquat : <strong class="text-red-400">${formatFCFA(reliquatClient)}</strong></div>
-                                    <div>Avance Formaliste : <strong class="text-slate-200">${formatFCFA(d.formaliste_avance)}</strong> ${d.formaliste_avance_valide ? '✅ (Validé)' : '⏳ (Attente)'}</div>
-                                    <div>Reliquat Formaliste : <strong class="text-slate-200">${formatFCFA(d.formaliste_reliquat_recu)}</strong> ${d.formaliste_reliquat_valide ? '✅ (Validé)' : '⏳ (Attente)'}</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
+                                    <div>Encaissement Client : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat : <strong class="text-red-400">${formatFCFA(reliquatClient)}</strong></div>
+                                    <div>RCCM : <span class="text-slate-200 font-bold">${d.rccm || 'En attente'}</span> | IFU : <span class="text-slate-200 font-bold">${d.ifu || 'En attente'}</span></div>
+                                </div>
+                                <div class="bg-navy-900 p-3 rounded-xl border border-slate-800 flex flex-wrap gap-3 items-center justify-between text-xs pt-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-slate-400">Avance Formaliste :</span>
+                                        <input type="number" id="pilote-av-${d.id}" value="${d.formaliste_avance || 0}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100 font-bold">
+                                        <button onclick="piloteSauverAvance('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Sauver Avance</button>
+                                        <span>${d.formaliste_avance_valide ? '✅ Validé Adama' : '⏳ Attente validation'}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-slate-400">Reliquat Formaliste :</span>
+                                        <input type="number" id="pilote-rel-${d.id}" value="${d.formaliste_reliquat_recu || 0}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100 font-bold">
+                                        <button onclick="piloteSauverReliquat('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Sauver Reliquat</button>
+                                        <span>${d.formaliste_reliquat_valide ? '✅ Validé Adama' : '⏳ Attente validation'}</span>
+                                    </div>
                                 </div>
                             </div>`;
                     });
                     containerDossiers.innerHTML = htmlD + '</div>';
                 }
             } catch (e) { console.error(e); }
+        }
+
+        async function piloteSauverAvance(id) {
+            const montant = parseFloat(document.getElementById(`pilote-av-${id}`).value) || 0;
+            const { error } = await kamaClient.from('dossiers').update({ formaliste_avance: montant }).eq('id', id);
+            if (error) return alert("Erreur : " + error.message);
+            alert("Avance formaliste enregistrée !");
+            chargerDonneesPilote();
+        }
+
+        async function piloteSauverReliquat(id) {
+            const montant = parseFloat(document.getElementById(`pilote-rel-${id}`).value) || 0;
+            const { error } = await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: montant }).eq('id', id);
+            if (error) return alert("Erreur : " + error.message);
+            alert("Reliquat formaliste enregistré !");
+            chargerDonneesPilote();
         }
 
         async function enregistrerPub(event) {
@@ -763,7 +792,6 @@
             chargerDonneesPilote();
         }
 
-        // Rapprochement Trésorerie (Exigence 1) : Écart = Solde Réel - Marge Nette
         async function sauvegarderSoldeReel() {
             const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
             const { data: dossiers } = await kamaClient.from('dossiers').select('*');
@@ -786,7 +814,7 @@
             }
         }
 
-        // ESPACE FORMALISTE (Exigence 2 & 4)
+        // ESPACE FORMALISTE
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
@@ -869,7 +897,7 @@
             }).eq('id', id);
 
             if (error) return alert("Erreur : " + error.message);
-            alert("Mise à jour et validation enregistrées avec succès !");
+            alert("Mise à jour et validation enregistrées !");
             chargerDonneesFormaliste();
         }
 
