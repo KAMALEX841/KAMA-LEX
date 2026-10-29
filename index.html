@@ -152,10 +152,16 @@
                     </div>
                 </div>
 
-                <!-- Vue globale de TOUS les dossiers avec Saisie des Paiements Formaliste -->
+                <!-- Suivi Global de Tous les Dossiers & Saisie des Versements Formaliste -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global de Tous les Dossiers & Saisie des Versements Formaliste</h3>
                     <div id="pilote-tous-dossiers" class="space-y-3 text-xs text-slate-300">Chargement...</div>
+                </div>
+
+                <!-- Suivi des Prospects en Intermédiation Financière (NOUVEAU) -->
+                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Prospects en Intermédiation Financière (Enregistrés par le Closer)</h3>
+                    <div id="pilote-financements-list" class="space-y-3 text-xs text-slate-300">Chargement...</div>
                 </div>
             </div>
 
@@ -451,8 +457,7 @@
                         let moisDossier = dateRef.getMonth() + 1;
                         let anneeDossier = dateRef.getFullYear();
 
-                        // Correction : on prend en compte les dossiers créés (si 2026/2027 pour les tests ou si année correspondante)
-                        if (periode === 'annee' || (anneeDossier === 2027 && String(moisDossier) === periode)) {
+                        if (periode === 'annee' || (anneeDossier === 2027 && String(moisDossier) === periode) || (anneeDossier !== 2027 && periode !== 'annee' && String(moisDossier) === periode)) {
                             realDossiers += 1;
                             let caDossier = Number(d.montant_encaisse || 0);
                             let formVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
@@ -466,7 +471,7 @@
                 if (pubs) {
                     pubs.forEach(p => {
                         let datePub = p.created_at ? new Date(p.created_at) : new Date();
-                        if (periode === 'annee' || (datePub.getFullYear() === 2027 && String(datePub.getMonth() + 1) === periode)) {
+                        if (periode === 'annee' || String(datePub.getMonth() + 1) === periode) {
                             totalPubPeriode += Number(p.depense_reelle || 0);
                         }
                     });
@@ -476,7 +481,7 @@
                 if (autresDep) {
                     autresDep.forEach(ad => {
                         let dateAd = ad.created_at ? new Date(ad.created_at) : new Date();
-                        if (periode === 'annee' || (dateAd.getFullYear() === 2027 && String(dateAd.getMonth() + 1) === periode)) {
+                        if (periode === 'annee' || String(dateAd.getMonth() + 1) === periode) {
                             totalAutresPeriode += Number(ad.montant || 0);
                         }
                     });
@@ -686,6 +691,7 @@
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
                 const { data: autresDep } = await kamaClient.from('autres_depenses').select('*');
+                const { data: financements } = await kamaClient.from('financements').select('*');
 
                 let totalPub = 0; if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
                 document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
@@ -756,6 +762,27 @@
                     });
                     containerDossiers.innerHTML = htmlD + '</div>';
                 }
+
+                // Affichage des prospects en intermédiation financière pour le Pilote
+                const containerFinancements = document.getElementById('pilote-financements-list');
+                if (!financements || financements.length === 0) {
+                    containerFinancements.innerHTML = "<p class='text-slate-400'>Aucun prospect en intermédiation financière pour le moment.</p>";
+                } else {
+                    let htmlF = '<div class="space-y-3">';
+                    financements.forEach(f => {
+                        let dateF = f.created_at ? new Date(f.created_at).toLocaleDateString('fr-FR') : '';
+                        htmlF += `
+                            <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-gold-500 text-sm">${f.nom}</span> (Tél : ${f.telephone}) — <span class="text-slate-300">Montant recherché : <strong class="text-gold-400">${formatFCFA(f.montant)}</strong></span>
+                                    <div class="text-[11px] text-slate-400 mt-1">Objet : ${f.objet || 'Non spécifié'}</div>
+                                </div>
+                                <div class="text-[11px] text-slate-500">${dateF}</div>
+                            </div>`;
+                    });
+                    containerFinancements.innerHTML = htmlF + '</div>';
+                }
+
             } catch (e) { console.error(e); }
         }
 
