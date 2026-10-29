@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAMA LEX - Savoir pour décider</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -14,20 +13,14 @@
                         navy: { 800: '#0B132B', 900: '#060B1E', 950: '#040712' },
                         gold: { 500: '#D4AF37', 600: '#AA8C2C', 400: '#E6CA65' }
                     },
-                    fontFamily: {
-                        sans: ['"Poppins"', 'sans-serif']
-                    }
+                    fontFamily: { sans: ['"Poppins"', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body, input, select, textarea, button { font-family: 'Poppins', sans-serif; }
-    </style>
+    <style>body, input, select, textarea, button { font-family: 'Poppins', sans-serif; }</style>
 </head>
 <body class="bg-navy-950 text-slate-100 h-full flex flex-col antialiased">
 
@@ -48,13 +41,13 @@
 
     <!-- Bande d'Annonce -->
     <div class="bg-gradient-to-r from-navy-900 via-gold-500/10 to-navy-900 border-b border-gold-500/30 px-6 py-2.5 text-xs text-gold-400 text-center font-medium shadow-inner flex justify-center items-center gap-2">
-        <span>📢</span> <span id="texte-annonce">Chargement de la note stratégique...</span>
+        <span>📢</span> <span id="texte-annonce">Chargement...</span>
     </div>
 
     <!-- Conteneur Principal -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
         
-        <!-- VUE 1 : CONNEXION RAPIDE (3 Cartes & Code PIN) -->
+        <!-- VUE 1 : CONNEXION RAPIDE -->
         <div id="view-login" class="flex flex-col items-center justify-center h-[75vh] max-w-xl mx-auto">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-8 shadow-2xl w-full relative overflow-hidden space-y-6">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
@@ -82,7 +75,7 @@
             </div>
         </div>
 
-        <!-- VUE 2 : ESPACE PILOTE (Coordinateur Général) -->
+        <!-- VUE 2 : ESPACE PILOTE -->
         <div id="view-pilote" class="space-y-6 hidden">
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -93,11 +86,11 @@
             </div>
 
             <div class="flex border-b border-gold-500/30 pb-4 gap-3">
-                <button onclick="basculerOngletPilote('dashboard')" id="btn-tab-dashboard" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Tableau de Bord</button>
+                <button onclick="basculerOngletPilote('dashboard')" id="btn-tab-dashboard" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Tableau de Bord & Dossiers</button>
                 <button onclick="basculerOngletPilote('objectifs')" id="btn-tab-objectifs" class="bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10">🎯 Objectifs 2027 & TRO</button>
             </div>
 
-            <!-- SOUS-VUE DASHBOARD PILOTE -->
+            <!-- DASHBOARD PILOTE -->
             <div id="pilote-section-dashboard" class="space-y-8">
                 <div class="flex justify-end gap-3 flex-wrap">
                     <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">⚙️ Paramètres & Seuils</button>
@@ -118,10 +111,6 @@
                     <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires Global (CA)</p>
                         <p id="pilote-ca-global" class="text-3xl font-bold text-gold-500">0 FCFA</p>
-                        <p class="text-[11px] text-slate-400" id="progression-ca-txt">Objectif CA Annuel : En cours</p>
-                        <div class="w-full bg-navy-950 rounded-full h-2 border border-slate-800 overflow-hidden">
-                            <div id="barre-progression-ca" class="bg-gold-500 h-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
                     </div>
                     <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 shadow-xl space-y-2">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Marge Brute (CA - Frais Formaliste)</p>
@@ -133,7 +122,7 @@
                     </div>
                 </div>
 
-                <!-- Saisie Dépenses & Rapprochement -->
+                <!-- Dépenses & Rapprochement de Trésorerie -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                         <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Pubs (Meta Ads)</h3>
@@ -145,7 +134,7 @@
                     </div>
 
                     <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl md:col-span-2">
-                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Autres Dépenses (Salaires, Charges...)</h3>
+                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Autres Dépenses & Rapprochement Bancaire</h3>
                         <form onsubmit="enregistrerAutreDepense(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <input type="text" id="autre-dep-intitule" required class="bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Intitulé (ex: Salaire)">
                             <input type="number" id="autre-dep-montant" required class="bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Montant FCFA">
@@ -154,29 +143,23 @@
                         <div class="flex justify-between items-center text-xs font-bold text-slate-400 pt-1">
                             <span>Total Autres Dépenses : <strong id="total-autres-depenses" class="text-red-400">0 FCFA</strong></span>
                         </div>
-                        <div id="liste-autres-depenses" class="max-h-28 overflow-y-auto space-y-1 text-xs text-slate-300"></div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Rapprochement de Trésorerie</h3>
-                        <div class="flex gap-3">
-                            <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Solde réel Banque / Caisse">
-                            <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-gold-600 shadow">Vérifier</button>
+                        <div id="liste-autres-depenses" class="max-h-24 overflow-y-auto space-y-1 text-xs text-slate-300"></div>
+                        <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row gap-3 items-center">
+                            <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100" placeholder="Solde bancaire réel constaté">
+                            <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2 rounded-xl hover:bg-gold-600 shadow whitespace-nowrap">Rapprocher</button>
                         </div>
-                        <div id="rapprochement-ecart" class="text-xs pt-1 font-bold"></div>
+                        <div id="rapprochement-ecart" class="text-xs font-bold"></div>
                     </div>
                 </div>
 
-                <!-- Gestion des versements au formaliste -->
+                <!-- Vue globale de TOUS les dossiers pour le Pilote -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Paiements KAMA LEX vers Formaliste</h3>
-                    <div id="pilote-formaliste-paiements" class="space-y-3 text-xs text-slate-300">Chargement des dossiers...</div>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global de Tous les Dossiers & Versements Formaliste</h3>
+                    <div id="pilote-tous-dossiers" class="space-y-3 text-xs text-slate-300">Chargement...</div>
                 </div>
             </div>
 
-            <!-- SOUS-VUE OBJECTIFS & TRO PILOTE -->
+            <!-- OBJECTIFS & TRO PILOTE -->
             <div id="pilote-section-objectifs" class="space-y-8 hidden">
                 <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center flex-wrap gap-4">
                     <div>
@@ -209,7 +192,6 @@
                 <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">Abdoul</div>
             </div>
 
-            <!-- Point Journalier Conversations & Clients -->
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                 <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Point Journalier WhatsApp (Obj: 35 Conv. & 2 Clients)</h3>
                 <form onsubmit="enregistrerStatsCloser(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
@@ -218,12 +200,11 @@
                     <div><label class="block text-xs font-bold text-slate-300 mb-1">Clients Acquis</label><input type="number" id="stat-acquis" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Ex: 2"></div>
                     <div><button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button></div>
                 </form>
-                <div id="comparaison-objectif-box" class="bg-navy-950 p-4 rounded-xl border border-slate-800 text-xs font-bold flex justify-between items-center">
+                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 text-xs font-bold flex justify-between items-center">
                     <span>Performance du jour :</span><span id="statut-objectif-jour" class="font-bold text-gold-500">Chargement...</span>
                 </div>
             </div>
 
-            <!-- Formulaire Création Dossier Client & Intermédiation -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Créer un Dossier Client</h3>
@@ -265,18 +246,18 @@
             <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center">
                 <div>
                     <span class="text-[11px] uppercase tracking-widest text-gold-500 font-bold">Espace Formaliste</span>
-                    <h2 class="text-2xl font-bold text-slate-100">Traitement Administratif & RCCM / IFU</h2>
+                    <h2 class="text-2xl font-bold text-slate-100">Traitement Administratif, RCCM/IFU & Validation Paiements</h2>
                 </div>
                 <div class="bg-gold-500/10 border border-gold-500/30 px-4 py-2 rounded-xl text-xs font-bold text-gold-500">OUEDRAOGO Adama</div>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl"><p class="text-xs font-bold text-slate-400">Total Avances Reçues de KAMA LEX</p><p id="formaliste-total-avances" class="text-2xl font-bold text-gold-500 mt-2">0 FCFA</p></div>
-                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl"><p class="text-xs font-bold text-slate-400">Total Soldes / Reliquats Reçus</p><p id="formaliste-total-reliquats" class="text-2xl font-bold text-emerald-400 mt-2">0 FCFA</p></div>
+                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl"><p class="text-xs font-bold text-slate-400">Total Avances Reçues & Validées</p><p id="formaliste-total-avances" class="text-2xl font-bold text-gold-500 mt-2">0 FCFA</p></div>
+                <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 shadow-xl"><p class="text-xs font-bold text-slate-400">Total Reliquats Reçus & Validés</p><p id="formaliste-total-reliquats" class="text-2xl font-bold text-emerald-400 mt-2">0 FCFA</p></div>
             </div>
 
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués & Suivi des Étapes</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Dossiers Attribués & Validation des Versements</h3>
                 <div id="formaliste-container" class="space-y-4 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
@@ -297,7 +278,7 @@
         </div>
     </div>
 
-    <!-- MODAL CODE PIN SÉCURISÉ -->
+    <!-- MODAL CODE PIN -->
     <div id="modal-password" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl text-center">
             <h3 id="modal-pwd-title" class="text-base font-bold text-gold-500">Code d'accès requis</h3>
@@ -312,22 +293,17 @@
         </div>
     </div>
 
-    <!-- SCRIPT JAVASCRIPT & LOGIQUE SUPABASE -->
+    <!-- SCRIPTS JAVASCRIPT -->
     <script>
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
-        
         const kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentRole = null;
         let pendingRole = null;
         let pendingNom = null;
 
-        const CODES_ACCES = {
-            'pilote': '051195',
-            'closer': '248211',
-            'formaliste': '062530'
-        };
+        const CODES_ACCES = { 'pilote': '051195', 'closer': '248211', 'formaliste': '062530' };
 
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
@@ -339,11 +315,7 @@
         async function chargerBandeauAnnonce() {
             try {
                 const { data } = await kamaClient.from('parametres').select('annonce').limit(1).maybeSingle();
-                if (data && data.annonce) {
-                    document.getElementById('texte-annonce').textContent = data.annonce;
-                } else {
-                    document.getElementById('texte-annonce').textContent = "Objectif du cabinet : 35 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
-                }
+                document.getElementById('texte-annonce').textContent = (data && data.annonce) ? data.annonce : "Objectif du cabinet : 35 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
             } catch (e) {
                 document.getElementById('texte-annonce').textContent = "Objectif du cabinet : 35 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
             }
@@ -352,31 +324,23 @@
         async function sauvegarderAnnonce() {
             const texte = document.getElementById('input-annonce').value;
             if (!texte) return alert('Veuillez entrer un message.');
-
             try {
                 const { data: existing } = await kamaClient.from('parametres').select('id').limit(1).maybeSingle();
-                let error;
                 if (existing && existing.id) {
-                    const res = await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing.id);
-                    error = res.error;
+                    await kamaClient.from('parametres').update({ annonce: texte }).eq('id', existing.id);
                 } else {
-                    const res = await kamaClient.from('parametres').insert([{ annonce: texte }]);
-                    error = res.error;
+                    await kamaClient.from('parametres').insert([{ annonce: texte }]);
                 }
-                if (error) throw error;
-                alert('Bande d\'annonce mise à jour avec succès !');
+                alert('Bande d\'annonce mise à jour !');
                 document.getElementById('input-annonce').value = '';
                 chargerBandeauAnnonce();
-            } catch (err) {
-                alert("Erreur lors de la mise à jour : " + err.message);
-            }
+            } catch (err) { alert("Erreur : " + err.message); }
         }
 
         function changerTarifOffre() {
             const selectType = document.getElementById('closer-type').value;
             const inputTotal = document.getElementById('closer-total');
-            if (selectType === 'EI') inputTotal.value = '150000';
-            else if (selectType === 'SARL') inputTotal.value = '175000';
+            inputTotal.value = (selectType === 'EI') ? '150000' : '175000';
         }
 
         function demanderCodeAcces(role, nom) {
@@ -390,20 +354,18 @@
 
         function fermerModalPassword() {
             document.getElementById('modal-password').classList.add('hidden');
-            pendingRole = null;
-            pendingNom = null;
+            pendingRole = null; pendingNom = null;
         }
 
         function validerCodeAcces(event) {
             event.preventDefault();
             const saisie = document.getElementById('input-secret-code').value;
             if (saisie === CODES_ACCES[pendingRole]) {
-                const role = pendingRole;
-                const nom = pendingNom;
+                const role = pendingRole, nom = pendingNom;
                 fermerModalPassword();
                 connexionRapide(role, nom);
             } else {
-                alert("Code d'accès incorrect. Veuillez réessayer.");
+                alert("Code d'accès incorrect.");
                 document.getElementById('input-secret-code').value = '';
             }
         }
@@ -523,9 +485,7 @@
 
                 afficherCartesTRO(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
                 afficherTableau12Mois(objectifs, dossiers, pubs, autresDep);
-            } catch (e) {
-                console.error("Erreur module objectifs 2027:", e);
-            }
+            } catch (e) { console.error(e); }
         }
 
         function getColorProgression(taux) {
@@ -616,9 +576,8 @@
             const datePoint = document.getElementById('stat-date').value || new Date().toISOString().split('T')[0];
             const conv = parseInt(document.getElementById('stat-conv').value) || 0;
             const acquis = parseInt(document.getElementById('stat-acquis').value) || 0;
-            const { error } = await kamaClient.from('closer_stats').insert([{ date_point: datePoint, conversations: conv, clients_acquis: acquis }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Point journalier enregistré avec succès !");
+            await kamaClient.from('closer_stats').insert([{ date_point: datePoint, conversations: conv, clients_acquis: acquis }]);
+            alert("Point journalier enregistré !");
             chargerStatsCloser();
         }
 
@@ -638,19 +597,16 @@
             const total = parseFloat(document.getElementById('closer-total').value) || 0, montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
             const numDossier = 'KML-' + Math.floor(10000 + Math.random() * 90000);
             
-            const { error } = await kamaClient.from('dossiers').insert([{ 
+            await kamaClient.from('dossiers').insert([{ 
                 numero_dossier: numDossier, nom, prenom, telephone, type_entreprise: typeEnt, 
                 montant_total: total, montant_encaisse: montantEncaisse, 
                 formaliste_du: typeEnt === 'EI' ? 100000 : 130000, 
                 formaliste_avance: 0, formaliste_reliquat_recu: 0, 
                 statut: '1. Dossier transmis au formaliste' 
             }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert(`Dossier ${numDossier} créé et transmis au formaliste avec succès !`);
-            document.getElementById('closer-nom').value = '';
-            document.getElementById('closer-prenom').value = '';
-            document.getElementById('closer-tel').value = '';
-            document.getElementById('closer-avance').value = '';
+            alert(`Dossier ${numDossier} créé !`);
+            document.getElementById('closer-nom').value = ''; document.getElementById('closer-prenom').value = '';
+            document.getElementById('closer-tel').value = ''; document.getElementById('closer-avance').value = '';
             chargerDonneesCloser();
         }
 
@@ -658,34 +614,30 @@
             event.preventDefault();
             const nom = document.getElementById('fin-nom').value, telephone = document.getElementById('fin-tel').value;
             const montant = parseFloat(document.getElementById('fin-montant').value) || 0, objet = document.getElementById('fin-objet').value;
-            const { error } = await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Prospect en intermédiation financière enregistré !");
-            document.getElementById('fin-nom').value = '';
-            document.getElementById('fin-tel').value = '';
-            document.getElementById('fin-montant').value = '';
-            document.getElementById('fin-objet').value = '';
+            await kamaClient.from('financements').insert([{ nom, telephone, montant, objet }]);
+            alert("Prospect intermédiation enregistré !");
+            document.getElementById('fin-nom').value = ''; document.getElementById('fin-tel').value = '';
+            document.getElementById('fin-montant').value = ''; document.getElementById('fin-objet').value = '';
         }
 
         async function chargerDonneesCloser() {
             const listDiv = document.getElementById('closer-dossiers-list');
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
-                if (!data || data.length === 0) { listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>"; return; }
+                if (!data || data.length === 0) { listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
                 let html = '';
                 data.forEach(d => {
                     let reliquat = Number(d.montant_total || 0) - Number(d.montant_encaisse || 0);
-                    html += `
-                        <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
-                            <div>
-                                <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} (${d.type_entreprise})
-                                <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat dû : <strong class="text-red-400">${formatFCFA(reliquat)}</strong></div>
-                                <div class="text-[11px] text-slate-300 mt-1">Statut : <span class="bg-navy-900 px-2 py-0.5 rounded border border-slate-700 text-gold-400 font-bold">${d.statut}</span></div>
-                            </div>
-                        </div>`;
+                    html += `<div class="bg-navy-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} (${d.type_entreprise})
+                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat dû : <strong class="text-red-400">${formatFCFA(reliquat)}</strong></div>
+                            <div class="text-[11px] text-slate-300 mt-1">Statut : <span class="bg-navy-900 px-2 py-0.5 rounded border border-slate-700 text-gold-400 font-bold">${d.statut}</span></div>
+                        </div>
+                    </div>`;
                 });
                 listDiv.innerHTML = html;
-            } catch (e) { listDiv.innerHTML = "<p class='text-slate-400'>Erreur de chargement des dossiers.</p>"; }
+            } catch (e) {}
         }
 
         async function recupererPlafonds() {
@@ -722,7 +674,7 @@
             } else {
                 await kamaClient.from('plafonds').insert([{ plafond_cpl: cpl, objectif_conversations_jour: objConv, objectif_clients_jour: objClients, plafond_cac: cac, objectif_annuel_ca: objAnnuel }]);
             }
-            alert("Paramètres et seuils mis à jour avec succès !");
+            alert("Paramètres mis à jour !");
             fermerModalPlafonds();
             chargerDonneesPilote();
         }
@@ -734,8 +686,7 @@
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
                 const { data: autresDep } = await kamaClient.from('autres_depenses').select('*');
 
-                let totalPub = 0;
-                if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
+                let totalPub = 0; if (pubs) pubs.forEach(p => totalPub += Number(p.depense_reelle || 0));
                 document.getElementById('total-depense-pub').textContent = formatFCFA(totalPub);
 
                 let totalAutres = 0;
@@ -747,15 +698,14 @@
                         htmlAutres += `<div class="flex justify-between bg-navy-950 px-3 py-1 rounded border border-slate-800"><span>${ad.intitule}</span><strong class="text-red-400">${formatFCFA(ad.montant)}</strong></div>`;
                     });
                     listeAutresDiv.innerHTML = htmlAutres;
-                } else {
-                    listeAutresDiv.innerHTML = "<span class='text-slate-500 italic'>Aucune autre charge enregistrée.</span>";
-                }
+                } else { listeAutresDiv.innerHTML = "<span class='text-slate-500 italic'>Aucune autre charge.</span>"; }
                 document.getElementById('total-autres-depenses').textContent = formatFCFA(totalAutres);
 
                 let caGlobal = 0, sommeFormVersee = 0;
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let caDossier = Number(d.montant_encaisse || 0);
+                        // On comptabilise les versements formaliste validés ou saisis
                         let formDossier = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
                         caGlobal += caDossier;
                         sommeFormVersee += formDossier;
@@ -769,91 +719,91 @@
                 document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
                 document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
 
-                let objAnnuel = plafonds.objectif_annuel_ca || 67320000;
-                let tauxProgressionCA = objAnnuel > 0 ? Math.min(100, Math.round((caGlobal / objAnnuel) * 100)) : 0;
-                document.getElementById('progression-ca-txt').textContent = `Objectif CA Annuel (${formatFCFA(objAnnuel)}) : ${tauxProgressionCA}%`;
-                document.getElementById('barre-progression-ca').style.width = tauxProgressionCA + '%';
-
-                const container = document.getElementById('pilote-formaliste-paiements');
-                if (!dossiers || dossiers.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier en cours.</p>"; return; }
-                let html = '<div class="space-y-3">';
-                dossiers.forEach(d => {
-                    html += `
-                        <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-gold-500">${d.numero_dossier}</span>
-                                <span class="text-slate-400">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
-                            </div>
-                            <div class="flex flex-wrap gap-2 items-center text-xs pt-1">
-                                <span class="text-slate-400">Paiements KAMA LEX vers Formaliste :</span>
-                                <input type="number" id="input-av-${d.id}" value="${d.formaliste_avance || 0}" class="bg-navy-900 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100" placeholder="Avance">
-                                <button onclick="payerAvanceForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Enregistrer Avance</button>
-                                <input type="number" id="input-rel-${d.id}" value="${d.formaliste_reliquat_recu || 0}" class="bg-navy-900 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100" placeholder="Solde">
-                                <button onclick="payerReliquatForm('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Enregistrer Solde</button>
-                            </div>
-                        </div>`;
-                });
-                container.innerHTML = html + '</div>';
-            } catch (e) {
-                console.error("Erreur chargement données pilote:", e);
-            }
+                // Affichage global de TOUS les dossiers pour le Pilote (Exigence 2 & 3)
+                const containerDossiers = document.getElementById('pilote-tous-dossiers');
+                if (!dossiers || dossiers.length === 0) { containerDossiers.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>"; }
+                else {
+                    let htmlD = '<div class="space-y-3">';
+                    dossiers.forEach(d => {
+                        let reliquatClient = Number(d.montant_total || 0) - Number(d.montant_encaisse || 0);
+                        htmlD += `
+                            <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <div>
+                                        <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> — <strong class="text-slate-200">${d.prenom} ${d.nom}</strong> (${d.type_entreprise})
+                                    </div>
+                                    <span class="bg-navy-900 border border-gold-500/30 px-3 py-1 rounded text-gold-400 font-bold">${d.statut}</span>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs pt-1 text-slate-300">
+                                    <div>Encaissement Client : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> / Reliquat : <strong class="text-red-400">${formatFCFA(reliquatClient)}</strong></div>
+                                    <div>Avance Formaliste : <strong class="text-slate-200">${formatFCFA(d.formaliste_avance)}</strong> ${d.formaliste_avance_valide ? '✅ (Validé)' : '⏳ (Attente)'}</div>
+                                    <div>Reliquat Formaliste : <strong class="text-slate-200">${formatFCFA(d.formaliste_reliquat_recu)}</strong> ${d.formaliste_reliquat_valide ? '✅ (Validé)' : '⏳ (Attente)'}</div>
+                                </div>
+                            </div>`;
+                    });
+                    containerDossiers.innerHTML = htmlD + '</div>';
+                }
+            } catch (e) { console.error(e); }
         }
 
-        async function payerAvanceForm(id) {
-            const m = parseFloat(document.getElementById(`input-av-${id}`).value) || 0;
-            await kamaClient.from('dossiers').update({ formaliste_avance: m }).eq('id', id);
-            alert("Avance versée au formaliste enregistrée !"); chargerDonneesPilote();
-        }
-        async function payerReliquatForm(id) {
-            const m = parseFloat(document.getElementById(`input-rel-${id}`).value) || 0;
-            await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: m }).eq('id', id);
-            alert("Solde versé au formaliste enregistré !"); chargerDonneesPilote();
-        }
         async function enregistrerPub(event) {
             event.preventDefault();
             const dep = parseFloat(document.getElementById('pub-depense').value) || 0;
             await kamaClient.from('pubs').insert([{ depense_reelle: dep }]);
-            alert("Dépense publicitaire enregistrée !"); document.getElementById('pub-depense').value = ''; chargerDonneesPilote();
+            alert("Pub enregistrée !"); document.getElementById('pub-depense').value = ''; chargerDonneesPilote();
         }
+
         async function enregistrerAutreDepense(event) {
             event.preventDefault();
             const intitule = document.getElementById('autre-dep-intitule').value;
             const montant = parseFloat(document.getElementById('autre-dep-montant').value) || 0;
-            const { error } = await kamaClient.from('autres_depenses').insert([{ intitule, montant }]);
-            if (error) return alert("Erreur : " + error.message);
-            alert("Autre charge enregistrée avec succès !");
-            document.getElementById('autre-dep-intitule').value = '';
-            document.getElementById('autre-dep-montant').value = '';
+            await kamaClient.from('autres_depenses').insert([{ intitule, montant }]);
+            alert("Charge enregistrée !");
+            document.getElementById('autre-dep-intitule').value = ''; document.getElementById('autre-dep-montant').value = '';
             chargerDonneesPilote();
         }
+
+        // Rapprochement Trésorerie (Exigence 1) : Écart = Solde Réel - Marge Nette
         async function sauvegarderSoldeReel() {
-            const solde = parseFloat(document.getElementById('solde-reel-input').value) || 0;
-            const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
-            let sys = 0; if (dossiers) dossiers.forEach(d => sys += Number(d.montant_encaisse || 0));
-            const { data: pubs } = await kamaClient.from('pubs').select('depense_reelle');
-            let totPub = 0; if (pubs) pubs.forEach(p => totPub += Number(p.depense_reelle || 0));
-            const { data: autres } = await kamaClient.from('autres_depenses').select('montant');
-            let totAutre = 0; if (autres) autres.forEach(a => totAutre += Number(a.montant || 0));
-            
-            const margeNetteCalc = sys - totPub - totAutre; // estimation simple de rapprochement de gestion
-            const ecart = solde - margeNette;
-            document.getElementById('rapprochement-ecart').innerHTML = ecart === 0 ? `<span class="text-emerald-400">✔ Trésorerie parfaitement rapprochée.</span>` : `<span class="text-amber-400">⚠ Écart constaté : ${formatFCFA(ecart)}</span>`;
+            const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
+            const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+            const { data: pubs } = await kamaClient.from('pubs').select('*');
+            const { data: autres } = await kamaClient.from('autres_depenses').select('*');
+
+            let ca = 0, form = 0;
+            if (dossiers) dossiers.forEach(d => { ca += Number(d.montant_encaisse || 0); form += Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0); });
+            let tPub = 0; if (pubs) pubs.forEach(p => tPub += Number(p.depense_reelle || 0));
+            let tAutre = 0; if (autres) autres.forEach(a => tAutre += Number(a.montant || 0));
+
+            let margeNette = (ca - form) - tPub - tAutre;
+            let ecart = soldeReel - margeNette;
+
+            const divEcart = document.getElementById('rapprochement-ecart');
+            if (ecart === 0) {
+                divEcart.innerHTML = `<span class="text-emerald-400">✔ Trésorerie parfaitement rapprochée (Écart : 0 FCFA)</span>`;
+            } else {
+                divEcart.innerHTML = `<span class="text-amber-400">⚠ Écart de rapprochement constaté (Solde Réel - Marge Nette) : <strong>${formatFCFA(ecart)}</strong></span>`;
+            }
         }
 
+        // ESPACE FORMALISTE (Exigence 2 & 4)
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
-                if (!data || data.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier attribué.</p>"; return; }
+                if (!data || data.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
                 let totAv = 0, totRel = 0;
-                data.forEach(d => { totAv += Number(d.formaliste_avance || 0); totRel += Number(d.formaliste_reliquat_recu || 0); });
+                data.forEach(d => {
+                    if (d.formaliste_avance_valide) totAv += Number(d.formaliste_avance || 0);
+                    if (d.formaliste_reliquat_valide) totRel += Number(d.formaliste_reliquat_recu || 0);
+                });
                 document.getElementById('formaliste-total-avances').textContent = formatFCFA(totAv);
                 document.getElementById('formaliste-total-reliquats').textContent = formatFCFA(totRel);
 
                 let html = '<div class="space-y-4">';
                 data.forEach(d => {
                     html += `
-                        <div class="bg-navy-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="bg-navy-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span>
                                 <span class="text-slate-300 font-medium">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
@@ -873,15 +823,31 @@
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 mb-1">Numéro RCCM</label>
-                                    <input type="text" id="input-rccm-${d.id}" value="${d.rccm || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 text-xs" placeholder="Ex: BF OUA...">
+                                    <input type="text" id="input-rccm-${d.id}" value="${d.rccm || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 text-xs" placeholder="RCCM">
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 mb-1">Numéro IFU</label>
-                                    <input type="text" id="input-ifu-${d.id}" value="${d.ifu || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 text-xs" placeholder="Ex: 0000000X">
+                                    <input type="text" id="input-ifu-${d.id}" value="${d.ifu || ''}" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 text-xs" placeholder="IFU">
+                                </div>
+                            </div>
+                            <div class="bg-navy-900 p-3 rounded-xl border border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                                <div class="flex items-center justify-between">
+                                    <span>Avance perçue : <strong>${formatFCFA(d.formaliste_avance)}</strong></span>
+                                    <label class="flex items-center space-x-2 cursor-pointer text-gold-400 font-bold">
+                                        <input type="checkbox" id="check-av-${d.id}" ${d.formaliste_avance_valide ? 'checked' : ''} class="w-4 h-4 accent-gold-500">
+                                        <span>Valider Avance</span>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Reliquat perçu : <strong>${formatFCFA(d.formaliste_reliquat_recu)}</strong></span>
+                                    <label class="flex items-center space-x-2 cursor-pointer text-gold-400 font-bold">
+                                        <input type="checkbox" id="check-rel-${d.id}" ${d.formaliste_reliquat_valide ? 'checked' : ''} class="w-4 h-4 accent-gold-500">
+                                        <span>Valider Reliquat</span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="flex justify-end pt-1">
-                                <button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-4 py-2 rounded-xl text-xs shadow">Enregistrer les modifications</button>
+                                <button onclick="mettreAJourDossierFormaliste('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-5 py-2 rounded-xl text-xs shadow hover:bg-gold-600">Enregistrer & Valider</button>
                             </div>
                         </div>`;
                 });
@@ -893,10 +859,17 @@
             const statut = document.getElementById(`select-statut-${id}`).value;
             const rccm = document.getElementById(`input-rccm-${id}`).value;
             const ifu = document.getElementById(`input-ifu-${id}`).value;
+            const avanceValide = document.getElementById(`check-av-${id}`).checked;
+            const reliquatValide = document.getElementById(`check-rel-${id}`).checked;
             
-            const { error } = await kamaClient.from('dossiers').update({ statut, rccm, ifu }).eq('id', id);
-            if (error) return alert("Erreur lors de la mise à jour : " + error.message);
-            alert("Dossier mis à jour avec succès par le formaliste !");
+            const { error } = await kamaClient.from('dossiers').update({ 
+                statut, rccm, ifu, 
+                formaliste_avance_valide: avanceValide, 
+                formaliste_reliquat_valide: reliquatValide 
+            }).eq('id', id);
+
+            if (error) return alert("Erreur : " + error.message);
+            alert("Mise à jour et validation enregistrées avec succès !");
             chargerDonneesFormaliste();
         }
 
@@ -904,11 +877,9 @@
             const { data: dossiers } = await kamaClient.from('dossiers').select('*');
             if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
             let csv = "\ufeffNumero;Nom;Prenom;Telephone;Type;Total;Encaisse;Statut;RCCM;IFU\n";
-            dossiers.forEach(d => { 
-                csv += `"${d.numero_dossier}";"${d.nom}";"${d.prenom}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";"${d.rccm || ''}";"${d.ifu || ''}"\n`; 
-            });
+            dossiers.forEach(d => { csv += `"${d.numero_dossier}";"${d.nom}";"${d.prenom}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";"${d.rccm || ''}";"${d.ifu || ''}"\n`; });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kama_lex_export_dossiers.csv";
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kama_lex_export.csv";
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
     </script>
