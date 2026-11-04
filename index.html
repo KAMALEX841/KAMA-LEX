@@ -30,7 +30,7 @@
             <div class="w-11 h-11 rounded-full bg-gold-500/10 border border-gold-500 flex items-center justify-center text-gold-500 font-bold text-xl">KL</div>
             <div>
                 <h1 class="font-bold text-gold-500 tracking-wider text-lg">KAMA LEX</h1>
-                <p class="text-xs text-slate-400 italic">« Savoir pour décider » — Ouagadougou</p>
+                <p class="text-xs text-slate-400 italic">« Savoir pour mieux décider » — Ouagadougou</p>
             </div>
         </div>
         <div id="user-badge" class="hidden flex items-center space-x-4 text-sm">
@@ -158,7 +158,7 @@
                     <div id="pilote-tous-dossiers" class="space-y-3 text-xs text-slate-300">Chargement...</div>
                 </div>
 
-                <!-- Suivi des Prospects en Intermédiation Financière (NOUVEAU) -->
+                <!-- Suivi des Prospects en Intermédiation Financière -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Prospects en Intermédiation Financière (Enregistrés par le Closer)</h3>
                     <div id="pilote-financements-list" class="space-y-3 text-xs text-slate-300">Chargement...</div>
@@ -219,6 +219,7 @@
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Nom</label><input type="text" id="closer-nom" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Nom"></div>
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Prénom</label><input type="text" id="closer-prenom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Prénom"></div>
                         </div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Dénomination Commerciale</label><input type="text" id="closer-denomination" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-gold-400 font-semibold" placeholder="Nom commercial de l'entreprise"></div>
                         <div><label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp / Téléphone</label><input type="text" id="closer-tel" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm" placeholder="Ex: 70000000"></div>
                         <div class="grid grid-cols-2 gap-3">
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Type Offre</label><select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm"><option value="EI">EI (150k)</option><option value="SARL">SARL (175k)</option></select></div>
@@ -596,23 +597,63 @@
             } catch (e) {}
         }
 
+        // Génération automatique de la numérotation séquentielle KML-0001, KML-0002...
+        async function genererNumeroDossierSuivant() {
+            try {
+                const { data, error } = await kamaClient.from('dossiers').select('numero_dossier').order('created_at', { ascending: false }).limit(1);
+                if (error || !data || data.length === 0 || !data[0].numero_dossier) {
+                    return 'KML-0001';
+                }
+                const dernierNum = data[0].numero_dossier;
+                const parts = dernierNum.split('-');
+                if (parts.length === 2) {
+                    let sequence = parseInt(parts[1], 10) + 1;
+                    return 'KML-' + String(sequence).padStart(4, '0');
+                }
+                return 'KML-0001';
+            } catch (e) {
+                return 'KML-0001';
+            }
+        }
+
         async function ajouterDossierCloser(event) {
             event.preventDefault();
-            const nom = document.getElementById('closer-nom').value, prenom = document.getElementById('closer-prenom').value || '';
-            const telephone = document.getElementById('closer-tel').value, typeEnt = document.getElementById('closer-type').value;
-            const total = parseFloat(document.getElementById('closer-total').value) || 0, montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
-            const numDossier = 'KML-' + Math.floor(10000 + Math.random() * 90000);
+            const nom = document.getElementById('closer-nom').value;
+            const prenom = document.getElementById('closer-prenom').value || '';
+            const denomination = document.getElementById('closer-denomination').value || '';
+            const telephone = document.getElementById('closer-tel').value;
+            const typeEnt = document.getElementById('closer-type').value;
+            const total = parseFloat(document.getElementById('closer-total').value) || 0;
+            const montantEncaisse = parseFloat(document.getElementById('closer-avance').value) || 0;
             
-            await kamaClient.from('dossiers').insert([{ 
-                numero_dossier: numDossier, nom, prenom, telephone, type_entreprise: typeEnt, 
-                montant_total: total, montant_encaisse: montantEncaisse, 
+            const numDossier = await genererNumeroDossierSuivant();
+            
+            const { error } = await kamaClient.from('dossiers').insert([{ 
+                numero_dossier: numDossier, 
+                nom, 
+                prenom, 
+                denomination_commerciale: denomination,
+                telephone, 
+                type_entreprise: typeEnt, 
+                montant_total: total, 
+                montant_encaisse: montantEncaisse, 
                 formaliste_du: typeEnt === 'EI' ? 100000 : 130000, 
-                formaliste_avance: 0, formaliste_reliquat_recu: 0, 
+                formaliste_avance: 0, 
+                formaliste_reliquat_recu: 0, 
                 statut: '1. Dossier transmis au formaliste' 
             }]);
-            alert(`Dossier ${numDossier} créé !`);
-            document.getElementById('closer-nom').value = ''; document.getElementById('closer-prenom').value = '';
-            document.getElementById('closer-tel').value = ''; document.getElementById('closer-avance').value = '';
+
+            if (error) {
+                alert("Erreur lors de l'enregistrement : " + error.message);
+                return;
+            }
+
+            alert(`Dossier ${numDossier} créé avec succès !`);
+            document.getElementById('closer-nom').value = ''; 
+            document.getElementById('closer-prenom').value = '';
+            document.getElementById('closer-denomination').value = '';
+            document.getElementById('closer-tel').value = ''; 
+            document.getElementById('closer-avance').value = '';
             chargerDonneesCloser();
         }
 
@@ -629,14 +670,15 @@
         async function chargerDonneesCloser() {
             const listDiv = document.getElementById('closer-dossiers-list');
             try {
-                const { data } = await kamaClient.from('dossiers').select('*');
+                const { data } = await kamaClient.from('dossiers').select('*').order('created_at', { ascending: false });
                 if (!data || data.length === 0) { listDiv.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
                 let html = '';
                 data.forEach(d => {
                     let reliquat = Number(d.montant_total || 0) - Number(d.montant_encaisse || 0);
+                    let denomAffichage = d.denomination_commerciale ? `<span class="text-gold-400 font-semibold">[${d.denomination_commerciale}]</span>` : '';
                     html += `<div class="bg-navy-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
                         <div>
-                            <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} (${d.type_entreprise})
+                            <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> - ${d.prenom} ${d.nom} ${denomAffichage} (${d.type_entreprise})
                             <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat dû : <strong class="text-red-400">${formatFCFA(reliquat)}</strong></div>
                             <div class="text-[11px] text-slate-300 mt-1">Statut : <span class="bg-navy-900 px-2 py-0.5 rounded border border-slate-700 text-gold-400 font-bold">${d.statut}</span></div>
                         </div>
@@ -688,7 +730,7 @@
         async function chargerDonneesPilote() {
             const plafonds = await recupererPlafonds();
             try {
-                const { data: dossiers } = await kamaClient.from('dossiers').select('*');
+                const { data: dossiers } = await kamaClient.from('dossiers').select('*').order('created_at', { ascending: false });
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
                 const { data: autresDep } = await kamaClient.from('autres_depenses').select('*');
                 const { data: financements } = await kamaClient.from('financements').select('*');
@@ -725,18 +767,18 @@
                 document.getElementById('pilote-marge-brute').textContent = formatFCFA(margeBrute);
                 document.getElementById('pilote-marge-nette').textContent = formatFCFA(margeNette);
 
-                // Affichage global de TOUS les dossiers avec Saisie des versements formaliste par le Pilote
                 const containerDossiers = document.getElementById('pilote-tous-dossiers');
                 if (!dossiers || dossiers.length === 0) { containerDossiers.innerHTML = "<p class='text-slate-400'>Aucun dossier enregistré.</p>"; }
                 else {
                     let htmlD = '<div class="space-y-3">';
                     dossiers.forEach(d => {
                         let reliquatClient = Number(d.montant_total || 0) - Number(d.montant_encaisse || 0);
+                        let denomAffichage = d.denomination_commerciale ? `<span class="text-gold-400 font-semibold">[${d.denomination_commerciale}]</span>` : '';
                         htmlD += `
                             <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-3">
                                 <div class="flex justify-between items-center flex-wrap gap-2">
                                     <div>
-                                        <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> — <strong class="text-slate-200">${d.prenom} ${d.nom}</strong> (${d.type_entreprise})
+                                        <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> — <strong class="text-slate-200">${d.prenom} ${d.nom}</strong> ${denomAffichage} (${d.type_entreprise})
                                     </div>
                                     <span class="bg-navy-900 border border-gold-500/30 px-3 py-1 rounded text-gold-400 font-bold">${d.statut}</span>
                                 </div>
@@ -763,7 +805,6 @@
                     containerDossiers.innerHTML = htmlD + '</div>';
                 }
 
-                // Affichage des prospects en intermédiation financière pour le Pilote
                 const containerFinancements = document.getElementById('pilote-financements-list');
                 if (!financements || financements.length === 0) {
                     containerFinancements.innerHTML = "<p class='text-slate-400'>Aucun prospect en intermédiation financière pour le moment.</p>";
@@ -845,7 +886,7 @@
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
             try {
-                const { data } = await kamaClient.from('dossiers').select('*');
+                const { data } = await kamaClient.from('dossiers').select('*').order('created_at', { ascending: false });
                 if (!data || data.length === 0) { container.innerHTML = "<p class='text-slate-400'>Aucun dossier.</p>"; return; }
                 let totAv = 0, totRel = 0;
                 data.forEach(d => {
@@ -857,11 +898,12 @@
 
                 let html = '<div class="space-y-4">';
                 data.forEach(d => {
+                    let denomAffichage = d.denomination_commerciale ? `<span class="text-gold-400 font-semibold">[${d.denomination_commerciale}]</span>` : '';
                     html += `
                         <div class="bg-navy-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span>
-                                <span class="text-slate-300 font-medium">${d.prenom} ${d.nom} (${d.type_entreprise})</span>
+                                <span class="text-slate-300 font-medium">${d.prenom} ${d.nom} ${denomAffichage} (${d.type_entreprise})</span>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
@@ -931,8 +973,8 @@
         async function exporterExcelPilote() {
             const { data: dossiers } = await kamaClient.from('dossiers').select('*');
             if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
-            let csv = "\ufeffNumero;Nom;Prenom;Telephone;Type;Total;Encaisse;Statut;RCCM;IFU\n";
-            dossiers.forEach(d => { csv += `"${d.numero_dossier}";"${d.nom}";"${d.prenom}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";"${d.rccm || ''}";"${d.ifu || ''}"\n`; });
+            let csv = "\ufeffNumero;Nom;Prenom;Denomination;Telephone;Type;Total;Encaisse;Statut;RCCM;IFU\n";
+            dossiers.forEach(d => { csv += `"${d.numero_dossier}";"${d.nom}";"${d.prenom}";"${d.denomination_commerciale || ''}";"${d.telephone}";"${d.type_entreprise}";${d.montant_total};${d.montant_encaisse};"${d.statut}";"${d.rccm || ''}";"${d.ifu || ''}"\n`; });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kama_lex_export.csv";
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
