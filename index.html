@@ -411,7 +411,7 @@
         </div>
     </div>
 
-    <!-- VUE FACTURE / REÇU A4 OFFICIEL (Invisible à l'écran, s'imprime ou s'exporte proprement) -->
+    <!-- VUE FACTURE / REÇU A4 OFFICIEL -->
     <div id="printable-invoice" class="hidden bg-white text-slate-900 p-8 max-w-2xl mx-auto rounded-none shadow-none">
         <div class="border-b-2 border-navy-900 pb-4 mb-6 flex justify-between items-start">
             <div>
@@ -467,18 +467,24 @@
         </div>
     </div>
 
-    <!-- JavaScript Application KAMA LEX -->
+    <!-- JavaScript Application KAMA LEX Blindé et Corrigé -->
     <script>
         const SUPABASE_URL = 'https://zhcjdlvboqzqpilbxmmr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoY2pkbHZib3F6cXBpbGJ4bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTU2NzEsImV4cCI6MjEwNzk5MTY3MX0.YxcqkLqpJGA1dQRhET3imsj2QtnijnxBZMMFK3Pivzc';
         
-        const kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let kamaClient = null;
+        try {
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                kamaClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (e) {
+            console.error("Erreur d'initialisation Supabase", e);
+        }
 
         let currentRole = null;
         let pendingRole = null;
         let pendingName = '';
 
-        // Mots de passe par défaut configurés avec vos codes exacts
         let sessionPins = {
             pilote: '051195',
             closer: '288211',
@@ -494,6 +500,7 @@
         });
 
         async function chargerPinsSecurite() {
+            if (!kamaClient) return;
             try {
                 const { data } = await kamaClient.from('parametres').select('pins').limit(1).single();
                 if (data && data.pins) {
@@ -503,6 +510,10 @@
         }
 
         async function chargerBandeauAnnonce() {
+            if (!kamaClient) {
+                document.getElementById('texte-annonce').textContent = "Objectif du cabinet : 34 conversations et 2 clients acquis par jour ! Savoir pour mieux décider.";
+                return;
+            }
             try {
                 const { data } = await kamaClient.from('parametres').select('annonce').limit(1).single();
                 if (data && data.annonce) {
@@ -516,6 +527,7 @@
         }
 
         async function sauvegarderAnnonce() {
+            if (!kamaClient) return alert("Base de données non connectée.");
             const texte = document.getElementById('input-annonce').value;
             if (!texte) return alert('Veuillez entrer un message.');
             const { data: existing } = await kamaClient.from('parametres').select('id').limit(1);
@@ -592,7 +604,6 @@
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // --- GESTION SÉCURITÉ / PINS ---
         function ouvrirModalSecurite() {
             document.getElementById('modal-securite').classList.remove('hidden');
             document.getElementById('sec-nouveau-pin').value = '';
@@ -601,6 +612,7 @@
             document.getElementById('modal-securite').classList.add('hidden');
         }
         async function sauvegarderNouveauPin() {
+            if (!kamaClient) return alert("Base de données non connectée.");
             const profil = document.getElementById('sec-profil').value;
             const nouveauPin = document.getElementById('sec-nouveau-pin').value;
             if (!nouveauPin) return alert('Veuillez entrer un code PIN valide.');
@@ -618,7 +630,6 @@
             fermerModalSecurite();
         }
 
-        // --- IMPRESSION / GÉNÉRATION FACTURE A4 ---
         function imprimerFacture(numeroDossier, clientNom, clientTel, serviceType, montantTotal, montantAvance) {
             document.getElementById('inv-number').textContent = `FAC-${numeroDossier}-01`;
             document.getElementById('inv-date').textContent = `Date : ${new Date().toLocaleDateString()}`;
@@ -635,8 +646,8 @@
             window.print();
         }
 
-        // --- PLAFONDS & OBJECTIFS ---
         async function recupererPlafonds() {
+            if (!kamaClient) return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
             try {
                 const { data } = await kamaClient.from('plafonds').select('*').limit(1).single();
                 if (data) return data;
@@ -661,6 +672,7 @@
 
         async function sauvegarderPlafondsGlobal(event) {
             event.preventDefault();
+            if (!kamaClient) return alert("Base de données non connectée.");
             const cpl = parseFloat(document.getElementById('cfg-cpl').value) || 500;
             const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 34;
             const objClients = parseInt(document.getElementById('cfg-obj-clients').value) || 2;
@@ -692,9 +704,9 @@
             chargerDonneesPilote();
         }
 
-        // --- CLOSER STATS ---
         async function enregistrerStatsCloser(event) {
             event.preventDefault();
+            if (!kamaClient) return alert("Base de données non connectée.");
             const datePoint = document.getElementById('stat-date').value || new Date().toISOString().split('T')[0];
             const conv = parseInt(document.getElementById('stat-conv').value) || 0;
             const acquis = parseInt(document.getElementById('stat-acquis').value) || 0;
@@ -711,6 +723,7 @@
         }
 
         async function chargerStatsCloser() {
+            if (!kamaClient) return;
             try {
                 const { data } = await kamaClient.from('closer_stats').select('*');
                 let aujourdhui = new Date().toISOString().split('T')[0];
@@ -739,9 +752,9 @@
             } catch (e) {}
         }
 
-        // --- CLOSER DOSSIERS & FINANCEMENT ---
         async function ajouterDossierCloser(event) {
             event.preventDefault();
+            if (!kamaClient) return alert("Base de données non connectée.");
             const nom = document.getElementById('closer-nom').value;
             const prenom = document.getElementById('closer-prenom').value || '';
             const telephone = document.getElementById('closer-tel').value;
@@ -772,6 +785,7 @@
 
         async function ajouterFinancementCloser(event) {
             event.preventDefault();
+            if (!kamaClient) return alert("Base de données non connectée.");
             const nom = document.getElementById('fin-nom').value;
             const telephone = document.getElementById('fin-tel').value;
             const montant = parseFloat(document.getElementById('fin-montant').value) || 0;
@@ -788,6 +802,10 @@
 
         async function chargerDonneesCloser() {
             const listDiv = document.getElementById('closer-dossiers-list');
+            if (!kamaClient) {
+                listDiv.innerHTML = "<p class='text-slate-400'>Base de données non initialisée.</p>";
+                return;
+            }
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
                 if (!data || data.length === 0) {
@@ -817,9 +835,9 @@
             }
         }
 
-        // --- PILOTE & FINANCES ---
         async function chargerDonneesPilote() {
             const plafonds = await recupererPlafonds();
+            if (!kamaClient) return;
             try {
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
@@ -957,6 +975,7 @@
         }
 
         async function payerAvanceForm(id) {
+            if (!kamaClient) return;
             const montant = parseFloat(document.getElementById(`input-av-${id}`).value) || 0;
             const { error } = await kamaClient.from('dossiers').update({ formaliste_avance: montant }).eq('id', id);
             if (error) return alert("Erreur : " + error.message);
@@ -965,6 +984,7 @@
         }
 
         async function payerReliquatForm(id) {
+            if (!kamaClient) return;
             const montant = parseFloat(document.getElementById(`input-rel-${id}`).value) || 0;
             const { error } = await kamaClient.from('dossiers').update({ formaliste_reliquat_recu: montant }).eq('id', id);
             if (error) return alert("Erreur : " + error.message);
@@ -974,6 +994,7 @@
 
         async function enregistrerPub(event) {
             event.preventDefault();
+            if (!kamaClient) return;
             const depense = parseFloat(document.getElementById('pub-depense').value) || 0;
             const { error } = await kamaClient.from('pubs').insert([{ depense_reelle: depense }]);
             if (error) return alert("Erreur : " + error.message);
@@ -983,6 +1004,7 @@
         }
 
         async function sauvegarderSoldeReel() {
+            if (!kamaClient) return;
             const soldeReel = parseFloat(document.getElementById('solde-reel-input').value) || 0;
             const { data: dossiers } = await kamaClient.from('dossiers').select('montant_encaisse');
             let systemeMontant = 0;
@@ -998,9 +1020,12 @@
             }
         }
 
-        // --- FORMALISTE ---
         async function chargerDonneesFormaliste() {
             const container = document.getElementById('formaliste-container');
+            if (!kamaClient) {
+                container.innerHTML = "<p class='text-slate-400'>Base de données non initialisée.</p>";
+                return;
+            }
             try {
                 const { data } = await kamaClient.from('dossiers').select('*');
                 if (!data || data.length === 0) {
@@ -1072,6 +1097,7 @@
         }
 
         async function mettreAJourDossierFormaliste(id) {
+            if (!kamaClient) return;
             const nouveauStatut = document.getElementById(`select-statut-${id}`).value;
             const diffInput = document.getElementById(`input-diff-${id}`);
             const rccmInput = document.getElementById(`input-rccm-${id}`);
@@ -1088,8 +1114,8 @@
             chargerDonneesFormaliste();
         }
 
-        // --- EXPORT TABLEUR (CSV Excel compatible UTF-8 BOM) ---
         async function exporterExcelPilote() {
+            if (!kamaClient) return alert("Base de données non connectée.");
             try {
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
@@ -1106,6 +1132,7 @@
         }
 
         async function exporterExcelFormaliste() {
+            if (!kamaClient) return alert("Base de données non connectée.");
             try {
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 if (!dossiers || dossiers.length === 0) return alert("Aucun dossier à exporter.");
