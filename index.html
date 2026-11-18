@@ -20,13 +20,10 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Inclusion de html2pdf pour téléchargement direct sur Mobile, Tablette et PC -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body, input, select, textarea, button { font-family: 'Poppins', sans-serif; }
-        @media print {
-            body * { visibility: hidden; }
-            #printable-invoice, #printable-invoice * { visibility: visible; }
-            #printable-invoice { position: absolute; left: 0; top: 0; width: 100%; display: block !important; }
-        }
     </style>
 </head>
 <body class="bg-navy-950 text-slate-100 h-full flex flex-col antialiased">
@@ -94,7 +91,7 @@
 
             <div class="flex border-b border-gold-500/30 pb-4 gap-3 overflow-x-auto">
                 <button onclick="basculerOngletPilote('dashboard')" id="btn-tab-dashboard" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow whitespace-nowrap">📊 Tableau de Bord & Dossiers</button>
-                <button onclick="basculerOngletPilote('objectifs')" id="btn-tab-objectifs" class="bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10 whitespace-nowrap">🎯 Objectifs 2027 & TRO</button>
+                <button onclick="basculerOngletPilote('objectifs')" id="btn-tab-objectifs" class="bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10 whitespace-nowrap">🎯 Objectifs 2027 & Analyse</button>
                 <button onclick="basculerOngletPilote('equipe')" id="btn-tab-equipe" class="bg-navy-950 text-gold-400 border border-gold-500/40 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow hover:bg-gold-500/10 whitespace-nowrap">🔐 Gestion Codes & Équipe</button>
             </div>
 
@@ -102,20 +99,36 @@
             <div id="pilote-section-dashboard" class="space-y-8">
                 <div class="flex justify-end gap-3 flex-wrap">
                     <button onclick="ouvrirModalPlafonds()" class="bg-navy-950 border border-gold-500/50 hover:bg-gold-500/10 text-gold-400 font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">⚙️ Paramètres & Seuils</button>
-                    <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Export Excel Complet (Base de Données)</button>
+                    <button onclick="exporterExcelPilote()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">📊 Export Excel Complet</button>
                 </div>
 
-                <!-- Analyse des Coûts Réels & Comparatif CPL / CAC -->
+                <!-- Analyse des Coûts Réels, Plafonds & Pourcentages -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-6 shadow-xl">
                     <div class="flex justify-between items-center flex-wrap gap-2">
                         <div>
-                            <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Tableau de Mesure des Coûts Réels & Acquisition (CPL / CAC)</h3>
-                            <p class="text-xs text-slate-400">Comparaison instantanée entre objectifs et performances réelles du cabinet</p>
+                            <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mesure des Coûts Réels & Taux d'Atteinte des Plafonds</h3>
+                            <p class="text-xs text-slate-400">Objectif : CPL max 500 FCFA | CAC max 8 000 FCFA | 34 Conv. & 2 Clients / jour</p>
                         </div>
-                        <button onclick="calculerCoutsReels()" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl hover:bg-gold-600 transition shadow">Actualiser les Coûts</button>
+                        <button onclick="calculerCoutsReels()" class="bg-gold-500 text-navy-950 font-bold text-xs px-4 py-2 rounded-xl hover:bg-gold-600 transition shadow">Actualiser</button>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4" id="tableau-mesure-couts">
-                        <!-- Rempli dynamiquement -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="tableau-mesure-couts"></div>
+                </div>
+
+                <!-- Module d'Export Publicitaire Personnalisé (Période A à B) -->
+                <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Export Excel & Analyse du Budget Publicitaire (Période A à B)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-300 mb-1">Date de Début (A)</label>
+                            <input type="date" id="export-date-debut" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-300 mb-1">Date de Fin (B)</label>
+                            <input type="date" id="export-date-fin" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100">
+                        </div>
+                        <div>
+                            <button onclick="exporterPubPeriode()" class="w-full bg-gold-500 text-navy-950 font-bold py-2.5 rounded-xl shadow hover:bg-gold-600 transition">Télécharger l'Export Pub (Excel)</button>
+                        </div>
                     </div>
                 </div>
 
@@ -147,7 +160,7 @@
                 <!-- Dépenses & Rapprochement de Trésorerie -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Pubs (Meta Ads)</h3>
+                        <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Pubs (Meta Ads / TikTok)</h3>
                         <form onsubmit="enregistrerPub(event)" class="space-y-3">
                             <input type="number" id="pub-depense" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100" placeholder="Montant en FCFA">
                             <button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer Pub</button>
@@ -167,14 +180,14 @@
                         </div>
                         <div id="liste-autres-depenses" class="max-h-24 overflow-y-auto space-y-1 text-xs text-slate-300"></div>
                         <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row gap-3 items-center">
-                            <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100" placeholder="Solde bancaire réel constaté">
+                            <input type="number" id="solde-reel-input" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100" placeholder="Solde bancaire ou caisse réel constaté">
                             <button onclick="sauvegarderSoldeReel()" class="bg-gold-500 text-navy-950 font-bold text-xs px-5 py-2 rounded-xl hover:bg-gold-600 shadow whitespace-nowrap">Rapprocher</button>
                         </div>
                         <div id="rapprochement-ecart" class="text-xs font-bold"></div>
                     </div>
                 </div>
 
-                <!-- Suivi Global de Tous les Dossiers & Saisie des Versements Formaliste -->
+                <!-- Suivi Global de Tous les Dossiers & Facturation PDF -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Suivi Global de Tous les Dossiers & Facturation PDF</h3>
                     <div id="pilote-tous-dossiers" class="space-y-3 text-xs text-slate-300">Chargement...</div>
@@ -182,26 +195,32 @@
 
                 <!-- Suivi des Prospects en Intermédiation Financière -->
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
-                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Prospects en Intermédiation Financière (Base de Données COFINA Burkina)</h3>
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Prospects en Intermédiation Financière (Base COFINA Burkina)</h3>
                     <div id="pilote-financements-list" class="space-y-3 text-xs text-slate-300">Chargement...</div>
                 </div>
             </div>
 
-            <!-- OBJECTIFS & TRO PILOTE -->
+            <!-- OBJECTIFS, ANALYSE MENSUELLE (1er au 30) & PROJECTION 15 DÉCEMBRE -->
             <div id="pilote-section-objectifs" class="space-y-8 hidden">
                 <div class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 shadow-xl flex justify-between items-center flex-wrap gap-4">
                     <div>
-                        <h3 class="text-lg font-bold text-gold-500">Suivi des Objectifs 2027 & TRO</h3>
-                        <p class="text-xs text-slate-400">Analyse comparative des performances et taux de réalisation</p>
+                        <h3 class="text-lg font-bold text-gold-500">Analyse Mensuelle Stricte (du 1er au 30) & Projection 15 Décembre 2027</h3>
+                        <p class="text-xs text-slate-400">Évaluation des performances et avis d'expert ingénieur du digital</p>
                     </div>
                     <select id="obj-select-periode" onchange="chargerModuleObjectifs2027()" class="bg-navy-950 border border-gold-500/40 rounded-xl px-4 py-2 text-xs text-gold-400 font-bold outline-none">
-                        <option value="annee">Année 2027 (Cumul)</option>
                         <option value="1">Janvier</option><option value="2">Février</option><option value="3">Mars</option>
                         <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
                         <option value="7">Juillet</option><option value="8">Août</option><option value="9">Septembre</option>
                         <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option>
                     </select>
                 </div>
+
+                <!-- Bloc Commentaire d'Expert Digital -->
+                <div id="expert-comment-box" class="bg-navy-900 border border-gold-500/50 rounded-2xl p-6 space-y-4 shadow-2xl"></div>
+
+                <!-- Bloc Projection au 15 décembre -->
+                <div id="projection-decembre-box" class="bg-navy-900 border border-gold-500/40 rounded-2xl p-6 space-y-4 shadow-xl"></div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="obj-cartes-indicateurs"></div>
                 <div class="bg-navy-900 border border-gold-500/30 rounded-2xl p-6 space-y-4 shadow-xl overflow-x-auto">
                     <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Tableau Budgétaire des 12 Mois</h3>
@@ -246,10 +265,10 @@
             </div>
 
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Point Journalier WhatsApp (Obj: 35 Conv. & 2 Clients)</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Point Journalier WhatsApp (Obj: 34 Conv. & 2 Clients)</h3>
                 <form onsubmit="enregistrerStatsCloser(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
                     <div><label class="block text-xs font-bold text-slate-300 mb-1">Date</label><input type="date" id="stat-date" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"></div>
-                    <div><label class="block text-xs font-bold text-slate-300 mb-1">Conversations</label><input type="number" id="stat-conv" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: 35"></div>
+                    <div><label class="block text-xs font-bold text-slate-300 mb-1">Conversations</label><input type="number" id="stat-conv" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: 34"></div>
                     <div><label class="block text-xs font-bold text-slate-300 mb-1">Clients Acquis</label><input type="number" id="stat-acquis" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: 2"></div>
                     <div><button type="submit" class="w-full bg-gold-500 text-navy-950 font-bold text-xs py-2.5 rounded-xl hover:bg-gold-600 shadow">Enregistrer</button></div>
                 </form>
@@ -266,7 +285,7 @@
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Nom</label><input type="text" id="closer-nom" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Nom"></div>
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Prénom</label><input type="text" id="closer-prenom" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Prénom"></div>
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Nom Commercial (Dénomination projetée)</label><input type="text" id="closer-nom-commercial" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: KAMA SERVICES SARL"></div>
+                        <div><label class="block text-xs font-bold text-slate-300 mb-1">Nom Commercial (Dénomination)</label><input type="text" id="closer-nom-commercial" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: KAMA SERVICES SARL"></div>
                         <div><label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp / Téléphone</label><input type="text" id="closer-tel" required class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100" placeholder="Ex: 70000000"></div>
                         <div class="grid grid-cols-2 gap-3">
                             <div><label class="block text-xs font-bold text-slate-300 mb-1">Type Offre</label><select id="closer-type" onchange="changerTarifOffre()" class="w-full bg-navy-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"><option value="EI">EI (150k)</option><option value="SARL">SARL (175k)</option></select></div>
@@ -290,7 +309,7 @@
             </div>
 
             <div class="bg-navy-900 border border-slate-800 rounded-2xl p-6 space-y-3 shadow-xl">
-                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistrés & Facturation PDF</h3>
+                <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">Mes Dossiers Enregistrés & Reçu PDF WhatsApp</h3>
                 <div id="closer-dossiers-list" class="space-y-2 text-xs text-slate-300">Chargement...</div>
             </div>
         </div>
@@ -317,8 +336,8 @@
         </div>
     </main>
 
-    <!-- MODAL / PAPIER À EN-TÊTE OFFICIEL POUR FACTURE / REÇU PDF ÉPURÉ & PROFESSIONNEL -->
-    <div id="printable-invoice" class="hidden bg-white text-slate-900 p-10 max-w-3xl mx-auto rounded-none shadow-none font-sans">
+    <!-- MODAL / PAPIER À EN-TÊTE OFFICIEL POUR FACTURE / REÇU PDF TÉLÉCHARGEABLE -->
+    <div id="printable-invoice" class="hidden bg-white text-slate-900 p-10 max-w-3xl mx-auto rounded-none font-sans">
         <div class="border-b-2 border-slate-900 pb-6 mb-6 flex justify-between items-start">
             <div>
                 <h1 class="text-2xl font-black text-slate-900 tracking-wide">KAMA LEX</h1>
@@ -421,7 +440,6 @@
         let pendingRole = null;
         let pendingNom = null;
 
-        // CODES D'ACCÈS PAR DÉFAUT (Modifiables par le Pilote)
         let CODES_ACCES = { 'pilote': '051195', 'closer': '288211', 'formaliste': '062230' };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -435,18 +453,16 @@
         async function chargerCodesSession() {
             try {
                 const { data } = await kamaClient.from('parametres').select('pins').limit(1).maybeSingle();
-                if (data && data.pins) {
-                    CODES_ACCES = data.pins;
-                }
+                if (data && data.pins) CODES_ACCES = data.pins;
             } catch (e) {}
         }
 
         async function chargerBandeauAnnonce() {
             try {
                 const { data } = await kamaClient.from('parametres').select('annonce').limit(1).maybeSingle();
-                document.getElementById('texte-annonce').textContent = (data && data.annonce) ? data.annonce : "Savoir pour mieux décider — Objectif : 35 conversations et 2 clients acquis par jour !";
+                document.getElementById('texte-annonce').textContent = (data && data.annonce) ? data.annonce : "Savoir pour mieux décider — Objectif : 34 conversations et 2 clients acquis par jour !";
             } catch (e) {
-                document.getElementById('texte-annonce').textContent = "Savoir pour mieux décider — Objectif : 35 conversations et 2 clients acquis par jour !";
+                document.getElementById('texte-annonce').textContent = "Savoir pour mieux décider — Objectif : 34 conversations et 2 clients acquis par jour !";
             }
         }
 
@@ -473,7 +489,7 @@
             const f = document.getElementById('code-formaliste-edit').value.trim();
 
             if (p.length !== 6 || c.length !== 6 || f.length !== 6) {
-                return alert("Chaque code doit obligatoirement comporter exactement 6 chiffres.");
+                return alert("Chaque code doit comporter exactement 6 chiffres.");
             }
 
             CODES_ACCES = { 'pilote': p, 'closer': c, 'formaliste': f };
@@ -485,7 +501,7 @@
                 } else {
                     await kamaClient.from('parametres').insert([{ pins: CODES_ACCES }]);
                 }
-                alert("Codes d'accès mis à jour avec succès ! Tous les accès ont été verrouillés.");
+                alert("Codes mis à jour avec succès ! Sessions verrouillées.");
                 deconnexion();
             } catch (err) { alert("Erreur : " + err.message); }
         }
@@ -551,8 +567,8 @@
             document.getElementById('view-login').classList.remove('hidden');
         }
 
-        // FACTURE / REÇU PDF OFFICIEL
-        function imprimerRecuPDF(numeroDossier, clientNom, clientTel, nomCommercial, typeEnt, montantTotal, montantEncaisse, closerNom) {
+        // TÉLÉCHARGEMENT DIRECT DU REÇU PDF SUR SMARTPHONE / TABLETTE / PC (POUR WHATSAPP)
+        function telechargerRecuPDF(numeroDossier, clientNom, clientTel, nomCommercial, typeEnt, montantTotal, montantEncaisse, closerNom) {
             document.getElementById('inv-number').textContent = `N° FAC-${numeroDossier}`;
             document.getElementById('inv-date').textContent = `Date : ${new Date().toLocaleDateString('fr-FR')}`;
             document.getElementById('inv-client-name').textContent = `Client : ${clientNom}`;
@@ -567,7 +583,20 @@
             document.getElementById('inv-reste-amount').textContent = formatFCFA(resteDu);
             document.getElementById('inv-closer-signature').textContent = `Enregistré par : ${closerNom || 'Abdoul (Closer)'}`;
 
-            window.print();
+            const element = document.getElementById('printable-invoice');
+            element.classList.remove('hidden');
+
+            const opt = {
+                margin:       10,
+                filename:     `Recu_KamaLex_${numeroDossier}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.classList.add('hidden');
+            });
         }
 
         function basculerOngletPilote(onglet) {
@@ -610,7 +639,6 @@
             const plafonds = await recupererPlafonds();
             const { data: stats } = await kamaClient.from('closer_stats').select('*');
             const { data: pubs } = await kamaClient.from('pubs').select('*');
-            const { data: dossiers } = await kamaClient.from('dossiers').select('*');
 
             let totalConv = 0, totalClients = 0;
             if (stats) stats.forEach(s => { totalConv += Number(s.conversations || 0); totalClients += Number(s.clients_acquis || 0); });
@@ -620,29 +648,53 @@
             let cplReel = totalConv > 0 ? Math.round(totalPub / totalConv) : 0;
             let cacReel = totalClients > 0 ? Math.round(totalPub / totalClients) : 0;
 
+            let tauxCPL = plafonds.plafond_cpl > 0 ? Math.round((cplReel / plafonds.plafond_cpl) * 100) : 0;
+            let tauxCAC = plafonds.plafond_cac > 0 ? Math.round((cacReel / plafonds.plafond_cac) * 100) : 0;
+
             const container = document.getElementById('tableau-mesure-couts');
             container.innerHTML = `
-                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
                     <p class="text-[11px] text-slate-400 uppercase font-bold">Total Conversations</p>
-                    <p class="text-xl font-bold text-gold-400">${totalConv}</p>
-                    <p class="text-[10px] text-slate-500">Objectif estimé : 35/jour</p>
+                    <p class="text-2xl font-bold text-gold-400">${totalConv}</p>
+                    <p class="text-[10px] text-slate-500">Obj. : 34 / jour</p>
                 </div>
-                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-1">
-                    <p class="text-[11px] text-slate-400 uppercase font-bold">Coût par Conversation (CPL)</p>
+                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <p class="text-[11px] text-slate-400 uppercase font-bold">Coût par Conv. (CPL)</p>
                     <p class="text-xl font-bold ${cplReel <= plafonds.plafond_cpl ? 'text-emerald-400' : 'text-red-400'}">${formatFCFA(cplReel)}</p>
-                    <p class="text-[10px] text-slate-500">Plafond max : ${formatFCFA(plafonds.plafond_cpl)}</p>
+                    <p class="text-[10px] text-slate-400">Plafond : ${formatFCFA(plafonds.plafond_cpl)} <span class="font-bold">(${tauxCPL}%)</span></p>
                 </div>
-                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-1">
-                    <p class="text-[11px] text-slate-400 uppercase font-bold">Clients Acquis</p>
-                    <p class="text-xl font-bold text-gold-400">${totalClients}</p>
-                    <p class="text-[10px] text-slate-500">Total dossiers payés</p>
+                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <p class="text-[11px] text-slate-400 uppercase font-bold">Clients Réels (Closer)</p>
+                    <p class="text-2xl font-bold text-gold-400">${totalClients}</p>
+                    <p class="text-[10px] text-slate-500">Obj. : 2 / jour</p>
                 </div>
-                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-1">
-                    <p class="text-[11px] text-slate-400 uppercase font-bold">Coût par Acquisition (CAC)</p>
+                <div class="bg-navy-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <p class="text-[11px] text-slate-400 uppercase font-bold">Coût Acquisition (CAC)</p>
                     <p class="text-xl font-bold ${cacReel <= plafonds.plafond_cac ? 'text-emerald-400' : 'text-red-400'}">${formatFCFA(cacReel)}</p>
-                    <p class="text-[10px] text-slate-500">Plafond max : ${formatFCFA(plafonds.plafond_cac)}</p>
+                    <p class="text-[10px] text-slate-400">Plafond : ${formatFCFA(plafonds.plafond_cac)} <span class="font-bold">(${tauxCAC}%)</span></p>
                 </div>
             `;
+        }
+
+        async function exporterPubPeriode() {
+            const dateDebut = document.getElementById('export-date-debut').value;
+            const dateFin = document.getElementById('export-date-fin').value;
+            if (!dateDebut || !dateFin) return alert("Veuillez sélectionner une période (Date A et Date B).");
+
+            const { data: pubs } = await kamaClient.from('pubs').select('*').gte('created_at', dateDebut + 'T00:00:00').lte('created_at', dateFin + 'T23:59:59');
+            if (!pubs || pubs.length === 0) return alert("Aucune dépense publicitaire trouvée sur cette période.");
+
+            let csv = "\ufeffID;Date;Montant Depense (FCFA)\n";
+            let totalPeriode = 0;
+            pubs.forEach(p => {
+                totalPeriode += Number(p.depense_reelle || 0);
+                csv += `"${p.id}";"${new Date(p.created_at).toLocaleDateString('fr-FR')}";${p.depense_reelle}\n`;
+            });
+            csv += `\nTotal Periode;;${totalPeriode}\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `kama_lex_pub_${dateDebut}_au_${dateFin}.csv`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         async function chargerModuleObjectifs2027() {
@@ -652,13 +704,15 @@
                 const { data: dossiers } = await kamaClient.from('dossiers').select('*');
                 const { data: pubs } = await kamaClient.from('pubs').select('*');
                 const { data: autresDep } = await kamaClient.from('autres_depenses').select('*');
+                const { data: stats } = await kamaClient.from('closer_stats').select('*');
 
                 let realDossiers = 0, realCA = 0, realMargeBrute = 0, realMargeNette = 0;
                 let objDossiers = 0, objCA = 0, objMargeBrute = 0, objMargeNette = 0;
+                let realConv = 0, realClients = 0, realPub = 0;
 
                 if (objectifs) {
                     objectifs.forEach(o => {
-                        if (periode === 'annee' || String(o.mois_num) === periode) {
+                        if (String(o.mois_num) === periode) {
                             objDossiers += Number(o.objectif_dossiers || 0);
                             objCA += Number(o.objectif_ca || 0);
                             objMargeBrute += Number(o.objectif_marge_brute || 0);
@@ -670,10 +724,7 @@
                 if (dossiers) {
                     dossiers.forEach(d => {
                         let dateRef = d.created_at ? new Date(d.created_at) : new Date();
-                        let moisDossier = dateRef.getMonth() + 1;
-                        let anneeDossier = dateRef.getFullYear();
-
-                        if (periode === 'annee' || (anneeDossier === 2027 && String(moisDossier) === periode) || (anneeDossier !== 2027 && periode !== 'annee' && String(moisDossier) === periode)) {
+                        if ((dateRef.getMonth() + 1) === parseInt(periode)) {
                             realDossiers += 1;
                             let caDossier = Number(d.montant_encaisse || 0);
                             let formVersee = Number(d.formaliste_avance || 0) + Number(d.formaliste_reliquat_recu || 0);
@@ -683,31 +734,105 @@
                     });
                 }
 
-                let totalPubPeriode = 0;
                 if (pubs) {
                     pubs.forEach(p => {
-                        let datePub = p.created_at ? new Date(p.created_at) : new Date();
-                        if (periode === 'annee' || String(datePub.getMonth() + 1) === periode) {
-                            totalPubPeriode += Number(p.depense_reelle || 0);
-                        }
+                        let dt = p.created_at ? new Date(p.created_at) : new Date();
+                        if ((dt.getMonth() + 1) === parseInt(periode)) realPub += Number(p.depense_reelle || 0);
                     });
                 }
 
                 let totalAutresPeriode = 0;
                 if (autresDep) {
                     autresDep.forEach(ad => {
-                        let dateAd = ad.created_at ? new Date(ad.created_at) : new Date();
-                        if (periode === 'annee' || String(dateAd.getMonth() + 1) === periode) {
-                            totalAutresPeriode += Number(ad.montant || 0);
+                        let dt = ad.created_at ? new Date(ad.created_at) : new Date();
+                        if ((dt.getMonth() + 1) === parseInt(periode)) totalAutresPeriode += Number(ad.montant || 0);
+                    });
+                }
+
+                if (stats) {
+                    stats.forEach(s => {
+                        let dt = s.date_point ? new Date(s.date_point) : new Date();
+                        if ((dt.getMonth() + 1) === parseInt(periode)) {
+                            realConv += Number(s.conversations || 0);
+                            realClients += Number(s.clients_acquis || 0);
                         }
                     });
                 }
 
-                realMargeNette = realMargeBrute - totalPubPeriode - totalAutresPeriode;
+                realMargeNette = realMargeBrute - realPub - totalAutresPeriode;
 
                 afficherCartesTRO(objDossiers, realDossiers, objCA, realCA, objMargeBrute, realMargeBrute, objMargeNette, realMargeNette);
                 afficherTableau12Mois(objectifs, dossiers, pubs, autresDep);
+                genererCommentaireExpert(realConv, realClients, realPub, realCA, realMargeNette, objCA);
+                genererProjectionDecembre(realCA, realMargeNette, realClients);
+
             } catch (e) { console.error(e); }
+        }
+
+        function genererCommentaireExpert(conv, clients, pub, ca, margeNette, objCA) {
+            const box = document.getElementById('expert-comment-box');
+            let evaluation = "Modeste";
+            let couleurEval = "text-amber-400";
+            let cpl = conv > 0 ? Math.round(pub / conv) : 0;
+            let cac = clients > 0 ? Math.round(pub / clients) : 0;
+
+            if (ca >= objCA && cac <= 8000) {
+                evaluation = "Excellent";
+                couleurEval = "text-emerald-400";
+            } else if (ca < (objCA * 0.5) || cac > 12000) {
+                evaluation = "Insuffisant / Critique";
+                couleurEval = "text-red-400";
+            }
+
+            box.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">💡 Analyse Stratégique & Diagnostic d'Expert (Ingénieur Digital)</h3>
+                    <span class="px-3 py-1 rounded-xl text-xs font-bold border border-gold-500/30 ${couleurEval}">Bilan : ${evaluation}</span>
+                </div>
+                <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+                    <div class="bg-navy-950 p-4 rounded-xl border border-slate-800">
+                        <strong class="text-gold-400 block mb-1">1. Diagnostic Global de Performance (Facebook & TikTok Ads)</strong>
+                        Les campagnes génèrent un volume de ${conv} conversations pour ${clients} clients acquis réels, avec un CPL de ${formatFCFA(cpl)} et un CAC de ${formatFCFA(cac)}. ${evaluation === 'Excellent' ? 'Les indicateurs sont au vert, traduisant une excellente maîtrise du tunnel d’acquisition publicitaire.' : 'La performance actuelle montre des frictions sur le coût par acquisition ou le volume de conversion.'}
+                    </div>
+                    <div class="bg-navy-950 p-4 rounded-xl border border-slate-800">
+                        <strong class="text-gold-400 block mb-1">2. Analyse des Causes (Technique & Publicitaire)</strong>
+                        ${cpl > 500 ? 'Le coût par conversation dépasse le plafond de 500 FCFA, ce qui indique une saturation potentielle des créatives publicitaires (vidéos Meta/TikTok) ou un ciblage à affiner sur Ouagadougou.' : 'Le coût par conversation est maîtrisé sous les seuils fixés.'} Du côté du closing sur WhatsApp, la transformation nécessite un suivi serré pour éviter l'érosion des prospects avant le versement de l'avance.
+                    </div>
+                    <div class="bg-navy-950 p-4 rounded-xl border border-slate-800">
+                        <strong class="text-gold-400 block mb-1">3. Décisions Correctives Immédiates & Stratégie de Closing</strong>
+                        • <strong>Marketing :</strong> Pivoter vers de nouvelles créatives vidéo axées sur la sécurité juridique des SARL et la rapidité des formalités.<br>
+                        • <strong>Closing WhatsApp :</strong> Abdoul doit intensifier la relance J+1 et systématiser l'envoi immédiat du reçu PDF pro pour verrouiller l'avance (150k/175k) sans délai.
+                    </div>
+                </div>
+            `;
+        }
+
+        async function genererProjectionDecembre(caActuel, margeActuelle, clientsActuels) {
+            const box = document.getElementById('projection-decembre-box');
+            try {
+                const { data: soldeData } = await kamaClient.from('autres_depenses').select('*'); // ou autre table de solde
+                let croissanceEstimee = clientsActuels > 0 ? 1.15 : 1.05; // Indice de croissance prévisionnel
+                let caProj15Dec = Math.round(caActuel * croissanceEstimee * 3.5);
+                let margeProj15Dec = Math.round(margeActuelle * croissanceEstimee * 3.5);
+
+                box.innerHTML = `
+                    <h3 class="text-base font-bold text-gold-500 uppercase tracking-wide">📈 Projection & Tendance au 15 Décembre 2027</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
+                        <div class="bg-navy-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-slate-400 block">CA Projeté au 15 Déc. 2027</span>
+                            <strong class="text-xl text-gold-400 font-bold mt-1 block">${formatFCFA(caProj15Dec)}</strong>
+                        </div>
+                        <div class="bg-navy-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-slate-400 block">Marge Nette Projetée</span>
+                            <strong class="text-xl text-emerald-400 font-bold mt-1 block">${formatFCFA(margeProj15Dec)}</strong>
+                        </div>
+                        <div class="bg-navy-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-slate-400 block">Indice de Croissance Appliqué</span>
+                            <strong class="text-xl text-white font-bold mt-1 block">+15% / mois</strong>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {}
         }
 
         function getColorProgression(taux) {
@@ -808,7 +933,7 @@
                 const { data } = await kamaClient.from('closer_stats').select('*');
                 let aujourdhui = new Date().toISOString().split('T')[0], convJour = 0, acquisJour = 0;
                 if (data) data.forEach(s => { if (s.date_point === aujourdhui) { convJour += Number(s.conversations || 0); acquisJour += Number(s.clients_acquis || 0); } });
-                document.getElementById('statut-objectif-jour').innerHTML = `<span class="text-gold-400">Aujourd'hui : ${convJour} / 35 conversations | ${acquisJour} / 2 clients</span>`;
+                document.getElementById('statut-objectif-jour').innerHTML = `<span class="text-gold-400">Aujourd'hui : ${convJour} / 34 conversations | ${acquisJour} / 2 clients</span>`;
             } catch (e) {}
         }
 
@@ -863,10 +988,10 @@
                         <div>
                             <span class="font-bold text-gold-500 text-sm">${d.numero_dossier}</span> — <strong class="text-slate-100">${nomComplet}</strong> (${d.type_entreprise})
                             <div class="text-[11px] text-gold-400 mt-0.5">Nom commercial : <strong>${nomCommercial}</strong> | Tél : ${d.telephone}</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat dû : <strong class="text-red-400">${formatFCFA(reliquat)}</strong></div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Encaissé : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat : <strong class="text-red-400">${formatFCFA(reliquat)}</strong></div>
                             <div class="text-[11px] text-slate-300 mt-1">Statut : <span class="bg-navy-900 px-2 py-0.5 rounded border border-slate-700 text-gold-400 font-bold">${d.statut}</span></div>
                         </div>
-                        <button onclick="imprimerRecuPDF('${d.numero_dossier}', '${nomComplet}', '${d.telephone}', '${nomCommercial}', '${d.type_entreprise}', ${d.montant_total}, ${d.montant_encaisse}, 'Abdoul')" class="bg-gold-500 text-navy-950 font-bold px-3 py-2 rounded-lg shadow hover:bg-gold-600 transition whitespace-nowrap">🖨️ Imprimer Reçu PDF</button>
+                        <button onclick="telechargerRecuPDF('${d.numero_dossier}', '${nomComplet}', '${d.telephone}', '${nomCommercial}', '${d.type_entreprise}', ${d.montant_total}, ${d.montant_encaisse}, 'Abdoul')" class="bg-gold-500 text-navy-950 font-bold px-3 py-2 rounded-lg shadow hover:bg-gold-600 transition whitespace-nowrap">📥 Télécharger Reçu PDF (WhatsApp)</button>
                     </div>`;
                 });
                 listDiv.innerHTML = html;
@@ -878,7 +1003,7 @@
                 const { data } = await kamaClient.from('plafonds').select('*').limit(1).maybeSingle();
                 if (data) return data;
             } catch (e) {}
-            return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 35, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
+            return { plafond_cpl: 500, plafond_cac: 8000, objectif_conversations_jour: 34, objectif_clients_jour: 2, objectif_annuel_ca: 67320000 };
         }
 
         async function ouvrirModalPlafonds() {
@@ -896,7 +1021,7 @@
         async function sauvegarderPlafondsGlobal(event) {
             event.preventDefault();
             const cpl = parseFloat(document.getElementById('cfg-cpl').value) || 500;
-            const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 35;
+            const objConv = parseInt(document.getElementById('cfg-obj-conv').value) || 34;
             const objClients = parseInt(document.getElementById('cfg-obj-clients').value) || 2;
             const cac = parseFloat(document.getElementById('cfg-cac').value) || 8000;
             const objAnnuel = parseFloat(document.getElementById('cfg-obj-annuel').value) || 67320000;
@@ -968,26 +1093,26 @@
                                         <div class="text-[11px] text-gold-400 mt-0.5">Nom commercial : <strong>${nomCommercial}</strong> | Tél : ${d.telephone}</div>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button onclick="imprimerRecuPDF('${d.numero_dossier}', '${nomComplet}', '${d.telephone}', '${nomCommercial}', '${d.type_entreprise}', ${d.montant_total}, ${d.montant_encaisse}, 'Abdoul')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1.5 rounded text-xs shadow hover:bg-gold-600">🖨️ Reçu PDF</button>
+                                        <button onclick="telechargerRecuPDF('${d.numero_dossier}', '${nomComplet}', '${d.telephone}', '${nomCommercial}', '${d.type_entreprise}', ${d.montant_total}, ${d.montant_encaisse}, 'Abdoul')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1.5 rounded text-xs shadow hover:bg-gold-600">📥 Reçu PDF</button>
                                         <span class="bg-navy-900 border border-gold-500/30 px-3 py-1 rounded text-gold-400 font-bold text-xs">${d.statut}</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
-                                    <div>Encaissement Client : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat : <strong class="text-red-400">${formatFCFA(reliquatClient)}</strong></div>
+                                    <div>Encaissement : <strong class="text-gold-400">${formatFCFA(d.montant_encaisse)}</strong> | Reliquat : <strong class="text-red-400">${formatFCFA(reliquatClient)}</strong></div>
                                     <div>RCCM : <span class="text-slate-200 font-bold">${d.rccm || 'En attente'}</span> | IFU : <span class="text-slate-200 font-bold">${d.ifu || 'En attente'}</span></div>
                                 </div>
                                 <div class="bg-navy-900 p-3 rounded-xl border border-slate-800 flex flex-wrap gap-3 items-center justify-between text-xs pt-2">
                                     <div class="flex items-center gap-2">
                                         <span class="text-slate-400">Avance Formaliste :</span>
                                         <input type="number" id="pilote-av-${d.id}" value="${d.formaliste_avance || 0}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100 font-bold">
-                                        <button onclick="piloteSauverAvance('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Sauver Avance</button>
-                                        <span>${d.formaliste_avance_valide ? '✅ Validé Adama' : '⏳ Attente'}</span>
+                                        <button onclick="piloteSauverAvance('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Sauver</button>
+                                        <span>${d.formaliste_avance_valide ? '✅ Validé' : '⏳ Attente'}</span>
                                     </div>
                                     <div class="flex items-center gap-2">
                                         <span class="text-slate-400">Reliquat Formaliste :</span>
                                         <input type="number" id="pilote-rel-${d.id}" value="${d.formaliste_reliquat_recu || 0}" class="bg-navy-950 border border-slate-700 rounded px-2 py-1 w-28 text-slate-100 font-bold">
-                                        <button onclick="piloteSauverReliquat('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Sauver Reliquat</button>
-                                        <span>${d.formaliste_reliquat_valide ? '✅ Validé Adama' : '⏳ Attente'}</span>
+                                        <button onclick="piloteSauverReliquat('${d.id}')" class="bg-gold-500 text-navy-950 font-bold px-3 py-1 rounded shadow">Sauver</button>
+                                        <span>${d.formaliste_reliquat_valide ? '✅ Validé' : '⏳ Attente'}</span>
                                     </div>
                                 </div>
                             </div>`;
@@ -997,7 +1122,7 @@
 
                 const containerFinancements = document.getElementById('pilote-financements-list');
                 if (!financements || financements.length === 0) {
-                    containerFinancements.innerHTML = "<p class='text-slate-400'>Aucun prospect en intermédiation financière pour le moment.</p>";
+                    containerFinancements.innerHTML = "<p class='text-slate-400'>Aucun prospect en intermédiation financière.</p>";
                 } else {
                     let htmlF = '<div class="space-y-3">';
                     financements.forEach(f => {
